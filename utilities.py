@@ -13,7 +13,7 @@ def read_graph_from_JSON_file(file_name='yelp_academic_dataset_user.json'):
 	graph of the users and their friendships.
 	"""
 	users_file = open(file_name)
-	users = [line for line in users_file.readlines()]
+	users = [json.loads(line) for line in users_file.readlines()]
 
 	graph = networkx.Graph()
 	for user in users:

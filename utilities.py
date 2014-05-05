@@ -7,6 +7,20 @@ import networkx
 import itertools
 
 
+def highest_degree_node_in_graph(graph):
+	"""
+	Given a NetworkX graph, returns the node with highest degree.
+	"""
+	max_degree = 0
+	max_degree_node = None
+	for node, degree in graph.degree_iter():
+		if degree > max_degree:
+			max_degree = degree
+			max_degree_node = node
+
+	return max_degree_node
+
+
 def read_graph_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
 	"""
 	Given a Yelp dataset user file (with users in JSON format), returns a NetworkX

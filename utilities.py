@@ -7,7 +7,7 @@ import networkx
 import itertools
 
 
-def read_graph_from_JSON_file(file_name='yelp_academic_dataset_user.json'):
+def read_graph_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
 	"""
 	Given a Yelp dataset user file (with users in JSON format), returns a NetworkX
 	graph of the users and their friendships.
@@ -27,8 +27,8 @@ def read_graph_from_JSON_file(file_name='yelp_academic_dataset_user.json'):
 
 def output_graph_to_D3_JSON_file(file_name='users_graph.json'):
 	"""
-	Given a NetworkX graph of users and their friendships, writes the graph
-	to a JSON file in a format suitable for displaying a D3 force-directed graph.
+	Given a NetworkX graph, writes the graph to a JSON file in a format suitable
+	for displaying a D3 force-directed graph.
 	"""
 	JSON = {'nodes': [], 'links': []}
 	for user_ID in graph.nodes_iter():

@@ -5,6 +5,15 @@ Utilities for file manipulation, graph processing, etc.
 import json
 import networkx
 import itertools
+from collections import Counter
+
+
+def frequencies(values):
+	"""
+	Given a list of values, returns a dictionary mapping each unique value
+	to the frequency with which it occurs.
+	"""
+	return Counter(values)
 
 
 def highest_degree_node_in_graph(graph):

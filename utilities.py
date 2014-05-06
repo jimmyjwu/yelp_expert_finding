@@ -7,6 +7,14 @@ import networkx
 import itertools
 from collections import Counter
 
+
+def unique(values):
+	"""
+	Given a list of values, returns a list of unique values.
+	"""
+	return list(set(values))
+
+
 def most_frequent_values_and_frequencies(values, k):
 	"""
 	Given a list of values, returns a list of tuples of the k most frequent values
@@ -19,14 +27,14 @@ def smallest_unique_values(values, k):
 	"""
 	Given a list of values, returns a list of the k smallest values.
 	"""
-	return sorted(list(set(values)))[0:k]
+	return sorted(unique(values))[0:k]
 
 
 def largest_unique_values(values, k):
 	"""
 	Given a list of values, returns a list of the k largest values.
 	"""
-	return sorted(list(set(values)))[-k:]
+	return sorted(unique(values))[-k:]
 
 
 def frequencies(values):

@@ -3,9 +3,13 @@ Utilities for file manipulation, graph processing, etc.
 """
 
 import json
-import networkx
 import itertools
 from collections import Counter
+
+import networkx
+import numpy
+import matplotlib
+from matplotlib import pyplot
 
 
 def unique(values):
@@ -57,6 +61,16 @@ def highest_degree_node_in_graph(graph):
 			max_degree_node = node
 
 	return max_degree_node
+
+
+def show_pagerank_histogram(pageranks):
+	n, bins, patches = pyplot.hist(pageranks, 50, normed=1, facecolor='g', alpha=0.75)
+	pyplot.xlabel('PageRank')
+	pyplot.ylabel('Frequency')
+	pyplot.title('Histogram of PageRanks')
+	pyplot.axis('tight')
+	pyplot.grid(True)
+	pyplot.show()
 
 
 def read_graph_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):

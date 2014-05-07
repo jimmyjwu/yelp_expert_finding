@@ -12,6 +12,21 @@ import matplotlib
 from matplotlib import pyplot
 
 
+def make_attribute_boolean(users, attribute):
+	"""
+	Given a list of users and an attribute name, transforms attribute values:
+		value = 0	-->		new value = 0
+		value > 0	-->		new value = 1
+	and returns a new list of users.
+	"""
+	transformed_users = []
+	for user in users:
+		user_copy = {key: value for key, value in user.items() if key != attribute}
+		user_copy[attribute] = 1 if user[attribute] > 0 else 0
+		transformed_users += [user_copy]
+	return transformed_users
+
+
 def designate_attribute_as_label(users, attribute):
 	"""
 	Given an attribute name, changes that attribute to 'label' in all user

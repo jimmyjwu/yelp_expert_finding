@@ -63,11 +63,11 @@ def highest_degree_node_in_graph(graph):
 	return max_degree_node
 
 
-def show_pagerank_histogram(pageranks):
-	n, bins, patches = pyplot.hist(pageranks, 50, normed=1, facecolor='g', alpha=0.75)
-	pyplot.xlabel('PageRank')
+def show_histogram(values, value_name='Value'):
+	n, bins, patches = pyplot.hist(values, 50, normed=1, facecolor='g', alpha=0.75)
+	pyplot.xlabel(value_name)
 	pyplot.ylabel('Frequency')
-	pyplot.title('Histogram of PageRanks')
+	pyplot.title('Histogram of ' + value_name + 's')
 	pyplot.axis('tight')
 	pyplot.grid(True)
 	pyplot.show()
@@ -89,6 +89,7 @@ def read_graph_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
 			graph.add_edge(user_ID, friend_ID)
 
 	return graph
+
 
 def read_users_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
 	"""

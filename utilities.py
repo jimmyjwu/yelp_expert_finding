@@ -90,6 +90,27 @@ def read_graph_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
 
 	return graph
 
+def read_users_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
+	"""
+	Given a Yelp dataset user file (with users in JSON format), returns a list of
+	user dictionaries with numeric values for various attributes.
+	"""
+	users_file = open(file_name)
+	raw_users = [json.loads(line) for line in users_file.readlines()]
+
+	users = []
+	for user in raw_users:
+		users += [
+			{
+				'review_count': user['review_count'],
+				'average_stars': user['average_stars'],
+				'friend_count': len(user['friends']),
+				'years_member': 2014 - int(user['yelping_since'].split('-')[0]),
+				'years_elite': len(user['elite']),
+			}
+		]
+	return users
+
 
 def output_graph_to_D3_JSON_file(file_name='users_graph.json'):
 	"""

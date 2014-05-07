@@ -12,6 +12,66 @@ import matplotlib
 from matplotlib import pyplot
 
 
+def designate_attribute_as_label(users, attribute):
+	"""
+	Given an attribute name, changes that attribute to 'label' in all user
+	dictionaries. Use for regression fitting.
+	"""
+	labeled_users = []
+	for user in users:
+		user_copy = {key: value for key, value in user.items() if key != attribute}
+		user_copy['label'] = user[attribute]
+		labeled_users += [user_copy]
+	return labeled_users
+
+
+def remove_labels(users, label_name='label'):
+	"""
+	Given a list of user dictionaries, returns a list of user dictionaries with
+	a label attribute from each user removed.
+	"""
+	unlabeled_users = []
+	for user in users:
+		unlabeled_users += [{key: value for key, value in user.items() if key != label_name}]
+	return unlabeled_users
+
+
+def normalize_users(users, excluded_attributes=[]):
+	"""
+	Given a list of user dictionaries with numeric values, returns a list of
+	user dictionaries in which all attributes, EXCEPT those whose names are in
+	excluded_attributes, arenormalized to [0, 1].
+	Normalization is done using min-max.
+	"""
+	excluded_attributes = set(excluded_attributes)
+
+	# Find extreme values for each attribute
+	max_user = {attribute: float('-infinity') for attribute in users[0].keys()}
+	min_user = {attribute: float('infinity') for attribute in users[0].keys()}
+	for user in users:
+		for attribute, value in user.items():
+			if attribute not in excluded_attributes:
+				max_user[attribute] = max(max_user[attribute], value)
+				min_user[attribute] = min(min_user[attribute], value)
+
+	# Normalize users
+	for user in users:
+		for attribute, value in user.items():
+			if attribute not in excluded_attributes:
+				user[attribute] = float(value - min_user[attribute]) / (max_user[attribute] - min_user[attribute])
+
+	return users
+
+
+def print_first_elements(values, k=1):
+	"""
+	Prints the first k values.
+	"""
+	for value in values[0:k]:
+		print value
+	print ''
+
+
 def unique(values):
 	"""
 	Given a list of values, returns a list of unique values.

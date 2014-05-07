@@ -26,27 +26,35 @@ def analyze_yelp_graph():
 
 
 def predict_elite_status():
+	# Hyperparameters
+	MAKE_LABELS_BOOLEAN = False
+
 	# Prepare user data
 	users = read_users_from_yelp_JSON_file()
-	normalized_users = normalize_users(users, excluded_attributes=['years_elite'])
-	labeled_users = designate_attribute_as_label(normalized_users, 'years_elite')
+	users = normalize_users(users, excluded_attributes=['years_elite'])
+	users = designate_attribute_as_label(users, 'years_elite')
+	if MAKE_LABELS_BOOLEAN:
+		users = make_attribute_boolean(users, 'label')
+
+	# Split data into training and test
+	user_count = len(users)
+	training_set_size = int(0.75 * user_count)
+	test_set_size = user_count - training_set_size
+	training_set = users[0:training_set_size]
+	test_set = users[-test_set_size:]
 
 	# Fit to hyperplane
-	model = regression.get_model(labeled_users)
-
-	# Test on some users
-	sample_users = labeled_users[0:100]
-	for user in sample_users:
-		print user['label']
-		print regression.predict(remove_labels([user]).pop(), model)
-		print ''
+	model = regression.get_model(training_set)
 
 	# Show us how important each attribute is
 	print 'Attribute weights:'
-	for attribute, weight in regression.get_weights(labeled_users).items():
+	for attribute, weight in regression.get_weights(training_set).items():
 		print attribute + ': ' + str(weight)
 
-
+	# Test the model by calculating its coefficient of determination (R^2) on test data
+	test_samples, test_labels, _ = regression.prep_data(test_set)
+	test_score = model.score(test_samples, test_labels)
+	print 'Test score: ' + str(test_score)
 
 
 

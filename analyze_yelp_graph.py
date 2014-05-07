@@ -26,15 +26,10 @@ def analyze_yelp_graph():
 
 
 def predict_elite_status():
-	# Hyperparameters
-	MAKE_LABELS_BOOLEAN = False
-
 	# Prepare user data
 	users = read_users_from_yelp_JSON_file()
 	users = normalize_users(users, excluded_attributes=['years_elite'])
 	users = designate_attribute_as_label(users, 'years_elite')
-	if MAKE_LABELS_BOOLEAN:
-		users = make_attribute_boolean(users, 'label')
 
 	# Split data into training and test
 	user_count = len(users)

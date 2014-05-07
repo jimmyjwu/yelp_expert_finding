@@ -148,6 +148,20 @@ def show_histogram(values, value_name='Value'):
 	pyplot.show()
 
 
+def read_graph_from_google_files():
+	"""
+	Given the Google+ dataset files, returns a NetworkX graph of the users
+	and their friendships.
+	"""
+
+
+def read_users_from_google_files():
+	"""
+	Given the Google+ dataset files, returns a list of user dictionaries with attribute
+	names mapped to values (not necessarily numeric).
+	"""
+
+
 def read_graph_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
 	"""
 	Given a Yelp dataset user file (with users in JSON format), returns a NetworkX

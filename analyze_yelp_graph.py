@@ -51,7 +51,7 @@ def predict_elite_status():
 	test_set = users[-test_set_size:]
 
 	# Fit to hyperplane
-	model, weights = regression.get_model(training_set)
+	model, weights = regression.get_model_and_weights(training_set)
 
 	# Show us how important each attribute is
 	print 'Attribute weights:'
@@ -87,7 +87,6 @@ def predict_elite_status_with_bayes():
 	users = temporary_users
 
 	random.shuffle(users)
-
 
 	sorted_keys = sorted(users[0].keys())
 	for user in users:
@@ -175,7 +174,7 @@ def predict_pagerank():
 
 	# Fit to hyperplane
 	training_set = users
-	model, weights = regression.get_model(training_set)
+	model, weights = regression.get_model_and_weights(training_set)
 
 	# Show us how important each attribute is
 	print 'Attribute weights:'
@@ -186,8 +185,8 @@ def predict_pagerank():
 
 
 if __name__ == "__main__":
-	predict_elite_status_with_bayes()
-	# predict_elite_status()
+	# predict_elite_status_with_bayes()
+	predict_elite_status()
 	# predict_pagerank()
 
 

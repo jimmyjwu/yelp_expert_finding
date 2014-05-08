@@ -167,11 +167,11 @@ def highest_degree_node_in_graph(graph):
 	return max_degree_node
 
 
-def show_histogram(values, value_name='Value', bins=100, range_to_display=(0,0)):
+def show_histogram(values, value_name='Value', bins=100, range_to_display=(0,0), normed=False):
 	if range_to_display == (0,0):
-		n, bins, patches = pyplot.hist(values, bins=bins, normed=1, facecolor='g', alpha=0.75)
+		n, bins, patches = pyplot.hist(values, bins=bins, normed=normed, facecolor='g', alpha=0.75)
 	else:
-		n, bins, patches = pyplot.hist(values, bins=bins, range=range_to_display, normed=1, facecolor='g', alpha=0.75)
+		n, bins, patches = pyplot.hist(values, bins=bins, range=range_to_display, normed=normed, facecolor='g', alpha=0.75)
 	pyplot.xlabel(value_name)
 	pyplot.ylabel('Frequency')
 	pyplot.title('Histogram of ' + value_name + 's')

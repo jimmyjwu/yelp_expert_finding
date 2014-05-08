@@ -78,8 +78,8 @@ def predict_elite_status_with_bayes():
 		# Transform each user into a vector
 		user_vector = []
 		for key in sorted_keys:
-			user_vector.append(user[key])
-
+			if user[key] != -1:
+				user_vector.append(user[key])
 		user_vectors.append(user_vector)
 
 		# Generate a label for every user
@@ -139,6 +139,6 @@ def predict_pagerank():
 if __name__ == "__main__":
 	predict_elite_status_with_bayes()
 	# predict_elite_status()
-	predict_pagerank()
+	# predict_pagerank()
 
 

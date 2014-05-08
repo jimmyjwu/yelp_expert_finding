@@ -195,7 +195,7 @@ def bin_value(key, value):
 	if key == 'review_count':
 		# Same binning procedure as friend count, but finer grain
 		return min(math.floor(value/3), 10)
-	return 0
+	return -1
 
 
 def read_graph_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):

@@ -91,27 +91,19 @@ def predict_elite_status_with_bayes():
 
 	sorted_keys = sorted(users[0].keys())
 	for user in users:
-		"""
-		# Discretize the feature dictionary of every user
-		for attribute in user:
-			# if attribute != 'years_elite':
-				user[attribute] = bin_value(attribute, user[attribute])
-		"""
-
 		# Transform each user into a vector
 		user_vector = []
 		for key in sorted_keys:
-			if key != 'years_elite' and user[key] != -1:
+			if key != 'years_elite':
 				user_vector.append(user[key])
 		user_vectors.append(user_vector)
 
 		# Generate a label for every user
 		labels.append(1 if user['years_elite'] > 0 else 0)
-		# labels.append(user['years_elite'])
 
 	# Split data into training and test
 	user_count = len(user_vectors)
-	training_set_size = int(0.75 * user_count)
+	training_set_size = int(0.7 * user_count)
 	test_set_size = user_count - training_set_size
 	training_set = user_vectors[0:training_set_size]
 	training_set_labels = labels[0:training_set_size]
@@ -136,7 +128,7 @@ def predict_elite_status_with_bayes():
 	test_set = test
 	test_set_labels = test_labels
 	"""
-
+	
 	"""
 	# Test on only 1's
 	test = []
@@ -151,7 +143,7 @@ def predict_elite_status_with_bayes():
 	print user_count
 	"""
 
-	# train naive bayes model
+	# Train Naive Bayes model
 	gnb = GaussianNB()
 	gnb.fit(training_set, training_set_labels)
 
@@ -194,8 +186,8 @@ def predict_pagerank():
 
 
 if __name__ == "__main__":
-	# predict_elite_status_with_bayes()
-	predict_elite_status()
+	predict_elite_status_with_bayes()
+	# predict_elite_status()
 	# predict_pagerank()
 
 

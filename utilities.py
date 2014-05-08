@@ -13,6 +13,25 @@ import math
 from matplotlib import pyplot
 
 
+def join_dictionaries(dictionaries_1, dictionaries_2, join_key):
+	"""
+	Given two lists of dictionaries, returns a list of new dictionaries that
+	are the original dictionaries joined by join_key.
+	NOTE: dictionaries_2 must be a superset of dictionaries_1.
+	"""
+	pairs_to_join = {dictionary[join_key]: [dictionary, None] for dictionary in dictionaries_1}
+	for dictionary in dictionaries_2:
+		if dictionary[join_key] in pairs_to_join:
+			pairs_to_join[dictionary[join_key]][1] = dictionary
+	pairs_to_join = pairs_to_join.values()
+
+	joined_dictionaries = []
+	for dictionary_1, dictionary_2 in pairs_to_join:
+		joined_dictionaries += [ dict( dictionary_1.items() + dictionary_2.items() ) ]
+
+	return joined_dictionaries
+
+
 def make_attribute_boolean(users, attribute):
 	"""
 	Given a list of users and an attribute name, transforms attribute values:
@@ -125,6 +144,15 @@ def frequencies(values):
 	return Counter(values)
 
 
+def remove_low_degree_nodes(graph, minimum_degree=1):
+	"""
+	Removes all nodes with degree less than minimum_degree.
+	"""
+	for node in graph.nodes():
+		if graph.degree(node) < minimum_degree:
+			graph.remove_node(node)
+
+
 def highest_degree_node_in_graph(graph):
 	"""
 	Given a NetworkX graph, returns the node with highest degree.
@@ -139,8 +167,11 @@ def highest_degree_node_in_graph(graph):
 	return max_degree_node
 
 
-def show_histogram(values, value_name='Value'):
-	n, bins, patches = pyplot.hist(values, 50, normed=1, facecolor='g', alpha=0.75)
+def show_histogram(values, value_name='Value', bins=100, range_to_display=(0,0)):
+	if range_to_display == (0,0):
+		n, bins, patches = pyplot.hist(values, bins=bins, normed=1, facecolor='g', alpha=0.75)
+	else:
+		n, bins, patches = pyplot.hist(values, bins=bins, range=range_to_display, normed=1, facecolor='g', alpha=0.75)
 	pyplot.xlabel(value_name)
 	pyplot.ylabel('Frequency')
 	pyplot.title('Histogram of ' + value_name + 's')
@@ -197,6 +228,7 @@ def read_users_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
 	for user in raw_users:
 		users += [
 			{
+				'ID': user['user_id'],
 				'review_count': user['review_count'],
 				'average_stars': user['average_stars'],
 				'friend_count': len(user['friends']),

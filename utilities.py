@@ -16,14 +16,19 @@ def join_dictionaries(dictionaries_1, dictionaries_2, join_key):
 	"""
 	Given two lists of dictionaries, returns a list of new dictionaries that
 	are the original dictionaries joined by join_key.
+	NOTE: dictionaries_2 must be a superset of dictionaries_1.
 	"""
-	joined_dictionaries = {dictionary[join_key]: dictionary for dictionary in dictionaries_1}
+	pairs_to_join = {dictionary[join_key]: [dictionary, None] for dictionary in dictionaries_1}
 	for dictionary in dictionaries_2:
-		dictionary_to_join = joined_dictionaries[dictionary[join_key]]
-		for key, value in dictionary:
-			dictionary_to_join[key] = value
-	return joined_dictionaries.values()
+		if dictionary[join_key] in pairs_to_join:
+			pairs_to_join[dictionary[join_key]][1] = dictionary
+	pairs_to_join = pairs_to_join.values()
 
+	joined_dictionaries = []
+	for dictionary_1, dictionary_2 in pairs_to_join:
+		joined_dictionaries += [ dict( dictionary_1.items() + dictionary_2.items() ) ]
+
+	return joined_dictionaries
 
 
 def make_attribute_boolean(users, attribute):

@@ -32,10 +32,8 @@ def analyze_yelp_graph():
 	for pagerank, frequency in most_frequent_values_and_frequencies(pageranks, 5):
 		print str(pagerank) + ', ' + str(frequency)
 
-
 	# Plot histogram of PageRanks
 	show_histogram(values=pageranks, value_name='PageRank', bins=500, range_to_display=(0,0.001))
-
 
 
 def predict_elite_status():
@@ -53,17 +51,18 @@ def predict_elite_status():
 	test_set = users[-test_set_size:]
 
 	# Fit to hyperplane
-	model = regression.get_model(training_set)
+	model, weights = regression.get_model(training_set)
 
 	# Show us how important each attribute is
 	print 'Attribute weights:'
-	for attribute, weight in regression.get_weights(training_set).items():
+	for attribute, weight in weights.items():
 		print attribute + ': ' + str(weight)
 
 	# Test the model by calculating its coefficient of determination (R^2) on test data
 	test_samples, test_labels, _ = regression.prep_data(test_set)
 	test_score = model.score(test_samples, test_labels)
 	print 'Test score: ' + str(test_score)
+
 
 def predict_elite_status_with_bayes():
 	users = read_users_from_yelp_JSON_file()
@@ -161,6 +160,7 @@ def predict_elite_status_with_bayes():
 
 	print 'Class prior distribution (should be roughly even): ' + str(gnb.class_prior_)
 
+
 def predict_pagerank():
 	# Hyperparameters
 	MINIMUM_FRIEND_COUNT = 1
@@ -183,19 +183,19 @@ def predict_pagerank():
 
 	# Fit to hyperplane
 	training_set = users
-	model = regression.get_model(training_set)
+	model, weights = regression.get_model(training_set)
 
 	# Show us how important each attribute is
 	print 'Attribute weights:'
-	for attribute, weight in regression.get_weights(training_set).items():
+	for attribute, weight in weights.items():
 		print attribute + ': ' + str(weight * 100)
 
 
 
 
 if __name__ == "__main__":
-	predict_elite_status_with_bayes()
-	# predict_elite_status()
+	# predict_elite_status_with_bayes()
+	predict_elite_status()
 	# predict_pagerank()
 
 

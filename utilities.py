@@ -198,7 +198,7 @@ def read_graph_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
 	return graph
 
 
-def read_users_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
+def read_users_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json', model_type='naive_bayes'):
 	"""
 	Given a Yelp dataset user file (with users in JSON format), returns a list of
 	user dictionaries with numeric values for various attributes.
@@ -207,22 +207,25 @@ def read_users_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
 	raw_users = [json.loads(line) for line in users_file.readlines()]
 
 	users = []
-	for user in raw_users:
-		users += [
-			{
-				'ID': user['user_id'],
-				'review_count': user['review_count'],
-				'average_stars': user['average_stars'],
-				'friend_count': len(user['friends']),
-				'years_member': 2014 - int(user['yelping_since'].split('-')[0]),
-				'years_elite': len(user['elite']),
-				# 'fan_count': user['fans'],
-				# 'vote_count': user['votes']['funny'] + user['votes']['useful'] + user['votes']['cool'],
-				# 'funny_vote_count': user['votes']['funny'],
-				# 'useful_vote_count': user['votes']['useful'],
-				# 'cool_vote_count': user['votes']['cool'],
-			}
-		]
+	for raw_user in raw_users:
+		user = {
+			'ID': raw_user['user_id'],
+			'review_count': raw_user['review_count'],
+			'average_stars': raw_user['average_stars'],
+			'friend_count': len(raw_user['friends']),
+			'years_member': 2014 - int(raw_user['yelping_since'].split('-')[0]),
+			'years_elite': len(raw_user['elite']),
+			# 'fan_count': raw_user['fans'],
+		}
+
+		if model_type == 'naive_bayes':
+			pass
+		elif model_type == 'linear_regression':
+			user['funny_vote_count'] = raw_user['votes']['funny']
+			user['useful_vote_count'] = raw_user['votes']['useful']
+			user['cool_vote_count'] = raw_user['votes']['cool']
+		
+		users += [user]
 	return users
 
 

@@ -36,12 +36,14 @@ def analyze_yelp_graph():
 	show_histogram(values=pageranks, value_name='PageRank', bins=500, range_to_display=(0,0.001))
 
 
-def predict_elite_status():
+def predict_elite_status_with_linear_regression():
 	# Prepare user data
-	users = read_users_from_yelp_JSON_file()
-	users = remove_labels(users, label_name='ID')
+	users = read_users_from_yelp_JSON_file(model_type='linear_regression')
+	users = remove_labels(users, 'ID')
 	users = normalize_users(users, excluded_attributes=['years_elite'])
 	users = designate_attribute_as_label(users, 'years_elite')
+
+	random.shuffle(users)
 
 	# Split data into training and test
 	user_count = len(users)
@@ -65,7 +67,7 @@ def predict_elite_status():
 
 
 def predict_elite_status_with_bayes():
-	users = read_users_from_yelp_JSON_file()
+	users = read_users_from_yelp_JSON_file(model_type='naive_bayes')
 	users = remove_labels(users, 'ID')
 	labels = []
 	user_vectors = []
@@ -186,7 +188,7 @@ def predict_pagerank():
 
 if __name__ == "__main__":
 	# predict_elite_status_with_bayes()
-	predict_elite_status()
+	predict_elite_status_with_linear_regression()
 	# predict_pagerank()
 
 

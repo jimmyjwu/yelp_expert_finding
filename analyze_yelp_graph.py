@@ -74,18 +74,16 @@ def predict_elite_status_with_bayes():
 		# Discretize the feature dictionary of every user
 		for attribute in user:
 			user[attribute] = bin_value(attribute, user[attribute])
-		
+
 		# Transform each user into a vector
 		user_vector = []
 		for key in sorted_keys:
-			if user[key] != -1:
+			if key != 'years_elite' and user[key] != -1:
 				user_vector.append(user[key])
 		user_vectors.append(user_vector)
 
 		# Generate a label for every user
 		labels.append(user['years_elite'])
-
-
 	
 	# Split data into training and test
 	user_count = len(user_vectors)

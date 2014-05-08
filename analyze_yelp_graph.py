@@ -36,11 +36,10 @@ def analyze_yelp_graph():
 		for pagerank, frequency in most_frequent_values_and_frequencies(pageranks, 5):
 			print str(pagerank) + ', ' + str(frequency)
 
-		# Plot histogram of PageRanks
 		show_histogram(values=pageranks, value_name='PageRank', bins=500, range_to_display=(0,0.001))
 
 	# Plot histogram of node degrees
-	show_histogram(values=degrees, value_name='Node Degree', bins=500)
+	show_histogram(values=degrees, value_name='Node Degree', bins=500, range_to_display=(0,40))
 
 
 def predict_elite_status_with_linear_regression():

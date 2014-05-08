@@ -124,6 +124,15 @@ def frequencies(values):
 	return Counter(values)
 
 
+def remove_low_degree_nodes(graph, minimum_degree=1):
+	"""
+	Removes all nodes with degree less than minimum_degree.
+	"""
+	for node in graph.nodes():
+		if graph.degree(node) < minimum_degree:
+			graph.remove_node(node)
+
+
 def highest_degree_node_in_graph(graph):
 	"""
 	Given a NetworkX graph, returns the node with highest degree.

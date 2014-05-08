@@ -215,6 +215,11 @@ def read_users_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
 				'friend_count': len(user['friends']),
 				'years_member': 2014 - int(user['yelping_since'].split('-')[0]),
 				'years_elite': len(user['elite']),
+				# 'fan_count': user['fans'],
+				# 'vote_count': user['votes']['funny'] + user['votes']['useful'] + user['votes']['cool'],
+				'funny_vote_count': user['votes']['funny'],
+				'useful_vote_count': user['votes']['useful'],
+				'cool_vote_count': user['votes']['cool'],
 			}
 		]
 	return users

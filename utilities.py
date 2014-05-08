@@ -12,6 +12,20 @@ import matplotlib
 from matplotlib import pyplot
 
 
+def join_dictionaries(dictionaries_1, dictionaries_2, join_key):
+	"""
+	Given two lists of dictionaries, returns a list of new dictionaries that
+	are the original dictionaries joined by join_key.
+	"""
+	joined_dictionaries = {dictionary[join_key]: dictionary for dictionary in dictionaries_1}
+	for dictionary in dictionaries_2:
+		dictionary_to_join = joined_dictionaries[dictionary[join_key]]
+		for key, value in dictionary:
+			dictionary_to_join[key] = value
+	return joined_dictionaries.values()
+
+
+
 def make_attribute_boolean(users, attribute):
 	"""
 	Given a list of users and an attribute name, transforms attribute values:

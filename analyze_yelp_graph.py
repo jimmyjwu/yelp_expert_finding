@@ -7,21 +7,36 @@ import regression
 
 
 def analyze_yelp_graph():
+	# Hyperparameters
+	REMOVE_FRIENDLESS_USERS = False
+
+	# Generate graph
 	graph = read_graph_from_yelp_JSON_file()
+
+	# Remove users without friends
+	if REMOVE_FRIENDLESS_USERS:
+		for user in graph.nodes():
+			if graph.degree(user) == 0:
+				graph.remove_node(user)
+
+	# Calculate various graph metrics
 	edge_density = networkx.density(graph)
-	# degree_histogram = networkx.degree_histogram(graph)
+	degree_histogram = networkx.degree_histogram(graph)
+
+	# Calculate and show PageRank metrics
 	pagerank_for_node = networkx.pagerank(graph)
 	pageranks = sorted(pagerank_for_node.values())
 	unique_pageranks = sorted(unique(pageranks))		# 26,145 unique PageRanks out of 70,817 total
 	pagerank_frequencies = sorted(frequencies(pageranks).items(), key=lambda x: x[1])
 
 	print 'The 5 smallest PageRanks are: ' + str(smallest_unique_values(pageranks, 5)) + '\n'
-	print 'The 5 most frequent PageRanks are: ' + str(most_frequent_values_and_frequencies(pageranks, 5)) + '\n'
+	print 'The 5 most frequent PageRanks are:'
+	for pagerank, frequency in most_frequent_values_and_frequencies(pageranks, 5):
+		print str(pagerank) + ', ' + str(frequency)
+
 
 	# Plot histogram of PageRanks
-	show_pagerank_histogram(pageranks)
-
-	# TODO: Eliminate users without friends, so as to reduce the number of small PageRanks that dominate the histogram
+	show_histogram(values=pageranks, value_name='PageRank', bins=500, range_to_display=(0,0.001))
 
 
 
@@ -53,5 +68,14 @@ def predict_elite_status():
 
 
 
+
+
 if __name__ == "__main__":
-	predict_elite_status()
+	analyze_yelp_graph()
+
+
+
+
+
+
+

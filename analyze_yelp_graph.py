@@ -40,7 +40,7 @@ def analyze_yelp_graph():
 		show_histogram(values=pageranks, value_name='PageRank', bins=500, range_to_display=(0,0.001))
 
 	# Plot histogram of node degrees
-	show_histogram(values=degrees, value_name='Node Degree', bins=500)
+	show_histogram(values=degrees, value_name='Node Degree', bins=500, range_to_display=(0,40))
 
 
 def predict_elite_status_with_linear_regression():

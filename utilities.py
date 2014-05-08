@@ -9,6 +9,7 @@ from collections import Counter
 import networkx
 import numpy
 import matplotlib
+import math
 from matplotlib import pyplot
 
 
@@ -146,6 +147,24 @@ def show_histogram(values, value_name='Value'):
 	pyplot.axis('tight')
 	pyplot.grid(True)
 	pyplot.show()
+
+def bin_value(key, value):
+	"""
+	Discretizes a given attribute and value from a user, returns 0 for attributes we don't care about.
+	"""
+	if key == 'friends':
+		# Bin # num friends into 0 [0-4 friends], 1 [5-9], 2 [10-14], 3 [15-19], 4 [20-24], 5 [25+]
+		return min(math.floor(value/5), 5)
+	if key == 'average_stars':
+		# Round average stars to nearest 0.5
+		return float(int(value * 2))/2
+	if key == 'years_elite':
+		# 1: has been elite before, 0: has never been elite
+		return int(value > 0)
+	if key == 'review_count':
+		# Same binning procedure as friend count, but finer grain
+		return min(math.floor(value/3), 10)
+	return 0
 
 
 def read_graph_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):

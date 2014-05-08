@@ -4,7 +4,7 @@ Primary file for analysis of the Yelp dataset.
 
 from utilities import *
 import regression
-
+from sklearn.naive_bayes import GaussianNB
 
 def analyze_yelp_graph():
 	graph = read_graph_from_yelp_JSON_file()
@@ -51,7 +51,46 @@ def predict_elite_status():
 	test_score = model.score(test_samples, test_labels)
 	print 'Test score: ' + str(test_score)
 
+def predict_elite_status_with_bayes():
+	users = read_users_from_yelp_JSON_file()
+	labels = []
+	user_vectors = []
+
+	sorted_keys = sorted(users[0].keys())
+	for user in users:
+		# Discretize the feature dictionary of every user
+		for attribute in user:
+			user[attribute] = bin_value(attribute, user[attribute])
+		
+		# Transform each user into a vector
+		user_vector = []
+		for key in sorted_keys:
+			user_vector.append(user[key])
+
+		user_vectors.append(user_vector)
+
+		# Generate a label for every user
+		labels.append(user['years_elite'])
+
+
+	
+	# Split data into training and test
+	user_count = len(user_vectors)
+	training_set_size = int(0.75 * user_count)
+	test_set_size = user_count - training_set_size
+	training_set = user_vectors[0:training_set_size]
+	training_set_labels = labels[0:training_set_size]
+	test_set = user_vectors[-test_set_size:]
+	test_set_labels = labels[-test_set_size:]
+
+	# train naive bayes model
+	gnb = GaussianNB()
+	gnb.fit(training_set, training_set_labels)
+
+	# See how accurate it predicts test set
+	print "Classification score: ", gnb.score(test_set, test_set_labels)
 
 
 if __name__ == "__main__":
-	predict_elite_status()
+	predict_elite_status_with_bayes()
+	# predict_elite_status()

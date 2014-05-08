@@ -74,6 +74,10 @@ def predict_elite_status_with_linear_regression():
 
 
 def predict_elite_status_with_bayes():
+	# Hyperparameters
+	TEST_ONLY_ONES = False
+	TRAIN_ON_ZEROS_TEST_ON_ONES = False
+
 	# Generate graph and user dictionaries
 	graph = read_graph_from_yelp_JSON_file()
 	users = read_users_from_yelp_JSON_file(model_type='naive_bayes')
@@ -128,38 +132,36 @@ def predict_elite_status_with_bayes():
 	test_set = user_vectors[-test_set_size:]
 	test_set_labels = labels[-test_set_size:]
 
-	"""
 	# Train on only 0's, test on only 1's. Result is zero accuracy score.
-	training = []
-	training_labels = []
-	test = []
-	test_labels = []
-	for i in range(user_count):
-		if labels[i] == 0:
-			training += [user_vectors[i]]
-			training_labels += [labels[i]]
-		else:
-			test += [user_vectors[i]]
-			test_labels += [labels[i]]
-	training_set = training
-	training_set_labels = training_labels
-	test_set = test
-	test_set_labels = test_labels
-	"""
+	if TRAIN_ON_ZEROS_TEST_ON_ONES:
+		training = []
+		training_labels = []
+		test = []
+		test_labels = []
+		for i in range(user_count):
+			if labels[i] == 0:
+				training += [user_vectors[i]]
+				training_labels += [labels[i]]
+			else:
+				test += [user_vectors[i]]
+				test_labels += [labels[i]]
+		training_set = training
+		training_set_labels = training_labels
+		test_set = test
+		test_set_labels = test_labels
 	
-	
-	# Test on only 1's
-	test = []
-	test_labels = []
-	for i in range(test_set_size):
-		if test_set_labels[i] == 1:
-			test += [test_set[i]]
-			test_labels += [test_set_labels[i]]
-	test_set = test
-	test_set_labels = test_labels
-	print len(test_set)
-	print user_count
-	
+	# Test for recall on 1's
+	if TEST_ONLY_ONES:
+		test = []
+		test_labels = []
+		for i in range(test_set_size):
+			if test_set_labels[i] == 1:
+				test += [test_set[i]]
+				test_labels += [test_set_labels[i]]
+		test_set = test
+		test_set_labels = test_labels
+		print len(test_set)
+		print user_count
 
 	# Train Naive Bayes model
 	gnb = GaussianNB()

@@ -4,7 +4,8 @@ Primary file for analysis of the Yelp dataset.
 
 from utilities import *
 import regression
-from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import GaussianNB, BernoulliNB
+import random
 
 def analyze_yelp_graph():
 	# Hyperparameters
@@ -66,14 +67,37 @@ def predict_elite_status():
 
 def predict_elite_status_with_bayes():
 	users = read_users_from_yelp_JSON_file()
+	users = remove_labels(users, 'ID')
 	labels = []
 	user_vectors = []
 
+	random.shuffle(users)
+
+	users_0 = 0
+	users_1 = 0
+	temporary_users = []
+	for user in users:
+		if user['years_elite'] == 0:
+			if users_0 < 5000:
+				temporary_users += [user]
+				users_0 += 1
+		else:
+			if users_1 < 5000:
+				temporary_users += [user]
+				users_1 += 1
+	users = temporary_users
+
+	random.shuffle(users)
+
+
 	sorted_keys = sorted(users[0].keys())
 	for user in users:
+		"""
 		# Discretize the feature dictionary of every user
 		for attribute in user:
-			user[attribute] = bin_value(attribute, user[attribute])
+			# if attribute != 'years_elite':
+				user[attribute] = bin_value(attribute, user[attribute])
+		"""
 
 		# Transform each user into a vector
 		user_vector = []
@@ -83,8 +107,9 @@ def predict_elite_status_with_bayes():
 		user_vectors.append(user_vector)
 
 		# Generate a label for every user
-		labels.append(user['years_elite'])
-	
+		labels.append(1 if user['years_elite'] > 0 else 0)
+		# labels.append(user['years_elite'])
+
 	# Split data into training and test
 	user_count = len(user_vectors)
 	training_set_size = int(0.75 * user_count)
@@ -94,13 +119,47 @@ def predict_elite_status_with_bayes():
 	test_set = user_vectors[-test_set_size:]
 	test_set_labels = labels[-test_set_size:]
 
+	"""
+	# Train on only 0's, test on only 1's. Result is zero accuracy score.
+	training = []
+	training_labels = []
+	test = []
+	test_labels = []
+	for i in range(user_count):
+		if labels[i] == 0:
+			training += [user_vectors[i]]
+			training_labels += [labels[i]]
+		else:
+			test += [user_vectors[i]]
+			test_labels += [labels[i]]
+	training_set = training
+	training_set_labels = training_labels
+	test_set = test
+	test_set_labels = test_labels
+	"""
+
+	"""
+	# Test on only 1's
+	test = []
+	test_labels = []
+	for i in range(test_set_size):
+		if test_set_labels[i] == 1:
+			test += [test_set[i]]
+			test_labels += [test_set_labels[i]]
+	test_set = test
+	test_set_labels = test_labels
+	print len(test_set)
+	print user_count
+	"""
+
 	# train naive bayes model
 	gnb = GaussianNB()
 	gnb.fit(training_set, training_set_labels)
 
-	# See how accurate it predicts test set
+	# Calculate mean accuracy on test data
 	print "Classification score: ", gnb.score(test_set, test_set_labels)
 
+	print 'Class prior distribution (should be roughly even): ' + str(gnb.class_prior_)
 
 def predict_pagerank():
 	# Hyperparameters

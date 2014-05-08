@@ -8,16 +8,14 @@ import regression
 
 def analyze_yelp_graph():
 	# Hyperparameters
-	REMOVE_FRIENDLESS_USERS = False
+	MINIMUM_FRIEND_COUNT = 1
 
 	# Generate graph
 	graph = read_graph_from_yelp_JSON_file()
 
 	# Remove users without friends
 	if REMOVE_FRIENDLESS_USERS:
-		for user in graph.nodes():
-			if graph.degree(user) == 0:
-				graph.remove_node(user)
+		remove_low_degree_nodes(graph, MINIMUM_FRIEND_COUNT)
 
 	# Calculate various graph metrics
 	edge_density = networkx.density(graph)
@@ -43,6 +41,7 @@ def analyze_yelp_graph():
 def predict_elite_status():
 	# Prepare user data
 	users = read_users_from_yelp_JSON_file()
+	users = remove_labels(users, label_name='ID')
 	users = normalize_users(users, excluded_attributes=['years_elite'])
 	users = designate_attribute_as_label(users, 'years_elite')
 
@@ -65,6 +64,7 @@ def predict_elite_status():
 	test_samples, test_labels, _ = regression.prep_data(test_set)
 	test_score = model.score(test_samples, test_labels)
 	print 'Test score: ' + str(test_score)
+
 
 
 

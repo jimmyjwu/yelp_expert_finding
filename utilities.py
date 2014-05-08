@@ -190,6 +190,7 @@ def read_users_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
 	for user in raw_users:
 		users += [
 			{
+				'ID': user['user_id'],
 				'review_count': user['review_count'],
 				'average_stars': user['average_stars'],
 				'friend_count': len(user['friends']),

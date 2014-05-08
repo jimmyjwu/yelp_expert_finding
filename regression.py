@@ -1,5 +1,5 @@
 import numpy as np
-#from sklearn import linear_model
+from sklearn import linear_model
 from sklearn.svm import SVR
 
 def prep_data(data):
@@ -24,7 +24,7 @@ def prep_data(data):
     return [samples, labels, feature_names]
         
 
-def get_weights(data, deg=3):
+def get_weights(data, deg=1):
     """
     input: list of dictionaries mapping attribute to value, (optional) model degree: default = 1
     output: dictionary of feature names to weight
@@ -32,15 +32,13 @@ def get_weights(data, deg=3):
     lm = get_model(data, deg)
     features = prep_data(data)[2]
     weights = {}
-#    coef = list(lm.coef_)
-#    print coef
     coef =  lm.dual_coef_.tolist()[0]
-    print coef
     for n in range(len(features)):
         weights[features[n]] = coef[n]
     return weights
 
-def get_model(data, deg=3):
+
+def get_model(data, deg=1):
     """
     input: list of dictionaries mapping attribute to value, (optional) model degree: default = 1
     output: sklearn.linear_model.base.LinearRegression
@@ -50,9 +48,16 @@ def get_model(data, deg=3):
     if deg > 1:
         k = 'poly'
     lm = SVR(degree=deg, kernel=k)
-#    lm = linear_model.LinearRegression()
+    # lm = linear_model.LinearRegression()
     lm.fit(data[0], data[1])
-    return lm
+
+    features = data[2]
+    weights = {}
+    coef =  lm.dual_coef_.tolist()[0]
+    for n in range(len(features)):
+        weights[features[n]] = coef[n]
+
+    return lm, weights
 
 def predict(data, model):
     """

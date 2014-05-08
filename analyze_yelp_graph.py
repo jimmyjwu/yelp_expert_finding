@@ -37,12 +37,19 @@ def analyze_yelp_graph():
 
 
 def predict_elite_status_with_linear_regression():
-	# Prepare user data
+	# Generate graph and user dictionaries
+	graph = read_graph_from_yelp_JSON_file()
 	users = read_users_from_yelp_JSON_file(model_type='linear_regression')
+
+	# Add PageRank to user dictionaries
+	pagerank_for_node = networkx.pagerank(graph)
+	user_pageranks = [{'ID': node_ID, 'pagerank': pagerank} for node_ID, pagerank in pagerank_for_node.iteritems()]
+	users = join_dictionaries(user_pageranks, users, 'ID')
+
+	# Prepare users for learning
 	users = remove_labels(users, 'ID')
 	users = normalize_users(users, excluded_attributes=['years_elite'])
 	users = designate_attribute_as_label(users, 'years_elite')
-
 	random.shuffle(users)
 
 	# Split data into training and test
@@ -67,13 +74,21 @@ def predict_elite_status_with_linear_regression():
 
 
 def predict_elite_status_with_bayes():
+	# Generate graph and user dictionaries
+	graph = read_graph_from_yelp_JSON_file()
 	users = read_users_from_yelp_JSON_file(model_type='naive_bayes')
-	users = remove_labels(users, 'ID')
-	labels = []
-	user_vectors = []
 
+	# Add PageRank to user dictionaries
+	pagerank_for_node = networkx.pagerank(graph)
+	user_pageranks = [{'ID': node_ID, 'pagerank': pagerank} for node_ID, pagerank in pagerank_for_node.iteritems()]
+	users = join_dictionaries(user_pageranks, users, 'ID')
+
+	# Prepare users for learning
+	users = remove_labels(users, 'ID')
 	random.shuffle(users)
 
+	# Ensure 50-50 split of 0-labeled and 1-labeled training and test data
+	# If we don't do this, data is 93% 0-labeled and performs poorly on 1-labeled users
 	users_0 = 0
 	users_1 = 0
 	temporary_users = []
@@ -90,6 +105,8 @@ def predict_elite_status_with_bayes():
 
 	random.shuffle(users)
 
+	labels = []
+	user_vectors = []
 	sorted_keys = sorted(users[0].keys())
 	for user in users:
 		# Transform each user into a vector
@@ -130,7 +147,7 @@ def predict_elite_status_with_bayes():
 	test_set_labels = test_labels
 	"""
 	
-	"""
+	
 	# Test on only 1's
 	test = []
 	test_labels = []
@@ -142,7 +159,7 @@ def predict_elite_status_with_bayes():
 	test_set_labels = test_labels
 	print len(test_set)
 	print user_count
-	"""
+	
 
 	# Train Naive Bayes model
 	gnb = GaussianNB()
@@ -187,8 +204,8 @@ def predict_pagerank():
 
 
 if __name__ == "__main__":
-	# predict_elite_status_with_bayes()
-	predict_elite_status_with_linear_regression()
+	predict_elite_status_with_bayes()
+	# predict_elite_status_with_linear_regression()
 	# predict_pagerank()
 
 

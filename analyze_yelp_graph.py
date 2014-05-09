@@ -81,7 +81,7 @@ def predict_elite_status_with_linear_regression():
 
 def predict_elite_status_with_bayes():
 	# Hyperparameters
-	TEST_ONLY_ONES = False
+	TEST_ONLY_ONES = True
 	TRAIN_ON_ZEROS_TEST_ON_ONES = False
 
 	# Generate graph and user dictionaries
@@ -92,6 +92,11 @@ def predict_elite_status_with_bayes():
 	pagerank_for_node = networkx.pagerank(graph)
 	user_pageranks = [{'ID': node_ID, 'pagerank': pagerank} for node_ID, pagerank in pagerank_for_node.iteritems()]
 	users = join_dictionaries(user_pageranks, users, 'ID')
+	
+	# Add reading level to user dictionaries
+	reading_level_for_user = read_user_reading_levels_from_yelp_JSON_file()
+	reading_levels = [{'ID': ID, 'reading_level': reading_level} for ID, reading_level in reading_level_for_user.items()]
+	users = join_dictionaries(reading_levels, users, 'ID')
 
 	# Prepare users for learning
 	users = remove_labels(users, 'ID')
@@ -140,6 +145,7 @@ def predict_elite_status_with_bayes():
 
 	# Train on only 0's, test on only 1's. Result is zero accuracy score.
 	if TRAIN_ON_ZEROS_TEST_ON_ONES:
+		print "Training only on 0's, testing only on 1's."
 		training = []
 		training_labels = []
 		test = []
@@ -158,6 +164,7 @@ def predict_elite_status_with_bayes():
 	
 	# Test for recall on 1's
 	if TEST_ONLY_ONES:
+		print "Testing only on 1's (recall)."
 		test = []
 		test_labels = []
 		for i in range(test_set_size):
@@ -212,9 +219,9 @@ def predict_pagerank():
 
 
 if __name__ == "__main__":
-	# predict_elite_status_with_bayes()
+	predict_elite_status_with_bayes()
 	# predict_elite_status_with_linear_regression()
 	# predict_pagerank()
-	analyze_yelp_graph()
+	# analyze_yelp_graph()
 
 

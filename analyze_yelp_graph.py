@@ -24,6 +24,8 @@ def analyze_yelp_graph():
 	degree_histogram = networkx.degree_histogram(graph)
 	degrees = [graph.degree(node) for node in graph.nodes()]
 
+	print 'Edge density: ' + str(edge_density)
+
 	# Calculate and show PageRank metrics
 	if SHOW_PAGERANK_METRICS:
 		pagerank_for_node = networkx.pagerank(graph)
@@ -39,7 +41,7 @@ def analyze_yelp_graph():
 		show_histogram(values=pageranks, value_name='PageRank', bins=500, range_to_display=(0,0.001))
 
 	# Plot histogram of node degrees
-	show_histogram(values=degrees, value_name='Node Degree', bins=500, range_to_display=(0,40))
+	show_histogram(values=degrees, value_name='Node Degree', bins=500, range_to_display=(-1,30))
 
 
 def predict_elite_status_with_linear_regression():
@@ -219,9 +221,9 @@ def predict_pagerank():
 
 
 if __name__ == "__main__":
-	predict_elite_status_with_bayes()
+	# predict_elite_status_with_bayes()
 	# predict_elite_status_with_linear_regression()
 	# predict_pagerank()
-	# analyze_yelp_graph()
+	analyze_yelp_graph()
 
 

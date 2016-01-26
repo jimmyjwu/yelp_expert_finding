@@ -55,20 +55,8 @@ docs/_build/
 
 
 #Dataset
-yelp_academic_dataset_business.json
-yelp_academic_dataset_review.json
-yelp_academic_dataset_user.json
-yelp_academic_dataset_checkin.json
-yelp_academic_dataset_tip.json
-
-
-
-
-
-Phoenix_Academic_Dataset_Agreement.pdf
-yelp_phoenix_academic_dataset.tgz
-
-
+raw_data/
+processed_data/
 
 
 .DS_Store

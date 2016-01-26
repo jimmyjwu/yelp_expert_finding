@@ -5,6 +5,7 @@ Utilities for file manipulation, graph processing, etc.
 import json
 import itertools
 from collections import Counter, defaultdict
+from datetime import date
 
 import networkx
 import numpy
@@ -246,6 +247,7 @@ def read_users_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json', 
 	Given a Yelp dataset user file (with users in JSON format), returns a list of
 	user dictionaries with numeric values for various attributes.
 	"""
+	current_year = date.today().year
 	users_file = open(file_name)
 	raw_users = [json.loads(line) for line in users_file.readlines()]
 
@@ -256,7 +258,7 @@ def read_users_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json', 
 			'review_count': raw_user['review_count'],
 			'average_stars': raw_user['average_stars'],
 			# 'friend_count': len(raw_user['friends']),
-			'months_member': 12 * (2014 - int(raw_user['yelping_since'].split('-')[0]) - 1) + (12 - int(raw_user['yelping_since'].split('-')[1])) + 5,
+			'months_member': 12 * (current_year - int(raw_user['yelping_since'].split('-')[0]) - 1) + (12 - int(raw_user['yelping_since'].split('-')[1])) + 5,
 			'years_elite': len(raw_user['elite']),
 			# 'fan_count': raw_user['fans'],
 		}

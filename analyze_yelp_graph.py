@@ -16,21 +16,19 @@ def analyze_yelp_graph():
 	graph = read_graph_from_yelp_JSON_file()
 
 	# Remove users with low friend count
-	if MINIMUM_FRIEND_COUNT > 0:
-		remove_low_degree_nodes(graph, MINIMUM_FRIEND_COUNT)
+	remove_low_degree_nodes(graph, MINIMUM_FRIEND_COUNT)
 
 	# Calculate various graph metrics
 	edge_density = networkx.density(graph)
 	degree_histogram = networkx.degree_histogram(graph)
 	degrees = [graph.degree(node) for node in graph.nodes()]
-
 	print 'Edge density: ' + str(edge_density)
 
 	# Calculate and show PageRank metrics
 	if SHOW_PAGERANK_METRICS:
 		pagerank_for_node = networkx.pagerank(graph)
 		pageranks = sorted(pagerank_for_node.values())
-		unique_pageranks = sorted(unique(pageranks))		# 26,145 unique PageRanks out of 70,817 total
+		unique_pageranks = sorted(unique_values(pageranks))		# 26,145 unique PageRanks out of 70,817 total
 		pagerank_frequencies = sorted(frequencies(pageranks).items(), key=lambda x: x[1])
 
 		print 'The 5 smallest PageRanks are: ' + str(smallest_unique_values(pageranks, 5)) + '\n'
@@ -88,17 +86,22 @@ def predict_elite_status_with_bayes():
 
 	# Generate graph and user dictionaries
 	graph = read_graph_from_yelp_JSON_file()
+	print 'Finished reading graph'
+
 	users = read_users_from_yelp_JSON_file(model_type='naive_bayes')
+	print 'Finished reading users'
 
 	# Add PageRank to user dictionaries
 	pagerank_for_node = networkx.pagerank(graph)
 	user_pageranks = [{'ID': node_ID, 'pagerank': pagerank} for node_ID, pagerank in pagerank_for_node.iteritems()]
 	users = join_dictionaries(user_pageranks, users, 'ID')
+	print 'Finished adding PageRanks to users'
 	
 	# Add reading level to user dictionaries
 	reading_level_for_user = read_user_reading_levels_from_yelp_JSON_file()
 	reading_levels = [{'ID': ID, 'reading_level': reading_level} for ID, reading_level in reading_level_for_user.items()]
 	users = join_dictionaries(reading_levels, users, 'ID')
+	print 'Finished adding reading level to users'
 
 	# Prepare users for learning
 	users = remove_labels(users, 'ID')

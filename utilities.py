@@ -77,7 +77,7 @@ def normalize_users(users, excluded_attributes=[]):
 	"""
 	Given a list of user dictionaries with numeric values, returns a list of
 	user dictionaries in which all attributes, EXCEPT those whose names are in
-	excluded_attributes, arenormalized to [0, 1].
+	excluded_attributes, are normalized to [0, 1].
 	Normalization is done using min-max.
 	"""
 	excluded_attributes = set(excluded_attributes)
@@ -102,7 +102,7 @@ def normalize_users(users, excluded_attributes=[]):
 
 def print_first_items(values, k=1):
 	"""Prints the first k values."""
-	for i in xrange(0:k):
+	for i in xrange(0,k):
 		print values[i]
 	print ''
 
@@ -123,9 +123,7 @@ def smallest_unique_values(values, k):
 
 
 def largest_unique_values(values, k):
-	"""
-	Given a list of values, returns a list of the k largest values.
-	"""
+	"""Given a list of values, returns a list of the k largest values."""
 	return sorted(unique_values(values))[-k:]
 
 

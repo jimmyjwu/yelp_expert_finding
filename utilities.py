@@ -12,7 +12,7 @@ import numpy
 import matplotlib
 import math
 from matplotlib import pyplot
-from readability import Readability
+from readability.readability import Readability
 
 
 def join_dictionaries(dictionaries_1, dictionaries_2, join_key):

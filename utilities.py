@@ -100,73 +100,50 @@ def normalize_users(users, excluded_attributes=[]):
 	return users
 
 
-def print_first_elements(values, k=1):
-	"""
-	Prints the first k values.
-	"""
-	for value in values[0:k]:
-		print value
+def print_first_items(values, k=1):
+	"""Prints the first k values."""
+	for i in xrange(0:k):
+		print values[i]
 	print ''
 
 
-def unique(values):
-	"""
-	Given a list of values, returns a list of unique values.
-	"""
+def unique_values(values):
+	"""Given a list of values, returns a list of unique values."""
 	return list(set(values))
 
 
 def most_frequent_values_and_frequencies(values, k):
-	"""
-	Given a list of values, returns a list of tuples of the k most frequent values
-	and their respective frequencies.
-	"""
-	return sorted(frequencies(values).items(), key=lambda value: value[1])[-k:]
+	"""Given a list of values, returns a list of tuples of the k most frequent values and their respective frequencies."""
+	return Counter(values).most_common(k)
 
 
 def smallest_unique_values(values, k):
-	"""
-	Given a list of values, returns a list of the k smallest values.
-	"""
-	return sorted(unique(values))[0:k]
+	"""Given a list of values, returns a list of the k smallest values."""
+	return sorted(unique_values(values))[0:k]
 
 
 def largest_unique_values(values, k):
 	"""
 	Given a list of values, returns a list of the k largest values.
 	"""
-	return sorted(unique(values))[-k:]
+	return sorted(unique_values(values))[-k:]
 
 
 def frequencies(values):
-	"""
-	Given a list of values, returns a dictionary mapping each unique value
-	to the frequency with which it occurs.
-	"""
+	"""Given a list of values, returns a dictionary mapping each unique value to the frequency with which it occurs."""
 	return Counter(values)
 
 
 def remove_low_degree_nodes(graph, minimum_degree=1):
-	"""
-	Removes all nodes with degree less than minimum_degree.
-	"""
+	"""Removes all nodes with degree less than minimum_degree."""
 	for node in graph.nodes():
 		if graph.degree(node) < minimum_degree:
 			graph.remove_node(node)
 
 
 def highest_degree_node_in_graph(graph):
-	"""
-	Given a NetworkX graph, returns the node with highest degree.
-	"""
-	max_degree = 0
-	max_degree_node = None
-	for node, degree in graph.degree_iter():
-		if degree > max_degree:
-			max_degree = degree
-			max_degree_node = node
-
-	return max_degree_node
+	"""Given a NetworkX graph, returns the node with highest degree."""
+	return max(graph.degree_iter(), key=lambda (node,degree): degree)[0]
 
 
 def show_histogram(values, value_name='Value', bins=100, range_to_display=(0,0), normed=False):

@@ -1,9 +1,13 @@
 """
 Utilities for the following:
 
-	+-----------+        cleaning                 +-----------------+
-	| raw_data/ | ------ reorganizing      -----> | processed_data/ |
-	+-----------+        feature extraction       +-----------------+
+    +-----------+        +--------------------+
+    | raw_data/ | -----> | cleaning           |        +-----------------+
+    +-----------+        | reorganizing       | -----> | processed_data/ |
+                    +--> | feature extraction |        +-----------------+
+                    |    +--------------------+                 |
+                    |                                           |
+                    +-------------------------------------------+
 """
 import os
 

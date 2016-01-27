@@ -36,10 +36,11 @@ def join_dictionaries(dictionaries_1, dictionaries_2, join_key):
 
 def make_attribute_boolean(users, attribute):
 	"""
-	Given a list of users and an attribute name, transforms attribute values:
-		value = 0	-->		new value = 0
+	Given a list of user dictionaries and an attribute name, returns a new list
+	of users whose designated attribute is transformed as follows:
+		value <= 0	-->		new value = 0
 		value > 0	-->		new value = 1
-	and returns a new list of users.
+	and all other attributes are copied without change.
 	"""
 	transformed_users = []
 	for user in users:
@@ -51,8 +52,9 @@ def make_attribute_boolean(users, attribute):
 
 def designate_attribute_as_label(users, attribute):
 	"""
-	Given an attribute name, changes that attribute to 'label' in all user
-	dictionaries. Use for regression fitting.
+	Given a list of user dictionaries and an attribute name, returns a new list
+	of users whose designated attribute is named 'label', and all other attributes
+	are copied without change.
 	"""
 	labeled_users = []
 	for user in users:
@@ -64,8 +66,8 @@ def designate_attribute_as_label(users, attribute):
 
 def remove_labels(users, label_name='label'):
 	"""
-	Given a list of user dictionaries, returns a list of user dictionaries with
-	a label attribute from each user removed.
+	Given a list of user dictionaries, returns a new list of users without
+	the label attribute, but with all other attributes copied.
 	"""
 	unlabeled_users = []
 	for user in users:
@@ -75,9 +77,10 @@ def remove_labels(users, label_name='label'):
 
 def normalize_users(users, excluded_attributes=[]):
 	"""
-	Given a list of user dictionaries with numeric values, returns a list of
-	user dictionaries in which all attributes, EXCEPT those whose names are in
-	excluded_attributes, are normalized to [0, 1].
+	Given a list of user dictionaries whose attributes are numeric values, returns a list of
+	users in which all attributes, EXCEPT those whose names are in excluded_attributes,
+	are normalized to [0, 1].
+
 	Normalization is done using min-max.
 	"""
 	excluded_attributes = set(excluded_attributes)
@@ -101,7 +104,7 @@ def normalize_users(users, excluded_attributes=[]):
 
 
 def print_first_items(values, k=1):
-	"""Prints the first k values."""
+	"""Prints the first k values on separate lines."""
 	for i in xrange(0,k):
 		print values[i]
 	print ''
@@ -113,17 +116,20 @@ def unique_values(values):
 
 
 def most_frequent_values_and_frequencies(values, k):
-	"""Given a list of values, returns a list of tuples of the k most frequent values and their respective frequencies."""
+	"""
+	Given a list of values, returns a list of tuples:
+		[ (most common value, its frequency), ..., (kth most common value, its frequency) ]
+	"""
 	return Counter(values).most_common(k)
 
 
 def smallest_unique_values(values, k):
-	"""Given a list of values, returns a list of the k smallest values."""
+	"""Given a list of values, returns a list of the k smallest unique values."""
 	return sorted(unique_values(values))[0:k]
 
 
 def largest_unique_values(values, k):
-	"""Given a list of values, returns a list of the k largest values."""
+	"""Given a list of values, returns a list of the k largest unique values."""
 	return sorted(unique_values(values))[-k:]
 
 
@@ -133,14 +139,14 @@ def frequencies(values):
 
 
 def remove_low_degree_nodes(graph, minimum_degree=1):
-	"""Removes all nodes with degree less than minimum_degree."""
+	"""Removes all nodes in a graph with degree less than minimum_degree."""
 	for node in graph.nodes():
 		if graph.degree(node) < minimum_degree:
 			graph.remove_node(node)
 
 
 def highest_degree_node_in_graph(graph):
-	"""Given a NetworkX graph, returns the node with highest degree."""
+	"""Given a graph, returns the node with highest degree."""
 	return max(graph.degree_iter(), key=lambda (node,degree): degree)[0]
 
 

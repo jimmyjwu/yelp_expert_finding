@@ -13,7 +13,7 @@ from utilities import *
 from data_utilities import *
 
 
-def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE, output_file_name=DEFAULT_REVIEW_LENGTHS_FILE):
+def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, output_file_name=DEFAULT_REVIEW_LENGTHS_FILE_NAME):
 	"""
 	Given a Yelp dataset reviews file (with reviews in JSON format), builds a file:
 		user_1_ID user_1_average_review_length
@@ -41,7 +41,26 @@ def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE
 			user_review_lengths_file.write(user_ID + ' ' + str( float(total_review_length) / review_count ) + '\n')
 
 
-def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE, output_file_name=DEFAULT_READING_LEVELS_FILE, reviews_to_analyze_per_user=float('inf')):
+def _read_user_average_review_lengths(input_file_name=DEFAULT_REVIEW_LENGTHS_FILE_NAME):
+	"""
+	Given a processed review lengths file, returns a dictionary:
+		{ user_1_ID: user_1_average_review_length, ..., user_N_ID: user_N_average_review_length }
+
+	WARNING: This function reads from an intermediate file in the data processing pipeline.
+	Applications should read data using data_interface.py instead.
+	"""
+	average_review_length_for_user = {}
+
+	with open(_processed_data_absolute_path(input_file_name)) as review_lengths_file:
+
+		for user_line in review_lengths_file:
+			user_ID, average_review_length = user_line.split()
+			average_review_length_for_user[user_ID] = average_review_length
+
+	return average_review_length_for_user
+
+
+def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, output_file_name=DEFAULT_READING_LEVELS_FILE_NAME, reviews_to_analyze_per_user=float('inf')):
 	"""
 	Given a Yelp dataset reviews file (with reviews in JSON format), builds a file:
 		user_1_ID user_1_reading_level
@@ -79,4 +98,22 @@ def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE, output
 		
 		for user_ID, [total_reading_level, review_count] in total_reading_level_and_review_count_for_user.iteritems():
 			user_reading_levels_file.write(user_ID + ' ' + str( float(total_reading_level) / review_count ) + '\n')
+
+
+def _read_user_average_reading_levels(input_file_name=DEFAULT_READING_LEVELS_FILE_NAME):
+	"""
+	Given a processed reading levels file, returns a dictionary:
+		{ user_1_ID: user_1_average_reading_level, ..., user_N_ID: user_N_average_reading_level }
+
+	WARNING: This function reads from an intermediate file in the data processing pipeline.
+	Applications should read data using data_interface.py instead.
+	"""
+	# Exploit the fact that the 'review length' and 'reading level' files are formatted the same
+	return _read_user_average_review_lengths(input_file_name)
+
+
+
+
+
+
 

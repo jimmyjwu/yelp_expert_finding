@@ -9,19 +9,8 @@ Utilities for the following:
                     |                                           |
                     +-------------------------------------------+
 """
-import os
-
 from utilities import *
-
-THIS_FILE_PATH = os.path.dirname(__file__)
-
-def _raw_data_absolute_path(relative_path):
-	"""Given the name of a raw data file, returns its absolute path."""
-	return os.path.join(THIS_FILE_PATH, 'raw_data/' + relative_path)
-
-def _processed_data_absolute_path(relative_path):
-	"""Given the name of a processed data file, returns its absolute path."""
-	return os.path.join(THIS_FILE_PATH, 'processed_data/' + relative_path)
+from data_utilities import *
 
 
 def extract_user_average_review_lengths(input_file_name='yelp_academic_dataset_review.json', output_file_name='user_average_review_lengths.txt'):

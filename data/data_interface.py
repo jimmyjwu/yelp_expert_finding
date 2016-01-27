@@ -17,8 +17,8 @@ from data_utilities import *
 
 def read_user_graph(file_name='raw_data/yelp_academic_dataset_user.json'):
 	"""
-	Given a Yelp dataset user file (with users in JSON format), returns a NetworkX
-	graph of the users and their friendships.
+	Given a Yelp dataset user file (with users in JSON format), returns a graph of the users and
+	their friendships.
 	"""
 	users_file = open(file_name)
 	users = [json.loads(line) for line in users_file.readlines()]

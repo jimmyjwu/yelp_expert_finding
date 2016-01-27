@@ -13,7 +13,7 @@ from utilities import *
 from data_utilities import *
 
 
-def extract_user_average_review_lengths(input_file_name='yelp_academic_dataset_review.json', output_file_name='user_average_review_lengths.txt'):
+def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE, output_file_name=DEFAULT_REVIEW_LENGTHS_FILE):
 	"""
 	Given a Yelp dataset reviews file (with reviews in JSON format), builds a file:
 		user_1_ID user_1_average_review_length
@@ -41,7 +41,7 @@ def extract_user_average_review_lengths(input_file_name='yelp_academic_dataset_r
 			user_review_lengths_file.write(user_ID + ' ' + str( float(total_review_length) / review_count ) + '\n')
 
 
-def extract_user_reading_levels(input_file_name='yelp_academic_dataset_review.json', output_file_name='user_reading_levels.txt', reviews_to_analyze_per_user=float('inf')):
+def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE, output_file_name=DEFAULT_READING_LEVELS_FILE, reviews_to_analyze_per_user=float('inf')):
 	"""
 	Given a Yelp dataset reviews file (with reviews in JSON format), builds a file:
 		user_1_ID user_1_reading_level
@@ -79,6 +79,4 @@ def extract_user_reading_levels(input_file_name='yelp_academic_dataset_review.js
 		
 		for user_ID, [total_reading_level, review_count] in total_reading_level_and_review_count_for_user.iteritems():
 			user_reading_levels_file.write(user_ID + ' ' + str( float(total_reading_level) / review_count ) + '\n')
-
-
 

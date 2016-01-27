@@ -1,12 +1,21 @@
 """
-Utilities for reading (raw and processed) data and presenting it in Python.
+Utilities for the following:
+
+          +-----------+
+          | raw_data/ | -----> +----- THIS FILE ------+
+          +-----------+        | read from file(s)    |        +--------------+
+                               | build Python objects | -----> | applications |
+    +-----------------+        |                      |        +--------------+
+    | processed_data/ | -----> +----------------------+
+    +-----------------+
 
 IMPORTANT: All data retrieval should be done through this file.
 """
+from utilities import *
+from data_utilities import *
 
 
-
-def read_graph_from_yelp_JSON_file(file_name='raw_data/yelp_academic_dataset_user.json'):
+def read_user_graph(file_name='raw_data/yelp_academic_dataset_user.json'):
 	"""
 	Given a Yelp dataset user file (with users in JSON format), returns a NetworkX
 	graph of the users and their friendships.

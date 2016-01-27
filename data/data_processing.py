@@ -1,7 +1,7 @@
 """
 Utilities for the following:
 
-    +-----------+        +--------------------+
+    +-----------+        +---- THIS FILE -----+
     | raw_data/ | -----> | cleaning           |        +-----------------+
     +-----------+        | reorganizing       | -----> | processed_data/ |
                     +--> | feature extraction |        +-----------------+

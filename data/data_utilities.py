@@ -13,6 +13,8 @@ DEFAULT_READING_LEVELS_FILE_NAME = 'user_reading_levels.txt'
 DEFAULT_PAGERANKS_FILE_NAME = 'user_pageranks.txt'
 DEFAULT_COMBINED_USERS_FILE_NAME = 'combined_users.json'
 
+DEFAULT_D3_GRAPH_FILE_NAME = 'users_graph.json'
+
 
 def _raw_data_absolute_path(relative_path):
 	"""Given the name of a raw data file, returns its absolute path."""

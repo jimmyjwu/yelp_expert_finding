@@ -255,20 +255,6 @@ def read_users_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json', 
 	return users
 
 
-def output_graph_to_D3_JSON_file(file_name='users_graph.json'):
-	"""
-	Given a NetworkX graph, writes the graph to a JSON file in a format suitable
-	for displaying a D3 force-directed graph.
-	"""
-	JSON = {'nodes': [], 'links': []}
-	for user_ID in graph.nodes_iter():
-		JSON['nodes'] += [{'name': user_ID}]
-	for friend_1_ID, friend_2_ID in graph.edges_iter():
-		JSON['links'] += [{'source': friend_1_ID, 'target': friend_2_ID, 'value': 1}]
-
-	with open(file_name, 'w') as output_file:
-		json.dump(JSON, output_file)
-
 
 
 

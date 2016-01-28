@@ -10,6 +10,7 @@ DEFAULT_RAW_USERS_FILE_NAME = 'yelp_academic_dataset_user.json'
 
 DEFAULT_REVIEW_LENGTHS_FILE_NAME = 'user_average_review_lengths.txt'
 DEFAULT_READING_LEVELS_FILE_NAME = 'user_reading_levels.txt'
+DEFAULT_PAGERANKS_FILE_NAME = 'user_pageranks.txt'
 DEFAULT_COMBINED_USERS_FILE_NAME = 'combined_users.json'
 
 

@@ -11,6 +11,7 @@ Utilities for the following:
 """
 from utilities import *
 from data_utilities import *
+from data_interface import *
 
 
 def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, output_file_name=DEFAULT_REVIEW_LENGTHS_FILE_NAME):
@@ -79,6 +80,25 @@ def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, o
 		
 		for user_ID, [total_reading_level, review_count] in total_reading_level_and_review_count_for_user.iteritems():
 			user_reading_levels_file.write(user_ID + ' ' + str( float(total_reading_level) / review_count ) + '\n')
+
+
+def extract_user_pageranks(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_file_name=DEFAULT_PAGERANKS_FILE_NAME):
+	"""
+	Given a Yelp dataset users file (with users in JSON format), builds a file:
+		user_1_ID user_1_pagerank
+			.
+			.
+			.
+		user_N_ID user_N_pagerank
+	"""
+	graph = read_user_graph(input_file_name)
+	pagerank_for_user = networkx.pagerank(graph)
+	
+	# Write each user's PageRank to file
+	with open(_processed_data_absolute_path(output_file_name), 'w') as user_pageranks_file: # Write mode; overwrite old file if it exists
+		
+		for user_ID, pagerank in pagerank_for_user.iteritems():
+			user_reading_levels_file.write(user_ID + ' ' + str(pagerank) + '\n')
 
 
 def combine_all_user_data(

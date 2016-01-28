@@ -163,66 +163,6 @@ def show_histogram(values, value_name='Value', bins=100, range_to_display=(0,0),
 	pyplot.show()
 
 
-def read_graph_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json'):
-	"""
-	Given a Yelp dataset user file (with users in JSON format), returns a NetworkX
-	graph of the users and their friendships.
-	"""
-	users_file = open(file_name)
-	users = [json.loads(line) for line in users_file.readlines()]
-
-	graph = networkx.Graph()
-	for user in users:
-		user_ID = user['user_id']
-		graph.add_node(user_ID)
-		for friend_ID in user['friends']:
-			graph.add_edge(user_ID, friend_ID)
-
-	return graph
-
-
-def read_user_reading_levels_from_yelp_JSON_file(file_name='yelp_academic_dataset_review.json'):
-	"""
-	Given a Yelp dataset reviews file (with reviews in JSON format), returns a
-	dictionary mapping user ID to the user's reading level.
-	"""
-	# Hyperparameters
-	LINES_TO_ANALYZE = 10000	# For reading level analysis only
-	USE_REVIEW_LENGTH = True 	# Use review length (in words) rather than computationally expensive reading level
-
-	review_reading_levels_for_user = defaultdict(list)
-
-	with open(file_name) as reviews_file:
-		if USE_REVIEW_LENGTH:
-			for review in reviews_file:
-				review = json.loads(review)
-				review_reading_levels_for_user[review['user_id']] += [len(review['text'].split())]
-		else:
-			lines_used = 0
-			for review in reviews_file:
-				if lines_used > LINES_TO_ANALYZE:
-					break
-				else:
-					lines_used += 1
-				review = json.loads(review)
-				try:
-					readability_analyzer = Readability(review['text'])
-					review_reading_levels_for_user[review['user_id']] += [readability_analyzer.SMOGIndex()]
-				except UnicodeEncodeError as e:
-					pass
-
-	print 'CHECKPOINT 1'
-
-	# Map each user to the average reading level of his/her reviews
-	average_reading_level_for_user = {}
-	for user_ID, reading_levels in review_reading_levels_for_user.iteritems():
-		average_reading_level_for_user[user_ID] = float(sum(reading_levels)) / len(reading_levels)
-
-	print 'CHECKPOINT 2'
-
-	return average_reading_level_for_user
-
-
 def read_users_from_yelp_JSON_file(file_name='yelp_academic_dataset_user.json', model_type='naive_bayes'):
 	"""
 	Given a Yelp dataset user file (with users in JSON format), returns a list of

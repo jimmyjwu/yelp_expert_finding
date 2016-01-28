@@ -68,6 +68,7 @@ def _read_single_user_attribute(input_file_name):
 			.
 			.
 		user_N_ID user_N_attribute_value
+	
 	returns a dictionary:
 		{ user_1_ID: user_1_attribute_value, ..., user_N_ID: user_N_attribute_value }
 	"""
@@ -80,6 +81,26 @@ def _read_single_user_attribute(input_file_name):
 			attribute_for_user[user_ID] = attribute_value
 
 	return attribute_for_user
+
+
+def _write_single_user_attribute(attribute_for_user, output_file_name):
+	"""
+	Given a dictionary
+		{ user_1_ID: user_1_attribute_value, ..., user_N_ID: user_N_attribute_value }
+
+	writes a file of the form
+		user_1_ID user_1_attribute_value
+			.
+			.
+			.
+		user_N_ID user_N_attribute_value
+	"""
+	with open(_processed_data_absolute_path(output_file_name), 'w') as attribute_file: # Write mode; overwrite old file if it exists
+		
+		for user_ID, attribute in attribute_for_user.iteritems():
+			attribute_file.write(user_ID + ' ' + str(attribute) + '\n')
+
+
 
 
 

@@ -14,7 +14,6 @@ from data_utilities import *
 from data_interface import *
 
 
-# TODO: Refactor the following three functions' write-to-file blocks into one utility function
 def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, output_file_name=DEFAULT_REVIEW_LENGTHS_FILE_NAME):
 	"""
 	Given a Yelp dataset reviews file (with reviews in JSON format), builds a file:
@@ -35,11 +34,10 @@ def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE
 			total_review_length_and_count_for_user[review['user_id']][0] += len(review['text'].split())
 			total_review_length_and_count_for_user[review['user_id']][1] += 1
 
-	# Write each user's average review length to file
-	with open(_processed_data_absolute_path(output_file_name), 'w') as user_review_lengths_file: # Write mode; overwrite old file if it exists
-		
-		for user_ID, [total_review_length, review_count] in total_review_length_and_count_for_user.iteritems():
-			user_review_lengths_file.write(user_ID + ' ' + str( float(total_review_length) / review_count ) + '\n')
+	# Compute each user's average review length
+	average_review_length_for_user = { user_ID: float(total_review_length) / review_count for user_ID, [total_review_length, review_count] in total_review_length_and_count_for_user.iteritems() }
+
+	_write_single_user_attribute(average_review_length_for_user, output_file_name)
 
 
 def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, output_file_name=DEFAULT_READING_LEVELS_FILE_NAME, reviews_to_analyze_per_user=float('inf')):
@@ -74,11 +72,10 @@ def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, o
 			except UnicodeEncodeError as error:
 				pass
 
-	# Write each user's average review reading level to file
-	with open(_processed_data_absolute_path(output_file_name), 'w') as user_reading_levels_file: # Write mode; overwrite old file if it exists
-		
-		for user_ID, [total_reading_level, review_count] in total_reading_level_and_review_count_for_user.iteritems():
-			user_reading_levels_file.write(user_ID + ' ' + str( float(total_reading_level) / review_count ) + '\n')
+	# Compute each user's average reading level
+	average_reading_level_for_user = { user_ID: float(total_reading_level) / review_count for user_ID, [total_reading_level, review_count] in total_reading_level_and_review_count_for_user.iteritems() }
+
+	_write_single_user_attribute(average_reading_level_for_user, output_file_name)
 
 
 def extract_user_pageranks(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_file_name=DEFAULT_PAGERANKS_FILE_NAME):
@@ -93,11 +90,7 @@ def extract_user_pageranks(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_f
 	graph = read_user_graph(input_file_name)
 	pagerank_for_user = networkx.pagerank(graph)
 	
-	# Write each user's PageRank to file
-	with open(_processed_data_absolute_path(output_file_name), 'w') as user_pageranks_file: # Write mode; overwrite old file if it exists
-		
-		for user_ID, pagerank in pagerank_for_user.iteritems():
-			user_reading_levels_file.write(user_ID + ' ' + str(pagerank) + '\n')
+	_write_single_user_attribute(pagerank_for_user, output_file_name)
 
 
 def combine_all_user_data(

@@ -15,20 +15,20 @@ from utilities import *
 from data_utilities import *
 
 
-def read_user_graph(file_name='raw_data/yelp_academic_dataset_user.json'):
+def read_user_graph(input_file_name=DEFAULT_RAW_USERS_FILE_NAME):
 	"""
 	Given a Yelp dataset user file (with users in JSON format), returns a graph of the users and
 	their friendships.
 	"""
-	users_file = open(file_name)
-	users = [json.loads(line) for line in users_file.readlines()]
-
 	graph = networkx.Graph()
-	for user in users:
-		user_ID = user['user_id']
-		graph.add_node(user_ID)
-		for friend_ID in user['friends']:
-			graph.add_edge(user_ID, friend_ID)
+
+	with open(_raw_data_absolute_path(input_file_name)) as users_file:
+
+		for user_line in users_file:
+			user = json.loads(user_line)
+			graph.add_node(user['user_id'])
+			for friend_ID in user['friends']:
+				graph.add_edge(user['user_id'], friend_ID)
 
 	return graph
 

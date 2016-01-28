@@ -59,10 +59,23 @@ def read_user_pageranks(input_file_name=DEFAULT_PAGERANKS_FILE_NAME):
 
 def read_users(input_file_name=DEFAULT_COMBINED_USERS_FILE_NAME, attributes=DEFAULT_USER_ATTRIBUTES):
 	"""
-	Given a combined Yelp dataset user file (with users in JSON format), returns a list of user
+	Given a combined Yelp dataset user file and a list of attributes, returns a list of user
 	dictionaries containing only the desired attributes.
 	"""
-	# TODO: Implement this function
+	attributes_set = set(attributes)
+	users = []
+
+	with open(_raw_data_absolute_path(input_file_name)) as combined_users_file:
+
+		# Row 1: attribute names
+		all_attributes = combined_users_file.readline().split()
+
+		# Rows 2,...,N: users' attribute values written in the same order
+		for user_line in combined_users_file:
+			user_attribute_values = user_line.split()
+			users += [ { attribute_name: user_attribute_values[i] for i, attribute_name in enumerate(all_attributes) if attribute_name in attributes_set } ]
+
+	return users
 
 
 def write_D3_graph(graph, output_file_name=DEFAULT_D3_GRAPH_FILE_NAME):

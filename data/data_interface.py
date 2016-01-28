@@ -33,21 +33,12 @@ def read_user_graph(input_file_name=DEFAULT_RAW_USERS_FILE_NAME):
 	return graph
 
 
-# TODO: Refactor the following three functions to call a single function
 def read_user_average_review_lengths(input_file_name=DEFAULT_REVIEW_LENGTHS_FILE_NAME):
 	"""
 	Given a processed review lengths file, returns a dictionary:
 		{ user_1_ID: user_1_average_review_length, ..., user_N_ID: user_N_average_review_length }
 	"""
-	average_review_length_for_user = {}
-
-	with open(_processed_data_absolute_path(input_file_name)) as review_lengths_file:
-
-		for user_line in review_lengths_file:
-			user_ID, average_review_length = user_line.split()
-			average_review_length_for_user[user_ID] = average_review_length
-
-	return average_review_length_for_user
+	return _read_single_user_attribute(input_file_name)
 
 
 def read_user_average_reading_levels(input_file_name=DEFAULT_READING_LEVELS_FILE_NAME):
@@ -55,8 +46,7 @@ def read_user_average_reading_levels(input_file_name=DEFAULT_READING_LEVELS_FILE
 	Given a processed reading levels file, returns a dictionary:
 		{ user_1_ID: user_1_average_reading_level, ..., user_N_ID: user_N_average_reading_level }
 	"""
-	# Exploit the fact that the 'review length' and 'reading level' files are formatted the same
-	return _read_user_average_review_lengths(input_file_name)
+	return _read_single_user_attribute(input_file_name)
 
 
 def read_user_pageranks(input_file_name=DEFAULT_PAGERANKS_FILE_NAME):
@@ -64,8 +54,7 @@ def read_user_pageranks(input_file_name=DEFAULT_PAGERANKS_FILE_NAME):
 	Given a processed reading levels file, returns a dictionary:
 		{ user_1_ID: user_1_PageRank, ..., user_N_ID: user_N_PageRank }
 	"""
-	# Exploit the fact that the 'review length' and 'PageRank' files are formatted the same
-	return _read_user_average_review_lengths(input_file_name)
+	return _read_single_user_attribute(input_file_name)
 
 
 def read_users(input_file_name=DEFAULT_COMBINED_USERS_FILE_NAME, attributes=DEFAULT_USER_ATTRIBUTES):

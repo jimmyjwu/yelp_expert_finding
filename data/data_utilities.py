@@ -54,6 +54,32 @@ def _raw_data_absolute_path(relative_path):
 	"""Given the name of a raw data file, returns its absolute path."""
 	return os.path.join(THIS_FILE_PATH, 'raw_data/' + relative_path)
 
+
 def _processed_data_absolute_path(relative_path):
 	"""Given the name of a processed data file, returns its absolute path."""
 	return os.path.join(THIS_FILE_PATH, 'processed_data/' + relative_path)
+
+
+def _read_single_user_attribute(input_file_name):
+	"""
+	Given a processed user attribute file of the form
+		user_1_ID user_1_attribute_value
+			.
+			.
+			.
+		user_N_ID user_N_attribute_value
+	returns a dictionary:
+		{ user_1_ID: user_1_attribute_value, ..., user_N_ID: user_N_attribute_value }
+	"""
+	attribute_for_user = {}
+
+	with open(_processed_data_absolute_path(input_file_name)) as attribute_file:
+
+		for user_line in attribute_file:
+			user_ID, attribute_value = user_line.split()
+			attribute_for_user[user_ID] = attribute_value
+
+	return attribute_for_user
+
+
+

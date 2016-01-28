@@ -33,6 +33,7 @@ def read_user_graph(input_file_name=DEFAULT_RAW_USERS_FILE_NAME):
 	return graph
 
 
+# TODO: Refactor the following three functions to call a single function
 def read_user_average_review_lengths(input_file_name=DEFAULT_REVIEW_LENGTHS_FILE_NAME):
 	"""
 	Given a processed review lengths file, returns a dictionary:
@@ -56,6 +57,23 @@ def read_user_average_reading_levels(input_file_name=DEFAULT_READING_LEVELS_FILE
 	"""
 	# Exploit the fact that the 'review length' and 'reading level' files are formatted the same
 	return _read_user_average_review_lengths(input_file_name)
+
+
+def read_user_pageranks(input_file_name=DEFAULT_PAGERANKS_FILE_NAME):
+	"""
+	Given a processed reading levels file, returns a dictionary:
+		{ user_1_ID: user_1_PageRank, ..., user_N_ID: user_N_PageRank }
+	"""
+	# Exploit the fact that the 'review length' and 'PageRank' files are formatted the same
+	return _read_user_average_review_lengths(input_file_name)
+
+
+def read_users(input_file_name=DEFAULT_COMBINED_USERS_FILE_NAME, attributes=DEFAULT_USER_ATTRIBUTES):
+	"""
+	Given a combined Yelp dataset user file (with users in JSON format), returns a list of user
+	dictionaries containing only the desired attributes.
+	"""
+	# TODO: Implement this function
 
 
 def write_D3_graph(graph, output_file_name=DEFAULT_D3_GRAPH_FILE_NAME):

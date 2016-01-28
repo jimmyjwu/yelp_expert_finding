@@ -133,18 +133,15 @@ def combine_all_user_data(
 			user_for_ID[user['ID']] = user
 
 	# Read in average review lengths
-	average_review_length_for_user = read_user_average_review_lengths(input_file_name=input_review_lengths_file_name)
-	for user_ID, average_review_length in average_review_length_for_user.iteritems():
+	for user_ID, average_review_length in read_user_average_review_lengths(input_file_name=input_review_lengths_file_name).iteritems():
 		user_for_ID[user_ID]['average_review_length'] = average_review_length
 
 	# Read in average reading levels
-	average_reading_level_for_user = read_user_average_reading_levels(input_file_name=input_reading_levels_file_name)
-	for user_ID, average_reading_level in average_reading_level_for_user.iteritems():
+	for user_ID, average_reading_level in read_user_average_reading_levels(input_file_name=input_reading_levels_file_name).iteritems():
 		user_for_ID[user_ID]['average_reading_level'] = average_reading_level
 
 	# Read in PageRanks
-	pagerank_for_user = read_user_pageranks(input_file_name=input_pageranks_file_name)
-	for user_ID, pagerank in pagerank_for_user.iteritems():
+	for user_ID, pagerank in read_user_pageranks(input_file_name=input_pageranks_file_name).iteritems():
 		user_for_ID[user_ID]['pagerank'] = pagerank
 
 	# Write combined user data to file
@@ -153,11 +150,9 @@ def combine_all_user_data(
 		# Row 1: attribute names
 		combined_users_file.write( ' '.join(ALL_USER_ATTRIBUTES) + '\n')
 
-		# Rows 2,...,N: users' attribute values
+		# Rows 2,...,N: users' attribute values written in the same order
 		for user in user_for_ID.itervalues():
 			combined_users_file.write( ' '.join([str(user[attribute]) for attribute in ALL_USER_ATTRIBUTES]) + '\n')
-
-
 
 
 

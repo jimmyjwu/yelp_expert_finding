@@ -81,6 +81,18 @@ def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, o
 			user_reading_levels_file.write(user_ID + ' ' + str( float(total_reading_level) / review_count ) + '\n')
 
 
+def combine_all_user_data(
+	input_users_file_name=DEFAULT_RAW_USERS_FILE_NAME,
+	input_review_lengths_file_name=DEFAULT_REVIEW_LENGTHS_FILE_NAME,
+	input_reading_levels_file_name=DEFAULT_READING_LEVELS_FILE_NAME,
+	output_users_file_name=DEFAULT_COMBINED_USERS_FILE_NAME,
+):
+	"""
+	Given all data on users (both raw and processed), combines them into a single JSON file of user
+	dictionaries.
+	"""
+	# TODO: Implement this function
+
 
 
 

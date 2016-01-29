@@ -93,31 +93,21 @@ def extract_user_pageranks(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_f
 	_write_single_user_attribute(pagerank_for_user, output_file_name)
 
 
-def combine_all_user_data(
-	input_users_file_name=DEFAULT_RAW_USERS_FILE_NAME,
-	input_review_lengths_file_name=DEFAULT_REVIEW_LENGTHS_FILE_NAME,
-	input_reading_levels_file_name=DEFAULT_READING_LEVELS_FILE_NAME,
-	input_pageranks_file_name=DEFAULT_PAGERANKS_FILE_NAME,
-	output_users_file_name=DEFAULT_COMBINED_USERS_FILE_NAME,
-):
+# TODO: Refactor multi-attribute file writing in the following two functions
+def extract_user_basic_attributes(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_file_name=DEFAULT_BASIC_ATTRIBUTES_FILE_NAME):
 	"""
-	Given all data on users (both raw and processed), combines them into a single file formatted as follows:
-		ID review_count ... pagerank
-		user_1_ID user_1_review_count ... user_1_pagerank
+	Given a Yelp dataset users file (with users in JSON format), builds a file:
+		user_1_ID user_1_review_count ... user_1_fan_count
 			.
 			.
 			.
-		user_N_ID user_N_review_count ... user_N_pagerank
+		user_N_ID user_N_review_count ... user_N_fan_count
 	"""
-	# TODO: Check if there are more features provided by the Yelp dataset that are not being added
-	# TODO: Fix and refactor months_member calculation
+	users = []
 
-	user_for_ID = {}
+	with open(_raw_data_absolute_path(input_file_name)) as raw_users_file:
 
-	# Read in basic user attributes
-	with open(_raw_data_absolute_path(input_users_file_name)) as users_file:
-
-		for user_line in users_file:
+		for user_line in raw_users_file:
 			raw_user = json.loads(user_line)
 			user = {
 				'ID': raw_user['user_id'],
@@ -131,7 +121,39 @@ def combine_all_user_data(
 				'months_member': _months_since_year_and_month(raw_user['yelping_since']),
 				'fan_count': raw_user['fans'],
 			}
-			user_for_ID[user['ID']] = user
+			users += [user]
+
+	# Write combined user data to file
+	with open(_processed_data_absolute_path(output_file_name), 'w') as user_basic_attributes_file: # Write mode; overwrite old file if it exists
+
+		# Row 1: attribute names
+		user_basic_attributes_file.write( ' '.join(BASIC_USER_ATTRIBUTES) + '\n')
+
+		# Rows 2,...,N: users' attribute values written in the same order
+		for user in user_for_ID.itervalues():
+			user_basic_attributes_file.write( ' '.join([str(user[attribute]) for attribute in BASIC_USER_ATTRIBUTES]) + '\n')
+
+
+def combine_all_user_data(
+	input_basic_attributes_file_name=DEFAULT_BASIC_ATTRIBUTES_FILE_NAME,
+	input_review_lengths_file_name=DEFAULT_REVIEW_LENGTHS_FILE_NAME,
+	input_reading_levels_file_name=DEFAULT_READING_LEVELS_FILE_NAME,
+	input_pageranks_file_name=DEFAULT_PAGERANKS_FILE_NAME,
+	output_users_file_name=DEFAULT_COMBINED_USERS_FILE_NAME,
+):
+	"""
+	Given all processed data on users, combines them into a single file formatted as follows:
+		ID review_count ... pagerank
+		user_1_ID user_1_review_count ... user_1_pagerank
+			.
+			.
+			.
+		user_N_ID user_N_review_count ... user_N_pagerank
+	"""
+	# TODO: Check if there are more features provided by the Yelp dataset that are not being added
+
+	# Read in basic user attributes
+	user_for_ID = { user['ID']: user for user in read_user_basic_attributes(input_file_name=input_basic_attributes_file_name) }
 
 	# Read in average review lengths
 	for user_ID, average_review_length in read_user_average_review_lengths(input_file_name=input_review_lengths_file_name).iteritems():

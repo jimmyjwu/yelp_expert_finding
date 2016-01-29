@@ -11,12 +11,27 @@ CURRENT_MONTH = date.today().month
 DEFAULT_RAW_REVIEWS_FILE_NAME = 'yelp_academic_dataset_review.json'
 DEFAULT_RAW_USERS_FILE_NAME = 'yelp_academic_dataset_user.json'
 
+DEFAULT_BASIC_ATTRIBUTES_FILE_NAME = 'user_basic_attributes.txt'
 DEFAULT_REVIEW_LENGTHS_FILE_NAME = 'user_average_review_lengths.txt'
 DEFAULT_READING_LEVELS_FILE_NAME = 'user_reading_levels.txt'
 DEFAULT_PAGERANKS_FILE_NAME = 'user_pageranks.txt'
 DEFAULT_COMBINED_USERS_FILE_NAME = 'combined_users.txt'
 
 DEFAULT_D3_GRAPH_FILE_NAME = 'users_graph.json'
+
+# Attributes that can be extracted solely from the raw Yelp user file
+BASIC_USER_ATTRIBUTES = [
+	'ID',
+	'review_count',
+	'average_stars',
+	'funny_vote_count',
+	'useful_vote_count',
+	'cool_vote_count',
+	'friend_count',
+	'years_elite',
+	'months_member',
+	'fan_count',
+]
 
 DEFAULT_USER_ATTRIBUTES = [
 	'ID',

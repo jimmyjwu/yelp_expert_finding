@@ -17,53 +17,35 @@ DEFAULT_READING_LEVELS_FILE_NAME = 'user_reading_levels.txt'
 DEFAULT_PAGERANKS_FILE_NAME = 'user_pageranks.txt'
 DEFAULT_COMBINED_USERS_FILE_NAME = 'combined_users.txt'
 
-DEFAULT_D3_GRAPH_FILE_NAME = 'users_graph.json'
+DEFAULT_D3_GRAPH_FILE_NAME = 'users_D3_graph.json'
+
+# List of (attribute name, function that returns attribute value, given a raw user dictionary)
+BASIC_USER_ATTRIBUTES_AND_EXTRACTORS = [
+	( 'ID', lambda raw_user: raw_user['user_id'] ),
+	( 'review_count', lambda raw_user: raw_user['review_count'] ),
+	( 'average_stars', lambda raw_user: raw_user['average_stars'] ),
+	( 'funny_vote_count', lambda raw_user: raw_user['votes']['funny'] ),
+	( 'useful_vote_count', lambda raw_user: raw_user['votes']['useful'] ),
+	( 'cool_vote_count', lambda raw_user: raw_user['votes']['cool'] ),
+	( 'friend_count', lambda raw_user: len(raw_user['friends']) ),
+	( 'years_elite', lambda raw_user: len(raw_user['elite']) ),
+	( 'months_member', lambda raw_user: _months_since_year_and_month(raw_user['yelping_since']) ),
+	( 'fan_count', lambda raw_user: raw_user['fans'] ),
+]
 
 # Attributes that can be extracted solely from the raw Yelp user file
-BASIC_USER_ATTRIBUTES = [
-	'ID',
-	'review_count',
-	'average_stars',
-	'funny_vote_count',
-	'useful_vote_count',
-	'cool_vote_count',
-	'friend_count',
-	'years_elite',
-	'months_member',
-	'fan_count',
-]
+BASIC_USER_ATTRIBUTES = list(zip(*BASIC_USER_ATTRIBUTES_AND_EXTRACTORS)[0])
 
-DEFAULT_USER_ATTRIBUTES = [
-	'ID',
-	'review_count',
-	'average_stars',
-	# 'funny_vote_count',
-	# 'useful_vote_count',
-	# 'cool_vote_count',
-	# 'friend_count',
-	'years_elite',
-	'months_member',
-	# 'fan_count',
+# All user attributes available (across all dataset files and after all processing)
+ALL_USER_ATTRIBUTES = list(BASIC_USER_ATTRIBUTES) + [
 	'average_review_length',
 	'average_reading_level',
 	'pagerank',
 ]
 
-ALL_USER_ATTRIBUTES = [
-	'ID',
-	'review_count',
-	'average_stars',
-	'funny_vote_count',
-	'useful_vote_count',
-	'cool_vote_count',
-	'friend_count',
-	'years_elite',
-	'months_member',
-	'fan_count',
-	'average_review_length',
-	'average_reading_level',
-	'pagerank',
-]
+# User attributes typically desired for training models
+_EXCLUDE_FROM_DEFAULT_USER_ATTRIBUTES = set(['funny_vote_count', 'useful_vote_count', 'cool_vote_count', 'friend_count', 'fan_count'])
+DEFAULT_USER_ATTRIBUTES = [attribute for attribute in ALL_USER_ATTRIBUTES if attribute not in _EXCLUDE_FROM_DEFAULT_USER_ATTRIBUTES]
 
 
 def _months_since_year_and_month(year_month_string):
@@ -82,6 +64,7 @@ def _processed_data_absolute_path(relative_path):
 	return os.path.join(THIS_FILE_PATH, 'processed_data/' + relative_path)
 
 
+# TODO: Cast numerical attribute values to floats, ints, etc.
 def _read_single_user_attribute(input_file_name):
 	"""
 	Given a processed user attribute file of the form
@@ -123,6 +106,7 @@ def _write_single_user_attribute(attribute_for_user, output_file_name):
 			attribute_file.write(user_ID + ' ' + str(attribute) + '\n')
 
 
+# TODO: Cast numerical attribute values to floats, ints, etc.
 def _read_multiple_user_attributes(input_file_name, attributes):
 	"""
 	Given a processed user attributes file of the form

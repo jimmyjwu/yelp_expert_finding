@@ -123,6 +123,41 @@ def _write_single_user_attribute(attribute_for_user, output_file_name):
 			attribute_file.write(user_ID + ' ' + str(attribute) + '\n')
 
 
+def _read_multiple_user_attributes(input_file_name, attributes):
+	"""
+	Given a processed user attributes file of the form
+		attribute_1_name ... attribute_K_name
+		user_1_attribute_1_value ... user_1_attribute_K_value
+			.
+			.
+			.
+		user_N_attribute_1_value ... user_N_attribute_K_value
+
+	and a list of desired attributes, returns a list of user dictionaries:
+		[
+			{attribute_1_name: user_1_attribute_1_value, ..., attribute_k_name: user_1_attribute_k_value},
+				.
+				.
+				.
+			{attribute_1_name: user_N_attribute_1_value, ..., attribute_k_name: user_N_attribute_k_value}
+		]
+	where the user dictionaries include only the k <= K desired attributes.
+	"""
+	attributes_set = set(attributes)
+	users = []
+
+	with open(_raw_data_absolute_path(input_file_name)) as attributes_file:
+
+		# Row 1: attribute names
+		attributes_in_file = attributes_file.readline().split()
+
+		# Rows 2,...,N: users' attribute values written in the same order
+		for user_line in attributes_file:
+			user_attribute_values = user_line.split()
+			users += [ { attribute_name: user_attribute_values[i] for i, attribute_name in enumerate(attributes_in_file) if attribute_name in attributes_set } ]
+
+	return users
+
 
 
 

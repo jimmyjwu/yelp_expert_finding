@@ -128,7 +128,7 @@ def combine_all_user_data(
 				'cool_vote_count': raw_user['votes']['cool'],
 				'friend_count': len(raw_user['friends']),
 				'years_elite': len(raw_user['elite']),
-				'months_member': 12 * (CURRENT_YEAR - int(raw_user['yelping_since'].split('-')[0]) - 1) + (12 - int(raw_user['yelping_since'].split('-')[1])) + 5,
+				'months_member': _months_since_year_and_month(raw_user['yelping_since']),
 				'fan_count': raw_user['fans'],
 			}
 			user_for_ID[user['ID']] = user

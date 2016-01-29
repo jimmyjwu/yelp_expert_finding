@@ -6,6 +6,7 @@ from datetime import date
 
 THIS_FILE_PATH = os.path.dirname(__file__)
 CURRENT_YEAR = date.today().year
+CURRENT_MONTH = date.today().month
 
 DEFAULT_RAW_REVIEWS_FILE_NAME = 'yelp_academic_dataset_review.json'
 DEFAULT_RAW_USERS_FILE_NAME = 'yelp_academic_dataset_user.json'
@@ -48,6 +49,12 @@ ALL_USER_ATTRIBUTES = [
 	'average_reading_level',
 	'pagerank',
 ]
+
+
+def _months_since_year_and_month(year_month_string):
+	"""Returns the number of months' difference between now and a month formatted as YYYY-MM."""
+	year, month = map(int, year_month_string.split('-'))
+	return 12 * (CURRENT_YEAR - year) - month + CURRENT_MONTH
 
 
 def _raw_data_absolute_path(relative_path):

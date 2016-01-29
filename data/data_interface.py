@@ -80,6 +80,6 @@ def write_D3_graph(graph, output_file_name=DEFAULT_D3_GRAPH_FILE_NAME):
 	[ D3_dictionary['nodes'].append( {'name': user_ID} ) for user_ID in graph.nodes_iter() ]
 	[ D3_dictionary['links'].append( {'source': friend_1_ID, 'target': friend_2_ID, 'value': 1} ) for friend_1_ID, friend_2_ID in graph.edges_iter() ]
 
-	with open(_raw_data_absolute_path(output_file_name), 'w') as D3_graph_file:
+	with open(_processed_data_absolute_path(output_file_name), 'w') as D3_graph_file:
 		json.dump(D3_dictionary, D3_graph_file)
 

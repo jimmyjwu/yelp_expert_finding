@@ -93,7 +93,6 @@ def extract_user_pageranks(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_f
 	_write_single_user_attribute(pagerank_for_user, output_file_name)
 
 
-# TODO: Refactor multi-attribute file writing in the following two functions
 def extract_user_basic_attributes(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_file_name=DEFAULT_BASIC_ATTRIBUTES_FILE_NAME):
 	"""
 	Given a Yelp dataset users file (with users in JSON format), builds a file:
@@ -131,15 +130,7 @@ def extract_user_basic_attributes(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, o
 			}
 			users += [user]
 
-	# Write combined user data to file
-	with open(_processed_data_absolute_path(output_file_name), 'w') as user_basic_attributes_file: # Write mode; overwrite old file if it exists
-
-		# Row 1: attribute names
-		user_basic_attributes_file.write( ' '.join(BASIC_USER_ATTRIBUTES) + '\n')
-
-		# Rows 2,...,N: users' attribute values written in the same order
-		for user in user_for_ID.itervalues():
-			user_basic_attributes_file.write( ' '.join([str(user[attribute]) for attribute in BASIC_USER_ATTRIBUTES]) + '\n')
+	_write_multiple_user_attributes(users, BASIC_USER_ATTRIBUTES, output_file_name)
 
 
 def combine_all_user_data(
@@ -175,15 +166,7 @@ def combine_all_user_data(
 	for user_ID, pagerank in read_user_pageranks(input_file_name=input_pageranks_file_name).iteritems():
 		user_for_ID[user_ID]['pagerank'] = pagerank
 
-	# Write combined user data to file
-	with open(_processed_data_absolute_path(output_users_file_name), 'w') as combined_users_file: # Write mode; overwrite old file if it exists
-
-		# Row 1: attribute names
-		combined_users_file.write( ' '.join(ALL_USER_ATTRIBUTES) + '\n')
-
-		# Rows 2,...,N: users' attribute values written in the same order
-		for user in user_for_ID.itervalues():
-			combined_users_file.write( ' '.join([str(user[attribute]) for attribute in ALL_USER_ATTRIBUTES]) + '\n')
+	_write_multiple_user_attributes(user_for_ID.itervalues(), ALL_USER_ATTRIBUTES, output_users_file_name)
 
 
 

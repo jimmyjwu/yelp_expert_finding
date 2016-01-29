@@ -159,5 +159,26 @@ def _read_multiple_user_attributes(input_file_name, attributes):
 	return users
 
 
+def _write_multiple_user_attributes(users, attributes, output_file_name):
+	"""
+	Given a list of (or iterator over) user dictionaries and a list of user attributes, writes a
+	file of the form
+		attribute_1_name ... attribute_K_name
+		user_1_attribute_1_value ... user_1_attribute_K_value
+			.
+			.
+			.
+		user_N_attribute_1_value ... user_N_attribute_K_value
+	"""
+	with open(_processed_data_absolute_path(output_file_name), 'w') as user_attributes_file: # Write mode; overwrite old file if it exists
+
+		# Row 1: attribute names
+		user_attributes_file.write( ' '.join(attributes) + '\n' )
+
+		# Rows 2,...,N: users' attribute values written in the same order
+		for user in users:
+			user_attributes_file.write( ' '.join([str(user[attribute]) for attribute in attributes]) + '\n' )
+
+
 
 

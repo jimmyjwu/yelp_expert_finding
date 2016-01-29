@@ -110,6 +110,7 @@ def combine_all_user_data(
 		user_N_ID user_N_review_count ... user_N_pagerank
 	"""
 	# TODO: Check if there are more features provided by the Yelp dataset that are not being added
+	# TODO: Fix and refactor months_member calculation
 
 	user_for_ID = {}
 
@@ -122,13 +123,13 @@ def combine_all_user_data(
 				'ID': raw_user['user_id'],
 				'review_count': raw_user['review_count'],
 				'average_stars': raw_user['average_stars'],
+				'funny_vote_count': raw_user['votes']['funny'],
+				'useful_vote_count': raw_user['votes']['useful'],
+				'cool_vote_count': raw_user['votes']['cool'],
 				'friend_count': len(raw_user['friends']),
-				'months_member': 12 * (CURRENT_YEAR - int(raw_user['yelping_since'].split('-')[0]) - 1) + (12 - int(raw_user['yelping_since'].split('-')[1])) + 5,
 				'years_elite': len(raw_user['elite']),
+				'months_member': 12 * (CURRENT_YEAR - int(raw_user['yelping_since'].split('-')[0]) - 1) + (12 - int(raw_user['yelping_since'].split('-')[1])) + 5,
 				'fan_count': raw_user['fans'],
-				'funny_vote_count': raw_user['votes']['funny']
-				'useful_vote_count': raw_user['votes']['useful']
-				'cool_vote_count': raw_user['votes']['cool']
 			}
 			user_for_ID[user['ID']] = user
 

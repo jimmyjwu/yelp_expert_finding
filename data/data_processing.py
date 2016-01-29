@@ -109,6 +109,14 @@ def extract_user_basic_attributes(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, o
 
 		for user_line in raw_users_file:
 			raw_user = json.loads(user_line)
+
+			# TODO: Abstract the creation of this user dictionary
+			# I.e. Create a mapping (in data_utilities.py) of the form
+			#		raw_attribute_name --> processed_attribute_value
+			# so that the user dictionary can be built by simply taking each desired processed
+			# attribute and adding the entry
+			#		processed_attribute_name: function_for_processed_attribute(raw_user)
+			# to the user dictionary
 			user = {
 				'ID': raw_user['user_id'],
 				'review_count': raw_user['review_count'],

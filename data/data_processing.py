@@ -83,6 +83,27 @@ def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, o
 	_write_single_user_attribute(average_reading_level_for_user, output_file_name)
 
 
+def extract_user_tip_counts(input_file_name=DEFAULT_RAW_TIPS_FILE_NAME, output_file_name=DEFAULT_TIP_COUNTS_FILE_NAME):
+	"""
+	Given a Yelp dataset tips file, builds a file:
+		user_1_ID user_1_tip_count
+			.
+			.
+			.
+		user_N_ID user_N_tip_count
+	"""
+	# Maps each user ID --> number of tips written by that user
+	tip_count_for_user = Counter()
+
+	with open(_raw_data_absolute_path(input_file_name)) as tips_file:
+
+		for tip_JSON in tips_file:
+			tip = json.loads(tip_JSON)
+			tip_count_for_user[tip['user_id']] += 1
+
+	_write_single_user_attribute(tip_count_for_user, output_file_name)
+
+
 def extract_user_pageranks(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_file_name=DEFAULT_PAGERANKS_FILE_NAME):
 	"""
 	Given a Yelp dataset users file, builds a file:
@@ -123,6 +144,7 @@ def combine_all_user_data(
 	input_basic_attributes_file_name=DEFAULT_BASIC_ATTRIBUTES_FILE_NAME,
 	input_review_lengths_file_name=DEFAULT_REVIEW_LENGTHS_FILE_NAME,
 	input_reading_levels_file_name=DEFAULT_READING_LEVELS_FILE_NAME,
+	input_tip_counts_file_name=DEFAULT_TIP_COUNTS_FILE_NAME,
 	input_pageranks_file_name=DEFAULT_PAGERANKS_FILE_NAME,
 	output_users_file_name=DEFAULT_COMBINED_USERS_FILE_NAME,
 ):
@@ -135,8 +157,6 @@ def combine_all_user_data(
 			.
 		user_N_ID user_N_review_count ... user_N_pagerank
 	"""
-	# TODO: Check if there are more features provided by the Yelp dataset that are not being added
-
 	# Read in basic user attributes
 	user_for_ID = { user['ID']: user for user in read_user_basic_attributes(input_file_name=input_basic_attributes_file_name) }
 
@@ -147,6 +167,10 @@ def combine_all_user_data(
 	# Read in average reading levels
 	for user_ID, average_reading_level in read_user_average_reading_levels(input_file_name=input_reading_levels_file_name).iteritems():
 		user_for_ID[user_ID]['average_reading_level'] = average_reading_level
+
+	# Read in tip counts
+	for user_ID, tip_count in read_user_tip_counts(input_file_name=input_tip_counts_file_name).iteritems():
+		user_for_ID[user_ID]['tip_count'] = tip_count
 
 	# Read in PageRanks
 	for user_ID, pagerank in read_user_pageranks(input_file_name=input_pageranks_file_name).iteritems():

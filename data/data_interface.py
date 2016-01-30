@@ -48,6 +48,14 @@ def read_user_average_reading_levels(input_file_name=DEFAULT_READING_LEVELS_FILE
 	return _read_single_user_attribute(input_file_name=input_file_name, attribute_name='average_reading_level')
 
 
+def read_user_tip_counts(input_file_name=DEFAULT_TIP_COUNTS_FILE_NAME):
+	"""
+	Given a processed tip counts file, returns a dictionary:
+		{ user ID: user's tip count }
+	"""
+	return _read_single_user_attribute(input_file_name=input_file_name, attribute_name='tip_count')
+
+
 def read_user_pageranks(input_file_name=DEFAULT_PAGERANKS_FILE_NAME):
 	"""
 	Given a processed reading levels file, returns a dictionary:

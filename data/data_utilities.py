@@ -8,12 +8,14 @@ THIS_FILE_PATH = os.path.dirname(__file__)
 CURRENT_YEAR = date.today().year
 CURRENT_MONTH = date.today().month
 
-DEFAULT_RAW_REVIEWS_FILE_NAME = 'yelp_academic_dataset_review.json'
 DEFAULT_RAW_USERS_FILE_NAME = 'yelp_academic_dataset_user.json'
+DEFAULT_RAW_REVIEWS_FILE_NAME = 'yelp_academic_dataset_review.json'
+DEFAULT_RAW_TIPS_FILE_NAME = 'yelp_academic_dataset_tip.json'
 
 DEFAULT_BASIC_ATTRIBUTES_FILE_NAME = 'user_basic_attributes.txt'
 DEFAULT_REVIEW_LENGTHS_FILE_NAME = 'user_average_review_lengths.txt'
 DEFAULT_READING_LEVELS_FILE_NAME = 'user_reading_levels.txt'
+DEFAULT_TIP_COUNTS_FILE_NAME = 'user_tip_counts.txt'
 DEFAULT_PAGERANKS_FILE_NAME = 'user_pageranks.txt'
 DEFAULT_COMBINED_USERS_FILE_NAME = 'combined_users.txt'
 
@@ -41,11 +43,12 @@ BASIC_USER_ATTRIBUTES = list(zip(*BASIC_USER_ATTRIBUTES_AND_EXTRACTORS)[0])
 ALL_USER_ATTRIBUTES = list(BASIC_USER_ATTRIBUTES) + [
 	'average_review_length',
 	'average_reading_level',
+	'tip_count',
 	'pagerank',
 ]
 
 # User attributes typically desired for training models
-_EXCLUDE_FROM_DEFAULT_USER_ATTRIBUTES = set(['funny_vote_count', 'useful_vote_count', 'cool_vote_count', 'friend_count', 'compliment_count', 'fan_count'])
+_EXCLUDE_FROM_DEFAULT_USER_ATTRIBUTES = set(['funny_vote_count', 'useful_vote_count', 'cool_vote_count', 'friend_count'])
 DEFAULT_USER_ATTRIBUTES = [attribute for attribute in ALL_USER_ATTRIBUTES if attribute not in _EXCLUDE_FROM_DEFAULT_USER_ATTRIBUTES]
 
 # Used for re-casting attribute values when reading from processed data files
@@ -63,6 +66,7 @@ CASTER_FOR_ATTRIBUTE_NAME = {
 	'fan_count': int,
 	'average_review_length': int,
 	'average_reading_level': float,
+	'tip_count': int,
 	'pagerank': float,
 }
 

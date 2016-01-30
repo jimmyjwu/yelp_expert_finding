@@ -104,6 +104,11 @@ def average(values):
 	return sum(values) / float(len(values)) if len(values) > 0 else 0
 
 
+def safe_divide(x,y):
+	"""Returns x / y as a float, or 0 if y = 0."""
+	return float(x) / y if y > 0 else 0
+
+
 def print_first_items(values, k=1):
 	"""Prints the first k values on separate lines."""
 	for i in xrange(0,k):

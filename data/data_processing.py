@@ -58,7 +58,7 @@ def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE
 			total_review_length_and_count_for_user[review['user_id']][1] += 1
 
 	# Compute each user's average review length (truncated to an integer)
-	average_review_length_for_user = { user_ID: (total_review_length / review_count if review_count > 0 else 0) for user_ID, [total_review_length, review_count] in total_review_length_and_count_for_user.iteritems() }
+	average_review_length_for_user = { user_ID: int(safe_divide(total_review_length, review_count)) for user_ID, [total_review_length, review_count] in total_review_length_and_count_for_user.iteritems() }
 
 	write_single_user_attribute(average_review_length_for_user, output_file_name)
 
@@ -97,7 +97,7 @@ def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, o
 				pass
 
 	# Compute each user's average reading level
-	average_reading_level_for_user = { user_ID: (float(total_reading_level) / review_count if review_count > 0 else 0) for user_ID, [total_reading_level, review_count] in total_reading_level_and_review_count_for_user.iteritems() }
+	average_reading_level_for_user = { user_ID: safe_divide(total_reading_level, review_count) for user_ID, [total_reading_level, review_count] in total_reading_level_and_review_count_for_user.iteritems() }
 
 	write_single_user_attribute(average_reading_level_for_user, output_file_name)
 

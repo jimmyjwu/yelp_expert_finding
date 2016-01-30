@@ -1,17 +1,10 @@
 """
-Utilities for file manipulation, graph processing, etc.
+General utilities for working with Python data structures, NetworkX graphs, etc.
 """
-
-import json
-import itertools
 from collections import Counter, defaultdict
 
 import networkx
-import numpy
-import matplotlib
-import math
 from matplotlib import pyplot
-from readability.readability import Readability
 
 
 def join_dictionaries(dictionaries_1, dictionaries_2, join_key):

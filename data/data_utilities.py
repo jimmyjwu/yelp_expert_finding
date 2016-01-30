@@ -102,12 +102,13 @@ def read_single_user_attribute(input_file_name, attribute_name):
 	"""
 	attribute_for_user = {}
 	attribute_caster = CASTER_FOR_ATTRIBUTE_NAME[attribute_name] # Type-casting function for this attribute
+	ID_caster = CASTER_FOR_ATTRIBUTE_NAME['ID']
 
 	with open(processed_data_absolute_path(input_file_name)) as attribute_file:
 
 		for user_line in attribute_file:
 			user_ID, attribute_value = user_line.split()
-			attribute_for_user[user_ID] = attribute_caster(attribute_value)
+			attribute_for_user[ID_caster(user_ID)] = attribute_caster(attribute_value)
 
 	return attribute_for_user
 

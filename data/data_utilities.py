@@ -30,6 +30,7 @@ BASIC_USER_ATTRIBUTES_AND_EXTRACTORS = [
 	( 'friend_count', lambda raw_user: len(raw_user['friends']) ),
 	( 'years_elite', lambda raw_user: len(raw_user['elite']) ),
 	( 'months_member', lambda raw_user: _months_since_year_and_month(raw_user['yelping_since']) ),
+	( 'compliment_count', lambda raw_user: sum(raw_user['compliments'].itervalues()) ),
 	( 'fan_count', lambda raw_user: raw_user['fans'] ),
 ]
 
@@ -44,7 +45,7 @@ ALL_USER_ATTRIBUTES = list(BASIC_USER_ATTRIBUTES) + [
 ]
 
 # User attributes typically desired for training models
-_EXCLUDE_FROM_DEFAULT_USER_ATTRIBUTES = set(['funny_vote_count', 'useful_vote_count', 'cool_vote_count', 'friend_count', 'fan_count'])
+_EXCLUDE_FROM_DEFAULT_USER_ATTRIBUTES = set(['funny_vote_count', 'useful_vote_count', 'cool_vote_count', 'friend_count', 'compliment_count', 'fan_count'])
 DEFAULT_USER_ATTRIBUTES = [attribute for attribute in ALL_USER_ATTRIBUTES if attribute not in _EXCLUDE_FROM_DEFAULT_USER_ATTRIBUTES]
 
 # Used for re-casting attribute values when reading from processed data files
@@ -58,6 +59,7 @@ CASTER_FOR_ATTRIBUTE_NAME = {
 	'friend_count': int,
 	'years_elite': int,
 	'months_member': int,
+	'compliment_count': int,
 	'fan_count': int,
 	'average_review_length': int,
 	'average_reading_level': float,

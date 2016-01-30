@@ -16,7 +16,7 @@ from data_interface import *
 
 def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, output_file_name=DEFAULT_REVIEW_LENGTHS_FILE_NAME):
 	"""
-	Given a Yelp dataset reviews file (with reviews in JSON format), builds a file:
+	Given a Yelp dataset reviews file, builds a file:
 		user_1_ID user_1_average_review_length
 			.
 			.
@@ -42,7 +42,7 @@ def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE
 
 def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, output_file_name=DEFAULT_READING_LEVELS_FILE_NAME, reviews_to_analyze_per_user=float('inf')):
 	"""
-	Given a Yelp dataset reviews file (with reviews in JSON format), builds a file:
+	Given a Yelp dataset reviews file, builds a file:
 		user_1_ID user_1_reading_level
 			.
 			.
@@ -80,7 +80,7 @@ def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, o
 
 def extract_user_pageranks(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_file_name=DEFAULT_PAGERANKS_FILE_NAME):
 	"""
-	Given a Yelp dataset users file (with users in JSON format), builds a file:
+	Given a Yelp dataset users file, builds a file:
 		user_1_ID user_1_pagerank
 			.
 			.
@@ -95,7 +95,7 @@ def extract_user_pageranks(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_f
 
 def extract_user_basic_attributes(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_file_name=DEFAULT_BASIC_ATTRIBUTES_FILE_NAME):
 	"""
-	Given a Yelp dataset users file (with users in JSON format), builds a file:
+	Given a Yelp dataset users file, builds a file:
 		user_1_ID user_1_review_count ... user_1_fan_count
 			.
 			.

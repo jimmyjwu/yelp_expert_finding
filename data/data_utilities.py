@@ -123,7 +123,6 @@ def _write_single_user_attribute(attribute_for_user, output_file_name):
 			attribute_file.write(user_ID + ' ' + str(attribute) + '\n')
 
 
-# TODO: Cast numerical attribute values to floats, ints, etc.
 def _read_multiple_user_attributes(input_file_name, attributes):
 	"""
 	Given a processed user attributes file of the form

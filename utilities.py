@@ -104,9 +104,9 @@ def average(values):
 	return sum(values) / float(len(values)) if len(values) > 0 else 0
 
 
-def safe_divide(x,y):
-	"""Returns x / y as a float, or 0 if y = 0."""
-	return float(x) / y if y > 0 else 0
+def safe_divide(x, y, default_value=0):
+	"""Returns x / y as a float, or default_value if y = 0."""
+	return float(x) / y if y > 0 else default_value
 
 
 def print_first_items(values, k=1):

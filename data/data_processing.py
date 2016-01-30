@@ -97,6 +97,7 @@ def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, o
 				pass
 
 	# Compute each user's average reading level
+	# Note: minimum SMOG index is 3.0, but users without reviews are assigned 0
 	average_reading_level_for_user = { user_ID: safe_divide(total_reading_level, review_count) for user_ID, [total_reading_level, review_count] in total_reading_level_and_review_count_for_user.iteritems() }
 
 	write_single_user_attribute(average_reading_level_for_user, output_file_name)

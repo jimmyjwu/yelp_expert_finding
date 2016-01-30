@@ -27,7 +27,7 @@ def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE
 	total_review_length_and_count_for_user = defaultdict(lambda: [0,0])
 
 	# Compute the above mapping
-	with open(_raw_data_absolute_path(input_file_name)) as reviews_file: # Read mode (default)
+	with open(_raw_data_absolute_path(input_file_name)) as reviews_file:
 		
 		for review_JSON in reviews_file:
 			review = json.loads(review_JSON)
@@ -57,7 +57,7 @@ def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, o
 	total_reading_level_and_review_count_for_user = defaultdict(lambda: [0,0])
 
 	# Compute the above mapping
-	with open(_raw_data_absolute_path(input_file_name)) as reviews_file: # Read mode (default)
+	with open(_raw_data_absolute_path(input_file_name)) as reviews_file:
 		
 		for review_JSON in reviews_file:
 			review = json.loads(review_JSON)
@@ -66,8 +66,9 @@ def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, o
 			if total_reading_level_and_review_count_for_user[review['user_id']][1] >= reviews_to_analyze_per_user:
 				continue
 
+			# TODO: Try other reading level metrics
 			try:
-				total_reading_level_and_review_count_for_user[review['user_id']][0] += Readability(review['text']).SMOGIndex() # Can be replaced with other text metrics
+				total_reading_level_and_review_count_for_user[review['user_id']][0] += Readability(review['text']).SMOGIndex()
 				total_reading_level_and_review_count_for_user[review['user_id']][1] += 1
 			except UnicodeEncodeError as error:
 				pass

@@ -47,6 +47,23 @@ ALL_USER_ATTRIBUTES = list(BASIC_USER_ATTRIBUTES) + [
 _EXCLUDE_FROM_DEFAULT_USER_ATTRIBUTES = set(['funny_vote_count', 'useful_vote_count', 'cool_vote_count', 'friend_count', 'fan_count'])
 DEFAULT_USER_ATTRIBUTES = [attribute for attribute in ALL_USER_ATTRIBUTES if attribute not in _EXCLUDE_FROM_DEFAULT_USER_ATTRIBUTES]
 
+# Used for re-casting attribute values when reading from processed data files
+CASTER_FOR_ATTRIBUTE_NAME = {
+	'ID': unicode,
+	'review_count': int,
+	'average_stars': float,
+	'funny_vote_count': int,
+	'useful_vote_count': int,
+	'cool_vote_count': int,
+	'friend_count': int,
+	'years_elite': int,
+	'months_member': int,
+	'fan_count': int,
+	'average_review_length': float,
+	'average_reading_level': float,
+	'pagerank': float,
+}
+
 
 def _months_since_year_and_month(year_month_string):
 	"""Returns the number of months' difference between now and a month formatted as YYYY-MM."""
@@ -64,8 +81,7 @@ def _processed_data_absolute_path(relative_path):
 	return os.path.join(THIS_FILE_PATH, 'processed_data/' + relative_path)
 
 
-# TODO: Cast numerical attribute values to floats, ints, etc.
-def _read_single_user_attribute(input_file_name):
+def _read_single_user_attribute(input_file_name, attribute_name):
 	"""
 	Given a processed user attribute file of the form
 		user_1_ID user_1_attribute_value
@@ -73,17 +89,18 @@ def _read_single_user_attribute(input_file_name):
 			.
 			.
 		user_N_ID user_N_attribute_value
-	
-	returns a dictionary:
+
+	and the name of the attribute, returns a dictionary:
 		{ user_1_ID: user_1_attribute_value, ..., user_N_ID: user_N_attribute_value }
 	"""
 	attribute_for_user = {}
+	attribute_caster = CASTER_FOR_ATTRIBUTE_NAME[attribute_name] # Type-casting function for this attribute
 
 	with open(_processed_data_absolute_path(input_file_name)) as attribute_file:
 
 		for user_line in attribute_file:
 			user_ID, attribute_value = user_line.split()
-			attribute_for_user[user_ID] = attribute_value
+			attribute_for_user[user_ID] = attribute_caster(attribute_value)
 
 	return attribute_for_user
 
@@ -135,10 +152,13 @@ def _read_multiple_user_attributes(input_file_name, attributes):
 		# Row 1: attribute names
 		attributes_in_file = attributes_file.readline().split()
 
+		# Type-casting functions corresponding to attributes found in file
+		attributes_in_file_casters = [CASTER_FOR_ATTRIBUTE_NAME[attribute] for attribute in attributes_in_file]
+
 		# Rows 2,...,N: users' attribute values written in the same order
 		for user_line in attributes_file:
 			user_attribute_values = user_line.split()
-			users += [ { attribute_name: user_attribute_values[i] for i, attribute_name in enumerate(attributes_in_file) if attribute_name in attributes_set } ]
+			users += [ { attribute_name: attributes_in_file_casters[i](user_attribute_values[i]) for i, attribute_name in enumerate(attributes_in_file) if attribute_name in attributes_set } ]
 
 	return users
 

@@ -38,7 +38,7 @@ def read_user_average_review_lengths(input_file_name=DEFAULT_REVIEW_LENGTHS_FILE
 	Given a processed review lengths file, returns a dictionary:
 		{ user_1_ID: user_1_average_review_length, ..., user_N_ID: user_N_average_review_length }
 	"""
-	return _read_single_user_attribute(input_file_name)
+	return _read_single_user_attribute(input_file_name=input_file_name, attribute_name='average_review_length')
 
 
 def read_user_average_reading_levels(input_file_name=DEFAULT_READING_LEVELS_FILE_NAME):
@@ -46,7 +46,7 @@ def read_user_average_reading_levels(input_file_name=DEFAULT_READING_LEVELS_FILE
 	Given a processed reading levels file, returns a dictionary:
 		{ user_1_ID: user_1_average_reading_level, ..., user_N_ID: user_N_average_reading_level }
 	"""
-	return _read_single_user_attribute(input_file_name)
+	return _read_single_user_attribute(input_file_name=input_file_name, attribute_name='average_reading_level')
 
 
 def read_user_pageranks(input_file_name=DEFAULT_PAGERANKS_FILE_NAME):
@@ -54,7 +54,7 @@ def read_user_pageranks(input_file_name=DEFAULT_PAGERANKS_FILE_NAME):
 	Given a processed reading levels file, returns a dictionary:
 		{ user_1_ID: user_1_PageRank, ..., user_N_ID: user_N_PageRank }
 	"""
-	return _read_single_user_attribute(input_file_name)
+	return _read_single_user_attribute(input_file_name=input_file_name, attribute_name='pagerank')
 
 
 def read_user_basic_attributes(input_file_name=DEFAULT_BASIC_ATTRIBUTES_FILE_NAME):

@@ -43,7 +43,7 @@ def make_attribute_boolean(users, attribute):
 	"""
 	transformed_users = []
 	for user in users:
-		user_copy = {key: value for key, value in user.items() if key != attribute}
+		user_copy = {key: value for key, value in user.iteritems() if key != attribute}
 		user_copy[attribute] = 1 if user[attribute] > 0 else 0
 		transformed_users += [user_copy]
 	return transformed_users
@@ -57,7 +57,7 @@ def designate_attribute_as_label(users, attribute):
 	"""
 	labeled_users = []
 	for user in users:
-		user_copy = {key: value for key, value in user.items() if key != attribute}
+		user_copy = {key: value for key, value in user.iteritems() if key != attribute}
 		user_copy['label'] = user[attribute]
 		labeled_users += [user_copy]
 	return labeled_users
@@ -88,14 +88,14 @@ def normalize_users(users, excluded_attributes=[]):
 	max_user = {attribute: float('-infinity') for attribute in users[0].keys()}
 	min_user = {attribute: float('infinity') for attribute in users[0].keys()}
 	for user in users:
-		for attribute, value in user.items():
+		for attribute, value in user.iteritems():
 			if attribute not in excluded_attributes:
 				max_user[attribute] = max(max_user[attribute], value)
 				min_user[attribute] = min(min_user[attribute], value)
 
 	# Normalize users
 	for user in users:
-		for attribute, value in user.items():
+		for attribute, value in user.iteritems():
 			if attribute not in excluded_attributes:
 				user[attribute] = float(value - min_user[attribute]) / (max_user[attribute] - min_user[attribute])
 

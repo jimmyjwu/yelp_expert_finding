@@ -9,8 +9,6 @@ Utilities for the following:
                     |                                           |
                     +-------------------------------------------+
 """
-import json
-
 from utilities import *
 from readability.readability import Readability
 
@@ -160,21 +158,18 @@ def combine_all_user_data(
 	# Read in basic user attributes
 	user_for_ID = { user['ID']: user for user in read_user_basic_attributes(input_file_name=input_basic_attributes_file_name) }
 
-	# Read in average review lengths
-	for user_ID, average_review_length in read_user_average_review_lengths(input_file_name=input_review_lengths_file_name).iteritems():
-		user_for_ID[user_ID]['average_review_length'] = average_review_length
+	# Read in additional user attributes
+	average_review_length_for_user = read_user_average_review_lengths(input_file_name=input_review_lengths_file_name)
+	average_reading_level_for_user = read_user_average_reading_levels(input_file_name=input_reading_levels_file_name)
+	tip_count_for_user = read_user_tip_counts(input_file_name=input_tip_counts_file_name)
+	pagerank_for_user = read_user_pageranks(input_file_name=input_pageranks_file_name)
 
-	# Read in average reading levels
-	for user_ID, average_reading_level in read_user_average_reading_levels(input_file_name=input_reading_levels_file_name).iteritems():
-		user_for_ID[user_ID]['average_reading_level'] = average_reading_level
-
-	# Read in tip counts
-	for user_ID, tip_count in read_user_tip_counts(input_file_name=input_tip_counts_file_name).iteritems():
-		user_for_ID[user_ID]['tip_count'] = tip_count
-
-	# Read in PageRanks
-	for user_ID, pagerank in read_user_pageranks(input_file_name=input_pageranks_file_name).iteritems():
-		user_for_ID[user_ID]['pagerank'] = pagerank
+	# Iterate over all users, filling in any attribute values that are not known
+	for user_ID, user in user_for_ID.iteritems():
+		user['average_review_length'] = average_review_length_for_user.get(user_ID, 0)
+		user['average_reading_level'] = average_reading_level_for_user.get(user_ID, 0)
+		user['tip_count'] = tip_count_for_user.get(user_ID, 0)
+		user['pagerank'] = pagerank_for_user.get(user_ID, 0)
 
 	write_multiple_user_attributes(user_for_ID.itervalues(), ALL_USER_ATTRIBUTES, output_users_file_name)
 

@@ -8,6 +8,12 @@ import networkx
 from matplotlib import pyplot
 
 
+def filter_dictionary_by_keys(dictionary, desired_keys):
+	"""Returns a dictionary containing only entries whose keys are in desired_keys."""
+	desired_key_set = set(desired_keys)
+	return {key: value for key, value in dictionary.iteritems() if key in desired_keys}
+
+
 def join_dictionaries(dictionaries_1, dictionaries_2, join_key):
 	"""
 	Given two lists of dictionaries, returns a list of new dictionaries that are the original

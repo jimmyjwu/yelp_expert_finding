@@ -18,6 +18,27 @@ from data_utilities import *
 from data_interface import *
 
 
+def extract_user_basic_attributes(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_file_name=DEFAULT_BASIC_ATTRIBUTES_FILE_NAME):
+	"""
+	Given a Yelp dataset users file, builds a file:
+		user_1_ID user_1_review_count ... user_1_fan_count
+			.
+			.
+			.
+		user_N_ID user_N_review_count ... user_N_fan_count
+	"""
+	users = []
+
+	with open(raw_data_absolute_path(input_file_name)) as raw_users_file:
+
+		for user_line in raw_users_file:
+			raw_user = json.loads(user_line)
+			user = { attribute_name: extract_attribute_value(raw_user) for attribute_name, extract_attribute_value in BASIC_USER_ATTRIBUTES_AND_EXTRACTORS }
+			users += [user]
+
+	write_multiple_user_attributes(users, BASIC_USER_ATTRIBUTES, output_file_name)
+
+
 def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, output_file_name=DEFAULT_REVIEW_LENGTHS_FILE_NAME):
 	"""
 	Given a Yelp dataset reviews file, builds a file:
@@ -31,7 +52,7 @@ def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE
 	total_review_length_and_count_for_user = defaultdict(lambda: [0,0])
 
 	# Compute the above mapping
-	with open(_raw_data_absolute_path(input_file_name)) as reviews_file:
+	with open(raw_data_absolute_path(input_file_name)) as reviews_file:
 		
 		for review_JSON in reviews_file:
 			review = json.loads(review_JSON)
@@ -41,7 +62,7 @@ def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE
 	# Compute each user's average review length (truncated to an integer)
 	average_review_length_for_user = { user_ID: (total_review_length / review_count if review_count > 0 else 0) for user_ID, [total_review_length, review_count] in total_review_length_and_count_for_user.iteritems() }
 
-	_write_single_user_attribute(average_review_length_for_user, output_file_name)
+	write_single_user_attribute(average_review_length_for_user, output_file_name)
 
 
 def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, output_file_name=DEFAULT_READING_LEVELS_FILE_NAME, reviews_to_analyze_per_user=float('inf')):
@@ -61,7 +82,7 @@ def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, o
 	total_reading_level_and_review_count_for_user = defaultdict(lambda: [0,0])
 
 	# Compute the above mapping
-	with open(_raw_data_absolute_path(input_file_name)) as reviews_file:
+	with open(raw_data_absolute_path(input_file_name)) as reviews_file:
 		
 		for review_JSON in reviews_file:
 			review = json.loads(review_JSON)
@@ -80,7 +101,7 @@ def extract_user_reading_levels(input_file_name=DEFAULT_RAW_REVIEWS_FILE_NAME, o
 	# Compute each user's average reading level
 	average_reading_level_for_user = { user_ID: float(total_reading_level) / review_count for user_ID, [total_reading_level, review_count] in total_reading_level_and_review_count_for_user.iteritems() }
 
-	_write_single_user_attribute(average_reading_level_for_user, output_file_name)
+	write_single_user_attribute(average_reading_level_for_user, output_file_name)
 
 
 def extract_user_tip_counts(input_file_name=DEFAULT_RAW_TIPS_FILE_NAME, output_file_name=DEFAULT_TIP_COUNTS_FILE_NAME):
@@ -95,13 +116,13 @@ def extract_user_tip_counts(input_file_name=DEFAULT_RAW_TIPS_FILE_NAME, output_f
 	# Maps each user ID --> number of tips written by that user
 	tip_count_for_user = Counter()
 
-	with open(_raw_data_absolute_path(input_file_name)) as tips_file:
+	with open(raw_data_absolute_path(input_file_name)) as tips_file:
 
 		for tip_JSON in tips_file:
 			tip = json.loads(tip_JSON)
 			tip_count_for_user[tip['user_id']] += 1
 
-	_write_single_user_attribute(tip_count_for_user, output_file_name)
+	write_single_user_attribute(tip_count_for_user, output_file_name)
 
 
 def extract_user_pageranks(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_file_name=DEFAULT_PAGERANKS_FILE_NAME):
@@ -116,28 +137,7 @@ def extract_user_pageranks(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_f
 	graph = read_user_graph(input_file_name)
 	pagerank_for_user = networkx.pagerank(graph)
 	
-	_write_single_user_attribute(pagerank_for_user, output_file_name)
-
-
-def extract_user_basic_attributes(input_file_name=DEFAULT_RAW_USERS_FILE_NAME, output_file_name=DEFAULT_BASIC_ATTRIBUTES_FILE_NAME):
-	"""
-	Given a Yelp dataset users file, builds a file:
-		user_1_ID user_1_review_count ... user_1_fan_count
-			.
-			.
-			.
-		user_N_ID user_N_review_count ... user_N_fan_count
-	"""
-	users = []
-
-	with open(_raw_data_absolute_path(input_file_name)) as raw_users_file:
-
-		for user_line in raw_users_file:
-			raw_user = json.loads(user_line)
-			user = { attribute_name: extract_attribute_value(raw_user) for attribute_name, extract_attribute_value in BASIC_USER_ATTRIBUTES_AND_EXTRACTORS }
-			users += [user]
-
-	_write_multiple_user_attributes(users, BASIC_USER_ATTRIBUTES, output_file_name)
+	write_single_user_attribute(pagerank_for_user, output_file_name)
 
 
 def combine_all_user_data(
@@ -176,7 +176,7 @@ def combine_all_user_data(
 	for user_ID, pagerank in read_user_pageranks(input_file_name=input_pageranks_file_name).iteritems():
 		user_for_ID[user_ID]['pagerank'] = pagerank
 
-	_write_multiple_user_attributes(user_for_ID.itervalues(), ALL_USER_ATTRIBUTES, output_users_file_name)
+	write_multiple_user_attributes(user_for_ID.itervalues(), ALL_USER_ATTRIBUTES, output_users_file_name)
 
 
 

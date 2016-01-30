@@ -77,17 +77,17 @@ def _months_since_year_and_month(year_month_string):
 	return 12 * (CURRENT_YEAR - year) - month + CURRENT_MONTH
 
 
-def _raw_data_absolute_path(relative_path):
+def raw_data_absolute_path(relative_path):
 	"""Given the name of a raw data file, returns its absolute path."""
 	return os.path.join(THIS_FILE_PATH, 'raw_data/' + relative_path)
 
 
-def _processed_data_absolute_path(relative_path):
+def processed_data_absolute_path(relative_path):
 	"""Given the name of a processed data file, returns its absolute path."""
 	return os.path.join(THIS_FILE_PATH, 'processed_data/' + relative_path)
 
 
-def _read_single_user_attribute(input_file_name, attribute_name):
+def read_single_user_attribute(input_file_name, attribute_name):
 	"""
 	Given a processed user attribute file of the form
 		user_1_ID user_1_attribute_value
@@ -102,7 +102,7 @@ def _read_single_user_attribute(input_file_name, attribute_name):
 	attribute_for_user = {}
 	attribute_caster = CASTER_FOR_ATTRIBUTE_NAME[attribute_name] # Type-casting function for this attribute
 
-	with open(_processed_data_absolute_path(input_file_name)) as attribute_file:
+	with open(processed_data_absolute_path(input_file_name)) as attribute_file:
 
 		for user_line in attribute_file:
 			user_ID, attribute_value = user_line.split()
@@ -111,7 +111,7 @@ def _read_single_user_attribute(input_file_name, attribute_name):
 	return attribute_for_user
 
 
-def _write_single_user_attribute(attribute_for_user, output_file_name):
+def write_single_user_attribute(attribute_for_user, output_file_name):
 	"""
 	Given a dictionary
 		{ user_1_ID: user_1_attribute_value, ..., user_N_ID: user_N_attribute_value }
@@ -123,13 +123,13 @@ def _write_single_user_attribute(attribute_for_user, output_file_name):
 			.
 		user_N_ID user_N_attribute_value
 	"""
-	with open(_processed_data_absolute_path(output_file_name), 'w') as attribute_file: # Write mode; overwrite old file if it exists
+	with open(processed_data_absolute_path(output_file_name), 'w') as attribute_file: # Write mode; overwrite old file if it exists
 		
 		for user_ID, attribute in attribute_for_user.iteritems():
 			attribute_file.write(user_ID + ' ' + str(attribute) + '\n')
 
 
-def _read_multiple_user_attributes(input_file_name, attributes):
+def read_multiple_user_attributes(input_file_name, attributes):
 	"""
 	Given a processed user attributes file of the form
 		attribute_1_name ... attribute_K_name
@@ -152,7 +152,7 @@ def _read_multiple_user_attributes(input_file_name, attributes):
 	attributes_set = set(attributes)
 	users = []
 
-	with open(_raw_data_absolute_path(input_file_name)) as attributes_file:
+	with open(raw_data_absolute_path(input_file_name)) as attributes_file:
 
 		# Row 1: attribute names
 		attributes_in_file = attributes_file.readline().split()
@@ -168,7 +168,7 @@ def _read_multiple_user_attributes(input_file_name, attributes):
 	return users
 
 
-def _write_multiple_user_attributes(users, attributes, output_file_name):
+def write_multiple_user_attributes(users, attributes, output_file_name):
 	"""
 	Given a list of (or iterator over) user dictionaries and a list of user attributes, writes a
 	file of the form
@@ -179,7 +179,7 @@ def _write_multiple_user_attributes(users, attributes, output_file_name):
 			.
 		user_N_attribute_1_value ... user_N_attribute_K_value
 	"""
-	with open(_processed_data_absolute_path(output_file_name), 'w') as user_attributes_file: # Write mode; overwrite old file if it exists
+	with open(processed_data_absolute_path(output_file_name), 'w') as user_attributes_file: # Write mode; overwrite old file if it exists
 
 		# Row 1: attribute names
 		user_attributes_file.write( ' '.join(attributes) + '\n' )

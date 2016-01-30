@@ -5,7 +5,7 @@ Primary file for analysis of the Yelp dataset.
 from utilities import *
 import regression
 from sklearn.naive_bayes import GaussianNB, BernoulliNB
-import random
+
 
 def analyze_yelp_graph():
 	# Hyperparameters

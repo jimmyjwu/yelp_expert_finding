@@ -16,18 +16,22 @@ from readability.readability import Readability
 
 def join_dictionaries(dictionaries_1, dictionaries_2, join_key):
 	"""
-	Given two lists of dictionaries, returns a list of new dictionaries that
-	are the original dictionaries joined by join_key.
+	Given two lists of dictionaries, returns a list of new dictionaries that are the original
+	dictionaries joined by join_key.
+	
+		Example: dictionaries_1 and dictionaries_2 are lists of user dictionaries, but have
+		different attributes, and we want a single list of users that have their combined
+		attributes. The 'join key' is the user ID.
+
 	NOTE: dictionaries_2 must be a superset of dictionaries_1.
 	"""
 	pairs_to_join = {dictionary[join_key]: [dictionary, None] for dictionary in dictionaries_1}
 	for dictionary in dictionaries_2:
 		if dictionary[join_key] in pairs_to_join:
 			pairs_to_join[dictionary[join_key]][1] = dictionary
-	pairs_to_join = pairs_to_join.values()
 
 	joined_dictionaries = []
-	for dictionary_1, dictionary_2 in pairs_to_join:
+	for dictionary_1, dictionary_2 in pairs_to_join.itervalues():
 		joined_dictionaries += [ dict( dictionary_1.items() + dictionary_2.items() ) ]
 
 	return joined_dictionaries

@@ -34,8 +34,8 @@ def extract_user_average_review_lengths(input_file_name=DEFAULT_RAW_REVIEWS_FILE
 			total_review_length_and_count_for_user[review['user_id']][0] += len(review['text'].split())
 			total_review_length_and_count_for_user[review['user_id']][1] += 1
 
-	# Compute each user's average review length
-	average_review_length_for_user = { user_ID: float(total_review_length) / review_count for user_ID, [total_review_length, review_count] in total_review_length_and_count_for_user.iteritems() }
+	# Compute each user's average review length (truncated to an integer)
+	average_review_length_for_user = { user_ID: (total_review_length / review_count if review_count > 0 else 0) for user_ID, [total_review_length, review_count] in total_review_length_and_count_for_user.iteritems() }
 
 	_write_single_user_attribute(average_review_length_for_user, output_file_name)
 

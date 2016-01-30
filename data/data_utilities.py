@@ -59,7 +59,7 @@ CASTER_FOR_ATTRIBUTE_NAME = {
 	'years_elite': int,
 	'months_member': int,
 	'fan_count': int,
-	'average_review_length': float,
+	'average_review_length': int,
 	'average_reading_level': float,
 	'pagerank': float,
 }

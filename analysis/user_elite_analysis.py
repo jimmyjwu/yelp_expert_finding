@@ -11,41 +11,8 @@ from ML_models.regression import *
 from analysis_utilities import *
 
 
-def predict_elite_status_with_linear_regression():
-	# Generate graph and user dictionaries
-	graph = read_graph_from_yelp_JSON_file()
-	users = read_users_from_yelp_JSON_file(model_type='linear_regression')
-
-	# Add PageRank to user dictionaries
-	pagerank_for_node = networkx.pagerank(graph)
-	user_pageranks = [{'ID': node_ID, 'pagerank': pagerank} for node_ID, pagerank in pagerank_for_node.iteritems()]
-	users = join_dictionaries(user_pageranks, users, 'ID')
-
-	# Prepare users for learning
-	users = remove_labels(users, 'ID')
-	users = normalize_users(users, excluded_attributes=['years_elite'])
-	users = designate_attribute_as_label(users, 'years_elite')
-	random.shuffle(users)
-
-	# Split data into training and test
-	user_count = len(users)
-	training_set_size = int(0.75 * user_count)
-	test_set_size = user_count - training_set_size
-	training_set = users[0:training_set_size]
-	test_set = users[-test_set_size:]
-
-	# Fit to hyperplane
-	model, weights = regression.get_model_and_weights(training_set)
-
-	# Show us how important each attribute is
-	print 'Attribute weights:'
-	for attribute, weight in weights.items():
-		print attribute + ': ' + str(weight)
-
-	# Test the model by calculating its coefficient of determination (R^2) on test data
-	test_samples, test_labels, _ = regression.prep_data(test_set)
-	test_score = model.score(test_samples, test_labels)
-	print 'Test score: ' + str(test_score)
+# TODO: Try decision trees/random forests
+# TODO: Refactor functions for training/classifying using different ML models
 
 
 def predict_elite_status_with_naive_bayes():

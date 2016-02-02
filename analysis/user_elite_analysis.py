@@ -47,11 +47,10 @@ def predict_elite_status_with_linear_regression():
 	print 'Test score: ' + str(test_score)
 
 
-def predict_elite_status_with_bayes():
-	# Assuming there are fewer positive samples than negative samples
-	POSITIVE_SAMPLE_COUNT = 31461
+def predict_elite_status_with_naive_bayes():
+	"""Trains and tests a Naive Bayes model for predicting users' Elite status."""
+	# Hyperparameters
 	FRACTION_FOR_TRAINING = 0.7
-
 	NAIVE_BAYES_USER_ATTRIBUTES = DEFAULT_USER_ATTRIBUTES
 
 	print 'READING USERS FROM FILE'
@@ -59,35 +58,31 @@ def predict_elite_status_with_bayes():
 	users = remove_labels(users, 'ID')
 	users = make_attribute_boolean(users, 'years_elite')
 
+	# Ensure 50-50 split of positive and negative data, preventing a natural bias towards the 94% negative labels
 	print 'TAKING STRATIFIED SAMPLE OF DATA'
-	# Ensure 50-50 split of 0-labeled and 1-labeled training and test data
-	# If we don't do this, data is 94% 0-labeled and performs poorly on 1-labeled users
 	elite_users, non_elite_users = stratified_boolean_sample(users, label_name='years_elite')
 	users = elite_users + non_elite_users
 	random.shuffle(users)
-
 	user_vectors, labels = vectorize_users(users, label_name='years_elite')
 
 	print 'PARTITIONING DATA INTO TRAINING AND TEST'
 	training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels = partition_data_vectors(user_vectors, labels, FRACTION_FOR_TRAINING)
 
 	# Train Naive Bayes model
-	gnb = GaussianNB()
-	gnb.fit(training_set, training_set_labels)
+	naive_bayes_model = GaussianNB()
+	naive_bayes_model.fit(training_set, training_set_labels)
 
 	# Compute accuracy measures
-	print 'Accuracy on test data: ', format_as_percentage( gnb.score(test_set, test_set_labels) )
-	print 'Accuracy on training data: ', format_as_percentage( gnb.score(training_set, training_set_labels) )
-	print 'Recall of positive samples: ', format_as_percentage( gnb.score(positive_test_set, positive_test_set_labels) )
-
-	print 'Class prior distribution (should be roughly even): ', gnb.class_prior_
-
+	print 'Accuracy on test data: ', format_as_percentage( naive_bayes_model.score(test_set, test_set_labels) )
+	print 'Accuracy on training data: ', format_as_percentage( naive_bayes_model.score(training_set, training_set_labels) )
+	print 'Recall of positive samples: ', format_as_percentage( naive_bayes_model.score(positive_test_set, positive_test_set_labels) )
+	print 'Class prior distribution (should be roughly even): ', naive_bayes_model.class_prior_
 
 
 
 
 if __name__ == "__main__":
-	predict_elite_status_with_bayes()
+	predict_elite_status_with_naive_bayes()
 	# predict_elite_status_with_linear_regression()
 
 

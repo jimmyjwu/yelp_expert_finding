@@ -60,8 +60,7 @@ def predict_elite_status_with_naive_bayes():
 
 	# Ensure 50-50 split of positive and negative data, preventing a natural bias towards the 94% negative labels
 	print 'TAKING STRATIFIED SAMPLE OF DATA'
-	elite_users, non_elite_users = stratified_boolean_sample(users, label_name='years_elite')
-	users = elite_users + non_elite_users
+	users = stratified_boolean_sample(users, label_name='years_elite')
 	random.shuffle(users)
 	user_vectors, labels = vectorize_users(users, label_name='years_elite')
 

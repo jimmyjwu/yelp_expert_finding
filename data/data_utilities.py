@@ -154,7 +154,7 @@ def read_multiple_user_attributes(input_file_name, attributes):
 	attributes_set = set(attributes)
 	users = []
 
-	with open(raw_data_absolute_path(input_file_name)) as attributes_file:
+	with open(processed_data_absolute_path(input_file_name)) as attributes_file:
 
 		# Row 1: attribute names
 		attributes_in_file = attributes_file.readline().split()

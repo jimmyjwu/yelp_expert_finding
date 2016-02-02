@@ -1,0 +1,9 @@
+USER GRAPH
+Nodes: 552339
+Edges: 1781932
+Edge density: 1.16818194668e-05
+
+
+USERS
+Elite users: 31461 (6.0%)
+Non-elite users: 520878 (94.0%)

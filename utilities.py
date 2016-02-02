@@ -134,6 +134,10 @@ def print_first_items(values, k=1):
 	print ''
 
 
+def format_as_percentage(value, decimal_places=2):
+	return ('{:.' + str(decimal_places) + '%}').format(value)
+
+
 def unique_values(values):
 	"""Given a list of values, returns a list of unique values."""
 	return list(set(values))

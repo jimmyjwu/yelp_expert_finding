@@ -1,10 +1,11 @@
 """
 Primary file for analysis of the Yelp dataset.
 """
+from sklearn.naive_bayes import GaussianNB
 
 from utilities import *
-import regression
-from sklearn.naive_bayes import GaussianNB, BernoulliNB
+from data.data_interface import *
+from ML_models.regression import *
 
 
 def predict_elite_status_with_linear_regression():
@@ -46,32 +47,17 @@ def predict_elite_status_with_linear_regression():
 
 def predict_elite_status_with_bayes():
 	# Hyperparameters
-	TEST_ONLY_ONES = True
+	TEST_ONLY_ONES = False
 	TRAIN_ON_ZEROS_TEST_ON_ONES = False
 
-	# Generate graph and user dictionaries
-	graph = read_graph_from_yelp_JSON_file()
-	print 'Finished reading graph'
+	NAIVE_BAYES_USER_ATTRIBUTES = DEFAULT_USER_ATTRIBUTES
 
-	users = read_users_from_yelp_JSON_file(model_type='naive_bayes')
-	print 'Finished reading users'
-
-	# Add PageRank to user dictionaries
-	pagerank_for_node = networkx.pagerank(graph)
-	user_pageranks = [{'ID': node_ID, 'pagerank': pagerank} for node_ID, pagerank in pagerank_for_node.iteritems()]
-	users = join_dictionaries(user_pageranks, users, 'ID')
-	print 'Finished adding PageRanks to users'
-	
-	# Add reading level to user dictionaries
-	reading_level_for_user = read_user_reading_levels_from_yelp_JSON_file()
-	reading_levels = [{'ID': ID, 'reading_level': reading_level} for ID, reading_level in reading_level_for_user.items()]
-	users = join_dictionaries(reading_levels, users, 'ID')
-	print 'Finished adding reading level to users'
-
-	# Prepare users for learning
+	print 'READING USERS FROM FILE'
+	users = read_users(attributes=NAIVE_BAYES_USER_ATTRIBUTES)
 	users = remove_labels(users, 'ID')
 	random.shuffle(users)
 
+	print 'TAKING STRATIFIED SAMPLE OF DATA'
 	# Ensure 50-50 split of 0-labeled and 1-labeled training and test data
 	# If we don't do this, data is 93% 0-labeled and performs poorly on 1-labeled users
 	users_0 = 0
@@ -104,6 +90,7 @@ def predict_elite_status_with_bayes():
 		# Generate a label for every user
 		labels.append(1 if user['years_elite'] > 0 else 0)
 
+	print 'PARTITIONING DATA INTO TRAINING AND TEST'
 	# Split data into training and test
 	user_count = len(user_vectors)
 	training_set_size = int(0.7 * user_count)
@@ -189,9 +176,9 @@ def predict_pagerank():
 
 
 if __name__ == "__main__":
-	# predict_elite_status_with_bayes()
+	predict_elite_status_with_bayes()
 	# predict_elite_status_with_linear_regression()
 	# predict_pagerank()
-	analyze_yelp_graph()
+	# analyze_yelp_graph()
 
 

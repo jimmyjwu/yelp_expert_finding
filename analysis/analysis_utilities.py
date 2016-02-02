@@ -73,6 +73,29 @@ def vectorize_users(users, label_name='label'):
 	return user_vectors, labels
 
 
+def partition_data_vectors(feature_vectors, labels, fraction_for_training=0.7):
+	"""
+	Given a list of feature vectors (lists) and their corresponding labels, returns:
+		- A training set
+		- A test set, disjoint from the training set
+		- A recall test set (subset of test data labeled positive)
+
+	NOTE: Does not sample randomly. Any randomization must be applied before using this utility.
+	"""
+	dataset_size = len(feature_vectors)
+	training_set_size = int(0.7 * dataset_size)
+	test_set_size = dataset_size - training_set_size
+
+	training_set = feature_vectors[0:training_set_size]
+	training_set_labels = labels[0:training_set_size]
+	test_set = feature_vectors[-test_set_size:]
+	test_set_labels = labels[-test_set_size:]
+	positive_test_set = [vector for i, vector in enumerate(test_set) if test_set_labels[i] == 1]
+	positive_test_set_labels = [1]*len(positive_test_set)
+
+	return training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels
+
+
 def normalize_users(users, excluded_attributes=[]):
 	"""
 	Given a list of user dictionaries whose attributes are numeric values, returns a list of

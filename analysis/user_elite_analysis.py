@@ -50,6 +50,7 @@ def predict_elite_status_with_linear_regression():
 def predict_elite_status_with_bayes():
 	# Assuming there are fewer positive samples than negative samples
 	POSITIVE_SAMPLE_COUNT = 31461
+	FRACTION_FOR_TRAINING = 0.7
 
 	NAIVE_BAYES_USER_ATTRIBUTES = DEFAULT_USER_ATTRIBUTES
 
@@ -68,13 +69,7 @@ def predict_elite_status_with_bayes():
 	user_vectors, labels = vectorize_users(users, label_name='years_elite')
 
 	print 'PARTITIONING DATA INTO TRAINING AND TEST'
-	user_count = len(user_vectors)
-	training_set_size = int(0.7 * user_count)
-	test_set_size = user_count - training_set_size
-	training_set = user_vectors[0:training_set_size]
-	training_set_labels = labels[0:training_set_size]
-	test_set = user_vectors[-test_set_size:]
-	test_set_labels = labels[-test_set_size:]
+	training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels = partition_data_vectors(user_vectors, labels, FRACTION_FOR_TRAINING)
 
 	# Train Naive Bayes model
 	gnb = GaussianNB()
@@ -83,10 +78,7 @@ def predict_elite_status_with_bayes():
 	# Compute accuracy measures
 	print 'Accuracy on test data: ', format_as_percentage( gnb.score(test_set, test_set_labels) )
 	print 'Accuracy on training data: ', format_as_percentage( gnb.score(training_set, training_set_labels) )
-
-	positive_test_samples = [sample for i, sample in enumerate(test_set) if test_set_labels[i] == 1]
-	positive_test_samples_labels = [1]*len(positive_test_samples)
-	print 'Recall of positive samples: ', format_as_percentage( gnb.score(positive_test_samples, positive_test_samples_labels) )
+	print 'Recall of positive samples: ', format_as_percentage( gnb.score(positive_test_set, positive_test_set_labels) )
 
 	print 'Class prior distribution (should be roughly even): ', gnb.class_prior_
 

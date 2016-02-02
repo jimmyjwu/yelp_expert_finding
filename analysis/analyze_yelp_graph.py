@@ -143,42 +143,11 @@ def predict_elite_status_with_bayes():
 	print 'Class prior distribution (should be roughly even): ' + str(gnb.class_prior_)
 
 
-def predict_pagerank():
-	# Hyperparameters
-	MINIMUM_FRIEND_COUNT = 1
-
-	# Generate graph and users
-	graph = read_graph_from_yelp_JSON_file()
-	remove_low_degree_nodes(graph, MINIMUM_FRIEND_COUNT)
-	users = read_users_from_yelp_JSON_file()
-
-	# Add PageRank to user dictionaries
-	pagerank_for_node = networkx.pagerank(graph)
-	user_pageranks = [{'ID': node_ID, 'pagerank': pagerank} for node_ID, pagerank in pagerank_for_node.iteritems()]
-	users = join_dictionaries(user_pageranks, users, 'ID')
-
-	# Prepare users for regression
-	users = remove_labels(users, label_name='ID')
-	users = remove_labels(users, label_name='friend_count')
-	users = normalize_users(users, excluded_attributes=['ID', 'years_elite'])
-	users = designate_attribute_as_label(users, attribute='pagerank')
-
-	# Fit to hyperplane
-	training_set = users
-	model, weights = regression.get_model_and_weights(training_set)
-
-	# Show us how important each attribute is
-	print 'Attribute weights:'
-	for attribute, weight in weights.items():
-		print attribute + ': ' + str(weight * 100)
-
 
 
 
 if __name__ == "__main__":
 	predict_elite_status_with_bayes()
 	# predict_elite_status_with_linear_regression()
-	# predict_pagerank()
-	# analyze_yelp_graph()
 
 

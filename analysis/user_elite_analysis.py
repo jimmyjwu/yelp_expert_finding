@@ -57,12 +57,13 @@ def predict_elite_status_with_naive_bayes():
 	users = read_users(attributes=NAIVE_BAYES_USER_ATTRIBUTES)
 	users = remove_labels(users, 'ID')
 	users = make_attribute_boolean(users, 'years_elite')
+	users = designate_attribute_as_label(users, 'years_elite')
 
 	# Ensure 50-50 split of positive and negative data, preventing a natural bias towards the 94% negative labels
 	print 'TAKING STRATIFIED SAMPLE OF DATA'
-	users = stratified_boolean_sample(users, label_name='years_elite')
+	users = stratified_boolean_sample(users)
 	random.shuffle(users)
-	user_vectors, labels = vectorize_users(users, label_name='years_elite')
+	user_vectors, labels = vectorize_users(users)
 
 	print 'PARTITIONING DATA INTO TRAINING AND TEST'
 	training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels = partition_data_vectors(user_vectors, labels, FRACTION_FOR_TRAINING)

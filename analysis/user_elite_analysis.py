@@ -7,6 +7,8 @@ from utilities import *
 from data.data_interface import *
 from ML_models.regression import *
 
+from analysis_utilities import *
+
 
 def predict_elite_status_with_linear_regression():
 	# Generate graph and user dictionaries

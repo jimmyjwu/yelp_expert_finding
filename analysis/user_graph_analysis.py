@@ -4,6 +4,8 @@ Tools for analyzing the Yelp social network.
 from utilities import *
 from data.data_interface import *
 
+from analysis_utilities import *
+
 
 def analyze_user_graph(
 	user_graph_file_name=DEFAULT_RAW_USERS_FILE_NAME,

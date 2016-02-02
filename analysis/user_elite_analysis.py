@@ -65,19 +65,7 @@ def predict_elite_status_with_bayes():
 	users = elite_users + non_elite_users
 	random.shuffle(users)
 
-	labels = []
-	user_vectors = []
-	sorted_keys = sorted(users[0].keys())
-	for user in users:
-		# Transform each user into a vector
-		user_vector = []
-		for key in sorted_keys:
-			if key != 'years_elite':
-				user_vector.append(user[key])
-		user_vectors.append(user_vector)
-
-		# Generate a label for every user
-		labels.append(1 if user['years_elite'] > 0 else 0)
+	user_vectors, labels = vectorize_users(users, label_name='years_elite')
 
 	print 'PARTITIONING DATA INTO TRAINING AND TEST'
 	user_count = len(user_vectors)

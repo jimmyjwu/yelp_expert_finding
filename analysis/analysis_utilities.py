@@ -56,6 +56,23 @@ def remove_labels(users, label_name='label'):
 	return unlabeled_users
 
 
+def vectorize_users(users, label_name='label'):
+	"""
+	Given a list of user dictionaries, returns
+		X : a list of vectors (lists), each representing the attribute values of a single user
+		y : a list of corresponding correct labels for X
+	"""
+	user_vectors = []
+	labels = []
+	attributes = users[0].keys()
+
+	for user in users:
+		user_vectors += [ [user[attribute] for attribute in attributes if attribute != label_name] ]
+		labels += [ user[label_name] ]
+
+	return user_vectors, labels
+
+
 def normalize_users(users, excluded_attributes=[]):
 	"""
 	Given a list of user dictionaries whose attributes are numeric values, returns a list of

@@ -48,7 +48,7 @@ def predict_elite_status_with_linear_regression():
 
 
 def predict_elite_status_with_naive_bayes():
-	"""Trains and tests a Naive Bayes model for predicting users' Elite status."""
+	"""Trains and tests a naive Bayes model for predicting users' Elite status."""
 	# Hyperparameters
 	FRACTION_FOR_TRAINING = 0.7
 	NAIVE_BAYES_USER_ATTRIBUTES = [
@@ -84,7 +84,7 @@ def predict_elite_status_with_naive_bayes():
 	print 'PARTITIONING DATA INTO TRAINING AND TEST'
 	training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels = partition_data_vectors(user_vectors, labels, FRACTION_FOR_TRAINING)
 
-	# Train Naive Bayes model
+	# Train naive Bayes model
 	naive_bayes_model = GaussianNB()
 	naive_bayes_model.fit(training_set, training_set_labels)
 

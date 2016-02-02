@@ -46,10 +46,6 @@ def predict_elite_status_with_linear_regression():
 
 
 def predict_elite_status_with_bayes():
-	# Hyperparameters
-	TEST_ONLY_ONES = False
-	TRAIN_ON_ZEROS_TEST_ON_ONES = False
-
 	# Assuming there are fewer positive samples than negative samples
 	POSITIVE_SAMPLE_COUNT = 31461
 
@@ -82,7 +78,6 @@ def predict_elite_status_with_bayes():
 		labels.append(1 if user['years_elite'] > 0 else 0)
 
 	print 'PARTITIONING DATA INTO TRAINING AND TEST'
-	# Split data into training and test
 	user_count = len(user_vectors)
 	training_set_size = int(0.7 * user_count)
 	test_set_size = user_count - training_set_size
@@ -91,48 +86,19 @@ def predict_elite_status_with_bayes():
 	test_set = user_vectors[-test_set_size:]
 	test_set_labels = labels[-test_set_size:]
 
-	# Train on only 0's, test on only 1's. Result is zero accuracy score.
-	if TRAIN_ON_ZEROS_TEST_ON_ONES:
-		print "Training only on 0's, testing only on 1's."
-		training = []
-		training_labels = []
-		test = []
-		test_labels = []
-		for i in range(user_count):
-			if labels[i] == 0:
-				training += [user_vectors[i]]
-				training_labels += [labels[i]]
-			else:
-				test += [user_vectors[i]]
-				test_labels += [labels[i]]
-		training_set = training
-		training_set_labels = training_labels
-		test_set = test
-		test_set_labels = test_labels
-	
-	# Test for recall on 1's
-	if TEST_ONLY_ONES:
-		print "Testing only on 1's (recall)."
-		test = []
-		test_labels = []
-		for i in range(test_set_size):
-			if test_set_labels[i] == 1:
-				test += [test_set[i]]
-				test_labels += [test_set_labels[i]]
-		test_set = test
-		test_set_labels = test_labels
-		print len(test_set)
-		print user_count
-
 	# Train Naive Bayes model
 	gnb = GaussianNB()
 	gnb.fit(training_set, training_set_labels)
 
 	# Compute accuracy measures
-	print 'Accuracy on test data: ', gnb.score(test_set, test_set_labels)
-	print 'Accuracy on training data: ', gnb.score(training_set, training_set_labels)
+	print 'Accuracy on test data: ', format_as_percentage( gnb.score(test_set, test_set_labels) )
+	print 'Accuracy on training data: ', format_as_percentage( gnb.score(training_set, training_set_labels) )
 
-	print 'Class prior distribution (should be roughly even): ' + str(gnb.class_prior_)
+	positive_test_samples = [sample for i, sample in enumerate(test_set) if test_set_labels[i] == 1]
+	positive_test_samples_labels = [1]*len(positive_test_samples)
+	print 'Recall of positive samples: ', format_as_percentage( gnb.score(positive_test_samples, positive_test_samples_labels) )
+
+	print 'Class prior distribution (should be roughly even): ', gnb.class_prior_
 
 
 

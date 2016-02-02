@@ -51,11 +51,27 @@ def predict_elite_status_with_naive_bayes():
 	"""Trains and tests a Naive Bayes model for predicting users' Elite status."""
 	# Hyperparameters
 	FRACTION_FOR_TRAINING = 0.7
-	NAIVE_BAYES_USER_ATTRIBUTES = DEFAULT_USER_ATTRIBUTES
+	NAIVE_BAYES_USER_ATTRIBUTES = [
+		#'ID',
+		'review_count',
+		'average_stars',
+		#'funny_vote_count',
+		#'useful_vote_count',
+		#'cool_vote_count',
+		#'friend_count',
+		'years_elite',
+		'months_member',
+		#'compliment_count',
+		#'fan_count',
+		#'average_review_length',
+		#'average_reading_level',
+		#'tip_count',
+		'pagerank',
+	]
 
 	print 'READING USERS FROM FILE'
 	users = read_users(attributes=NAIVE_BAYES_USER_ATTRIBUTES)
-	users = remove_labels(users, 'ID')
+	users = remove_attribute(users, 'ID')
 	users = make_attribute_boolean(users, 'years_elite')
 	users = designate_attribute_as_label(users, 'years_elite')
 

@@ -48,15 +48,15 @@ def stratified_boolean_sample(users, label_name='label'):
 		return random.sample(positive_samples, len(negative_samples)) + negative_samples
 
 
-def remove_labels(users, label_name='label'):
+def remove_attribute(users, attribute):
 	"""
-	Given a list of user dictionaries, returns a new list of users without
-	the label attribute, but with all other attributes copied.
+	Given a list of user dictionaries, returns a new list of users without a designated attribute,
+	but with all other attributes copied.
 	"""
-	unlabeled_users = []
+	users_without_attribute = []
 	for user in users:
-		unlabeled_users += [{key: value for key, value in user.items() if key != label_name}]
-	return unlabeled_users
+		users_without_attribute += [{key: value for key, value in user.iteritems() if key != attribute}]
+	return users_without_attribute
 
 
 def vectorize_users(users, label_name='label'):

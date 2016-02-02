@@ -67,6 +67,17 @@ def designate_attribute_as_label(users, attribute):
 	return labeled_users
 
 
+def stratified_boolean_sample(users, label_name='label'):
+	"""
+	Given a list of user dictionaries and the name of a Boolean-valued label, samples and returns
+	two maximal, equal-size lists of positive and negative samples.
+	"""
+	positive_samples = [user for user in users if user[label_name] == 1]
+	negative_samples = [user for user in users if user[label_name] == 0]
+
+	return (positive_samples, random.sample(negative_samples, len(positive_samples))) if len(positive_samples) < len(negative_samples) else (random.sample(positive_samples, len(negative_samples)), negative_samples)
+
+
 def remove_labels(users, label_name='label'):
 	"""
 	Given a list of user dictionaries, returns a new list of users without

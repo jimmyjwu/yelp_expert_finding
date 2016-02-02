@@ -50,30 +50,21 @@ def predict_elite_status_with_bayes():
 	TEST_ONLY_ONES = False
 	TRAIN_ON_ZEROS_TEST_ON_ONES = False
 
+	# Assuming there are fewer positive samples than negative samples
+	POSITIVE_SAMPLE_COUNT = 31461
+
 	NAIVE_BAYES_USER_ATTRIBUTES = DEFAULT_USER_ATTRIBUTES
 
 	print 'READING USERS FROM FILE'
 	users = read_users(attributes=NAIVE_BAYES_USER_ATTRIBUTES)
 	users = remove_labels(users, 'ID')
-	random.shuffle(users)
+	users = make_attribute_boolean(users, 'years_elite')
 
 	print 'TAKING STRATIFIED SAMPLE OF DATA'
 	# Ensure 50-50 split of 0-labeled and 1-labeled training and test data
-	# If we don't do this, data is 93% 0-labeled and performs poorly on 1-labeled users
-	users_0 = 0
-	users_1 = 0
-	temporary_users = []
-	for user in users:
-		if user['years_elite'] == 0:
-			if users_0 < 5000:
-				temporary_users += [user]
-				users_0 += 1
-		else:
-			if users_1 < 5000:
-				temporary_users += [user]
-				users_1 += 1
-	users = temporary_users
-
+	# If we don't do this, data is 94% 0-labeled and performs poorly on 1-labeled users
+	elite_users, non_elite_users = stratified_boolean_sample(users, label_name='years_elite')
+	users = elite_users + non_elite_users
 	random.shuffle(users)
 
 	labels = []
@@ -137,8 +128,9 @@ def predict_elite_status_with_bayes():
 	gnb = GaussianNB()
 	gnb.fit(training_set, training_set_labels)
 
-	# Calculate mean accuracy on test data
-	print "Classification score: ", gnb.score(test_set, test_set_labels)
+	# Compute accuracy measures
+	print 'Accuracy on test data: ', gnb.score(test_set, test_set_labels)
+	print 'Accuracy on training data: ', gnb.score(training_set, training_set_labels)
 
 	print 'Class prior distribution (should be roughly even): ' + str(gnb.class_prior_)
 

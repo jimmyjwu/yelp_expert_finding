@@ -11,13 +11,46 @@ from data.data_interface import *
 from analysis_utilities import *
 
 
-# TODO: Try decision trees/random forests
-# TODO: Refactor functions for training/classifying using different ML models
+# TODO: Try random forests
 
 
-def predict_elite_status_with_naive_bayes():
+def train_elite_status_classifier(ModelClass, attributes, fraction_for_training):
+	"""
+	Given a constructor for a classifier object and a list of user attributes to use, trains,
+	tests, and returns a classifier for Elite status.
+	"""
+	print '\nREADING USERS FROM FILE'
+	users = read_users(attributes=attributes)
+	users = remove_attribute(users, 'ID')
+	users = make_attribute_boolean(users, 'years_elite')
+	users = designate_attribute_as_label(users, 'years_elite')
+
+	# Ensure 50-50 split of positive and negative data, preventing a natural bias towards the 94% negative labels
+	print 'TAKING STRATIFIED SAMPLE OF DATA'
+	users = stratified_boolean_sample(users)
+	random.shuffle(users)
+	user_vectors, labels = vectorize_users(users)
+
+	print 'PARTITIONING DATA INTO TRAINING AND TEST'
+	training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels = partition_data_vectors(user_vectors, labels, fraction_for_training)
+
+	print 'TRAINING ' + ModelClass.__name__ + ' CLASSIFIER'
+	model = ModelClass()
+	model.fit(training_set, training_set_labels)
+
+	# Compute accuracy measures
+	print ''
+	print 'Accuracy on test data: ', format_as_percentage( model.score(test_set, test_set_labels) )
+	print 'Accuracy on training data: ', format_as_percentage( model.score(training_set, training_set_labels) )
+	print 'Recall of positive samples: ', format_as_percentage( model.score(positive_test_set, positive_test_set_labels) )
+	print ''
+
+	return model
+
+
+def train_naive_bayes_elite_status_classifier():
 	"""Trains and tests a naive Bayes model for predicting users' Elite status."""
-	# Hyperparameters
+
 	FRACTION_FOR_TRAINING = 0.7
 	NAIVE_BAYES_USER_ATTRIBUTES = [
 		#'ID',
@@ -37,35 +70,12 @@ def predict_elite_status_with_naive_bayes():
 		'pagerank',
 	]
 
-	print 'READING USERS FROM FILE'
-	users = read_users(attributes=NAIVE_BAYES_USER_ATTRIBUTES)
-	users = remove_attribute(users, 'ID')
-	users = make_attribute_boolean(users, 'years_elite')
-	users = designate_attribute_as_label(users, 'years_elite')
-
-	# Ensure 50-50 split of positive and negative data, preventing a natural bias towards the 94% negative labels
-	print 'TAKING STRATIFIED SAMPLE OF DATA'
-	users = stratified_boolean_sample(users)
-	random.shuffle(users)
-	user_vectors, labels = vectorize_users(users)
-
-	print 'PARTITIONING DATA INTO TRAINING AND TEST'
-	training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels = partition_data_vectors(user_vectors, labels, FRACTION_FOR_TRAINING)
-
-	# Train naive Bayes model
-	naive_bayes_model = GaussianNB()
-	naive_bayes_model.fit(training_set, training_set_labels)
-
-	# Compute accuracy measures
-	print 'Accuracy on test data: ', format_as_percentage( naive_bayes_model.score(test_set, test_set_labels) )
-	print 'Accuracy on training data: ', format_as_percentage( naive_bayes_model.score(training_set, training_set_labels) )
-	print 'Recall of positive samples: ', format_as_percentage( naive_bayes_model.score(positive_test_set, positive_test_set_labels) )
-	print 'Class prior distribution (should be roughly even): ', naive_bayes_model.class_prior_
+	model = train_elite_status_classifier(GaussianNB, NAIVE_BAYES_USER_ATTRIBUTES, FRACTION_FOR_TRAINING)
 
 
-def predict_elite_status_with_logistic_regression():
+def train_logistic_regression_elite_status_classifier():
 	"""Trains and tests a logistic regression model for predicting users' Elite status."""
-	# Hyperparameters
+
 	FRACTION_FOR_TRAINING = 0.7
 	LOGISTIC_REGRESSION_USER_ATTRIBUTES = [
 		#'ID',
@@ -85,35 +95,13 @@ def predict_elite_status_with_logistic_regression():
 		#'pagerank',
 	]
 
-	print 'READING USERS FROM FILE'
-	users = read_users(attributes=LOGISTIC_REGRESSION_USER_ATTRIBUTES)
-	users = remove_attribute(users, 'ID')
-	users = make_attribute_boolean(users, 'years_elite')
-	users = designate_attribute_as_label(users, 'years_elite')
-
-	# Ensure 50-50 split of positive and negative data, preventing a natural bias towards the 94% negative labels
-	print 'TAKING STRATIFIED SAMPLE OF DATA'
-	users = stratified_boolean_sample(users)
-	random.shuffle(users)
-	user_vectors, labels = vectorize_users(users)
-
-	print 'PARTITIONING DATA INTO TRAINING AND TEST'
-	training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels = partition_data_vectors(user_vectors, labels, FRACTION_FOR_TRAINING)
-
-	# Train logistic regression model
-	logistic_regression_model = LogisticRegression()
-	logistic_regression_model.fit(training_set, training_set_labels)
-
-	# Compute accuracy measures
-	print 'Accuracy on test data: ', format_as_percentage( logistic_regression_model.score(test_set, test_set_labels) )
-	print 'Accuracy on training data: ', format_as_percentage( logistic_regression_model.score(training_set, training_set_labels) )
-	print 'Recall of positive samples: ', format_as_percentage( logistic_regression_model.score(positive_test_set, positive_test_set_labels) )
+	model = train_elite_status_classifier(LogisticRegression, LOGISTIC_REGRESSION_USER_ATTRIBUTES, FRACTION_FOR_TRAINING)
 
 
-def predict_elite_status_with_decision_tree():
+def train_decision_tree_elite_status_classifier():
 	"""Trains and tests a decision tree model for predicting users' Elite status."""
-	# Hyperparameters
-	FRACTION_FOR_TRAINING = 0.7
+
+	FRACTION_FOR_TRAINING = 0.8
 	DECISION_TREE_USER_ATTRIBUTES = [
 		#'ID',
 		'review_count',
@@ -132,30 +120,9 @@ def predict_elite_status_with_decision_tree():
 		#'pagerank',
 	]
 
-	print 'READING USERS FROM FILE'
-	users = read_users(attributes=DECISION_TREE_USER_ATTRIBUTES)
-	users = remove_attribute(users, 'ID')
-	users = make_attribute_boolean(users, 'years_elite')
-	users = designate_attribute_as_label(users, 'years_elite')
+	model = train_elite_status_classifier(DecisionTreeClassifier, DECISION_TREE_USER_ATTRIBUTES, FRACTION_FOR_TRAINING)
 
-	# Ensure 50-50 split of positive and negative data, preventing a natural bias towards the 94% negative labels
-	print 'TAKING STRATIFIED SAMPLE OF DATA'
-	users = stratified_boolean_sample(users)
-	random.shuffle(users)
-	user_vectors, labels = vectorize_users(users)
-
-	print 'PARTITIONING DATA INTO TRAINING AND TEST'
-	training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels = partition_data_vectors(user_vectors, labels, FRACTION_FOR_TRAINING)
-
-	# Train decision tree model
-	decision_tree_model = DecisionTreeClassifier()
-	decision_tree_model.fit(training_set, training_set_labels)
-
-	# Compute accuracy measures
-	print 'Accuracy on test data: ', format_as_percentage( decision_tree_model.score(test_set, test_set_labels) )
-	print 'Accuracy on training data: ', format_as_percentage( decision_tree_model.score(training_set, training_set_labels) )
-	print 'Recall of positive samples: ', format_as_percentage( decision_tree_model.score(positive_test_set, positive_test_set_labels) )
-
+	# TODO: Output tree representation showing decision rules
 
 
 

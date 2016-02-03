@@ -72,7 +72,7 @@ def read_user_basic_attributes(input_file_name=DEFAULT_BASIC_ATTRIBUTES_FILE_NAM
 	return read_multiple_user_attributes(input_file_name=input_file_name, attributes=BASIC_USER_ATTRIBUTES)
 
 
-def read_users(input_file_name=DEFAULT_COMBINED_USERS_FILE_NAME, attributes=DEFAULT_USER_ATTRIBUTES):
+def read_users(input_file_name=DEFAULT_COMBINED_USERS_FILE_NAME, attributes=ALL_USER_ATTRIBUTES):
 	"""
 	Given a combined users file and a list of desired attributes, returns a list of user dictionaries
 	containing only those attributes.

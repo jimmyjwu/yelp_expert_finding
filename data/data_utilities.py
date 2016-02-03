@@ -50,10 +50,6 @@ ALL_USER_ATTRIBUTES = list(BASIC_USER_ATTRIBUTES) + [
 	'pagerank',
 ]
 
-# User attributes typically desired for training models
-_EXCLUDE_FROM_DEFAULT_USER_ATTRIBUTES = set(['funny_vote_count', 'useful_vote_count', 'cool_vote_count', 'friend_count'])
-DEFAULT_USER_ATTRIBUTES = [attribute for attribute in ALL_USER_ATTRIBUTES if attribute not in _EXCLUDE_FROM_DEFAULT_USER_ATTRIBUTES]
-
 # Used for re-casting attribute values when reading from processed data files
 CASTER_FOR_ATTRIBUTE_NAME = {
 	'ID': unicode,

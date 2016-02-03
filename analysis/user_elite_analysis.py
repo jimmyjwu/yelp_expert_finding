@@ -3,7 +3,10 @@ Primary file for analysis of the Yelp dataset.
 """
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
+from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.externals.six import StringIO
+import pydot
 
 from utilities import *
 from data.data_interface import *
@@ -122,13 +125,17 @@ def train_decision_tree_elite_status_classifier():
 
 	model = train_elite_status_classifier(DecisionTreeClassifier, DECISION_TREE_USER_ATTRIBUTES, FRACTION_FOR_TRAINING)
 
-	# TODO: Output tree representation showing decision rules
+	# Output tree representation showing decision rules
+	dot_data = StringIO()
+	tree.export_graphviz(model, out_file=dot_data, class_names=True, filled=True)
+	graph = pydot.graph_from_dot_data(dot_data.getvalue())
+	graph.write_pdf('analysis/analysis_results/decision_tree.pdf')
 
 
 
 
 
 if __name__ == "__main__":
-	predict_elite_status_with_decision_tree()
+	train_decision_tree_elite_status_classifier()
 
 

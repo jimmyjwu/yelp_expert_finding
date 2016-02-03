@@ -22,9 +22,9 @@ def train_elite_status_classifier(ModelClass, attributes, fraction_for_training,
 	"""
 	print '\nREADING USERS FROM FILE'
 	users = read_users(attributes=attributes)
-	users = remove_attribute(users, 'ID')
-	users = make_attribute_boolean(users, 'years_elite')
-	users = designate_attribute_as_label(users, 'years_elite')
+	remove_attribute(users, 'ID')
+	make_attribute_boolean(users, 'years_elite')
+	designate_attribute_as_label(users, 'years_elite')
 
 	# Ensure 50-50 split of positive and negative data, preventing a natural bias towards the 94% negative labels
 	print 'TAKING STRATIFIED SAMPLE OF DATA'
@@ -156,15 +156,15 @@ def train_random_forest_elite_status_classifier():
 		'tip_count',
 		'pagerank',
 	]
-	RANDOM_FOREST_PARAMETERS = {
+	RANDOM_FOREST_ARGUMENTS = {
 		'n_estimators': 100
 	}
 
-	model = train_elite_status_classifier(RandomForestClassifier, RANDOM_FOREST_USER_ATTRIBUTES, FRACTION_FOR_TRAINING, model_arguments=RANDOM_FOREST_PARAMETERS)
+	model = train_elite_status_classifier(RandomForestClassifier, RANDOM_FOREST_USER_ATTRIBUTES, FRACTION_FOR_TRAINING, model_arguments=RANDOM_FOREST_ARGUMENTS)
 
 	# TODO: Make learning pipeline preserve order of attributes
 	# TODO: Print features and importances side-by-side
-	print model.feature_importances_
+	# print model.feature_importances_
 
 
 

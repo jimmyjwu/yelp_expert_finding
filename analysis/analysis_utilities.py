@@ -6,32 +6,21 @@ from utilities import *
 
 def make_attribute_boolean(users, attribute):
 	"""
-	Given a list of user dictionaries and an attribute name, returns a new list
-	of users whose designated attribute is transformed as follows:
-		value <= 0	-->		new value = 0
-		value > 0	-->		new value = 1
-	and all other attributes are copied without change.
+	Given a list of user dictionaries and an attribute name, maps the designated attribute values
+	of all users as follows:
+		value = 0	-->		new value = 0
+		value != 0	-->		new value = 1
 	"""
-	transformed_users = []
-	for user in users:
-		user_copy = {key: value for key, value in user.iteritems() if key != attribute}
-		user_copy[attribute] = 1 if user[attribute] > 0 else 0
-		transformed_users += [user_copy]
-	return transformed_users
+	[ user.update( { attribute: int(bool(user[attribute])) } ) for user in users ]
 
 
 def designate_attribute_as_label(users, attribute):
 	"""
-	Given a list of user dictionaries and an attribute name, returns a new list
-	of users whose designated attribute is named 'label', and all other attributes
-	are copied without change.
+	Given a list of user dictionaries and an attribute name, replaces the designated attribute
+	with a 'label' attribute which takes on the removed attribute's value.
 	"""
-	labeled_users = []
 	for user in users:
-		user_copy = {key: value for key, value in user.iteritems() if key != attribute}
-		user_copy['label'] = user[attribute]
-		labeled_users += [user_copy]
-	return labeled_users
+		user['label'] = user.pop(attribute)
 
 
 def stratified_boolean_sample(users, label_name='label'):
@@ -49,14 +38,8 @@ def stratified_boolean_sample(users, label_name='label'):
 
 
 def remove_attribute(users, attribute):
-	"""
-	Given a list of user dictionaries, returns a new list of users without a designated attribute,
-	but with all other attributes copied.
-	"""
-	users_without_attribute = []
-	for user in users:
-		users_without_attribute += [{key: value for key, value in user.iteritems() if key != attribute}]
-	return users_without_attribute
+	"""Deletes an attribute from all users in a list of user dictionaries."""
+	[ user.pop(attribute, None) for user in users ]
 
 
 def vectorize_users(users, label_name='label'):

@@ -5,6 +5,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.externals.six import StringIO
 import pydot
 
@@ -14,10 +15,7 @@ from data.data_interface import *
 from analysis_utilities import *
 
 
-# TODO: Try random forests
-
-
-def train_elite_status_classifier(ModelClass, attributes, fraction_for_training):
+def train_elite_status_classifier(ModelClass, attributes, fraction_for_training, model_arguments={}):
 	"""
 	Given a constructor for a classifier object and a list of user attributes to use, trains,
 	tests, and returns a classifier for Elite status.
@@ -38,7 +36,7 @@ def train_elite_status_classifier(ModelClass, attributes, fraction_for_training)
 	training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels = partition_data_vectors(user_vectors, labels, fraction_for_training)
 
 	print 'TRAINING ' + ModelClass.__name__ + ' CLASSIFIER'
-	model = ModelClass()
+	model = ModelClass(**model_arguments)
 	model.fit(training_set, training_set_labels)
 
 	# Compute accuracy measures
@@ -132,6 +130,41 @@ def train_decision_tree_elite_status_classifier():
 	graph.write_pdf('analysis/analysis_results/decision_tree.pdf')
 
 
+def train_random_forest_elite_status_classifier():
+	"""Trains and tests a random forest model for predicting users' Elite status."""
+
+	# Current best: FRACTION_FOR_TRAINING=0.8, n_estimators=100
+	# Accuracy on test data: ~96%
+	# Accuracy on training data: 100%
+	# Recall on positive samples: ~97.5%
+
+	FRACTION_FOR_TRAINING = 0.8
+	RANDOM_FOREST_USER_ATTRIBUTES = [
+		#'ID',
+		'review_count',
+		'average_stars',
+		'funny_vote_count',
+		'useful_vote_count',
+		'cool_vote_count',
+		'friend_count',
+		'years_elite',
+		'months_member',
+		'compliment_count',
+		'fan_count',
+		'average_review_length',
+		'average_reading_level',
+		'tip_count',
+		'pagerank',
+	]
+	RANDOM_FOREST_PARAMETERS = {
+		'n_estimators': 100
+	}
+
+	model = train_elite_status_classifier(RandomForestClassifier, RANDOM_FOREST_USER_ATTRIBUTES, FRACTION_FOR_TRAINING, model_arguments=RANDOM_FOREST_PARAMETERS)
+
+	# TODO: Make learning pipeline preserve order of attributes
+	# TODO: Print features and importances side-by-side
+	print model.feature_importances_
 
 
 

@@ -28,7 +28,13 @@ def train_elite_status_classifier(ModelClass, attributes, fraction_for_training,
 	Given a constructor for a classifier object and a list of user attributes to use, trains,
 	tests, and returns a classifier for Elite status.
 	"""
+	print '---------------------------------------------------------------------------------------'
+	print 'STARTING LEARNING PIPELINE'
+	print 'Model type: ' + ModelClass.__name__ + ' with arguments ' + str(model_arguments)
+	print 'Features: ' + ', '.join(attributes)
+	print 'Fraction of dataset for training: ' + format_as_percentage(fraction_for_training)
 	print ''
+
 	if CACHE['users']:
 		print 'USERS LOADED FROM MEMORY'
 		users = CACHE['users']
@@ -48,12 +54,12 @@ def train_elite_status_classifier(ModelClass, attributes, fraction_for_training,
 	print 'PARTITIONING DATA INTO TRAINING AND TEST'
 	training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels = partition_data_vectors(user_vectors, labels, fraction_for_training)
 
-	print 'TRAINING ' + ModelClass.__name__ + ' CLASSIFIER'
+	print 'TRAINING CLASSIFIER'
 	model = ModelClass(**model_arguments)
 	model.fit(training_set, training_set_labels)
 
-	# Compute accuracy measures
 	print ''
+	print 'COMPUTING ACCURACY MEASURES'
 	print 'Accuracy on test data: ', format_as_percentage( model.score(test_set, test_set_labels) )
 	print 'Accuracy on training data: ', format_as_percentage( model.score(training_set, training_set_labels) )
 	print 'Recall of positive samples: ', format_as_percentage( model.score(positive_test_set, positive_test_set_labels) )
@@ -107,11 +113,11 @@ def train_logistic_regression_elite_status_classifier():
 
 
 
-# Current best: fraction for training=0.5, attributes=['review_count'], kernel='rbf' (default)
-# Accuracy on test data: ~%
-# Accuracy on training data: ~%
-# Recall on positive samples: ~%
-SVM_FRACTION_FOR_TRAINING = 0.5
+# Current best: training fraction=0.8, attributes=['review_count'], kernel='rbf' (default)
+# Accuracy on test data: ~94.5%
+# Accuracy on training data: ~94.5%
+# Recall on positive samples: ~97.5%
+SVM_FRACTION_FOR_TRAINING = 0.8
 SVM_USER_ATTRIBUTES = [
 	'review_count',
 	#'average_stars',
@@ -161,7 +167,7 @@ def train_decision_tree_elite_status_classifier():
 
 
 
-# Current best: FRACTION_FOR_TRAINING=0.8, n_estimators=100
+# Current best: training fraction=0.8, attributes=[(all attributes)], n_estimators=100
 # Accuracy on test data: ~96%
 # Accuracy on training data: 100%
 # Recall on positive samples: ~97.5%

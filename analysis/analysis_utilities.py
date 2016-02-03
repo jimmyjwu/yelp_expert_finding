@@ -50,7 +50,7 @@ def remove_attribute(users, attribute):
 	[ user.pop(attribute, None) for user in users ]
 
 
-def vectorize_users(users, label_name='label'):
+def vectorize_users(users, attributes, label_name='label'):
 	"""
 	Given a list of user dictionaries, returns
 		X : a list of vectors (lists), each representing the attribute values of a single user
@@ -60,7 +60,6 @@ def vectorize_users(users, label_name='label'):
 	"""
 	user_vectors = []
 	labels = []
-	attributes = users[0].keys()
 
 	for user in users:
 		user_vectors += [ [user[attribute] for attribute in attributes if attribute != label_name] ]

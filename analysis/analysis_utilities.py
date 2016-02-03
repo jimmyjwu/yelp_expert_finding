@@ -79,7 +79,7 @@ def partition_data_vectors(feature_vectors, labels, fraction_for_training=0.7):
 	NOTE: Does not sample randomly. Any randomization must be applied before using this utility.
 	"""
 	dataset_size = len(feature_vectors)
-	training_set_size = int(0.7 * dataset_size)
+	training_set_size = int(fraction_for_training * dataset_size)
 	test_set_size = dataset_size - training_set_size
 
 	training_set = feature_vectors[0:training_set_size]

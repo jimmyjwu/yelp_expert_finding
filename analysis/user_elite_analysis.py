@@ -3,6 +3,7 @@ Primary file for analysis of the Yelp dataset.
 """
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -103,6 +104,32 @@ LOGISTIC_REGRESSION_USER_ATTRIBUTES = [
 def train_logistic_regression_elite_status_classifier():
 	"""Trains and tests a logistic regression model for predicting users' Elite status."""
 	model = train_elite_status_classifier(LogisticRegression, LOGISTIC_REGRESSION_USER_ATTRIBUTES, LOGISTIC_REGRESSION_FRACTION_FOR_TRAINING)
+
+
+
+# Current best: fraction for training=0.5, attributes=['review_count'], kernel='rbf' (default)
+# Accuracy on test data: ~%
+# Accuracy on training data: ~%
+# Recall on positive samples: ~%
+SVM_FRACTION_FOR_TRAINING = 0.5
+SVM_USER_ATTRIBUTES = [
+	'review_count',
+	#'average_stars',
+	#'funny_vote_count',
+	#'useful_vote_count',
+	#'cool_vote_count',
+	#'friend_count',
+	#'months_member',
+	#'compliment_count',
+	#'fan_count',
+	#'average_review_length',
+	#'average_reading_level',
+	#'tip_count',
+	#'pagerank',
+]
+def train_SVM_elite_status_classifier():
+	"""Trains and tests a support vector machine model for predicting users' Elite status."""
+	model = train_elite_status_classifier(SVC, SVM_USER_ATTRIBUTES, SVM_FRACTION_FOR_TRAINING)
 
 
 

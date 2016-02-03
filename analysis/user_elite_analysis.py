@@ -15,22 +15,32 @@ from data.data_interface import *
 from analysis_utilities import *
 
 
+# User cache to avoid re-reading from file
+USERS = None
+
+
+
 def train_elite_status_classifier(ModelClass, attributes, fraction_for_training, model_arguments={}):
 	"""
 	Given a constructor for a classifier object and a list of user attributes to use, trains,
 	tests, and returns a classifier for Elite status.
 	"""
-	print '\nREADING USERS FROM FILE'
-	users = read_users(attributes=attributes)
-	remove_attribute(users, 'ID')
-	make_attribute_boolean(users, 'years_elite')
-	designate_attribute_as_label(users, 'years_elite')
+	global USERS
+	print ''
+	if USERS:
+		print 'USERS LOADED FROM MEMORY'
+	else:
+		print 'READING USERS FROM FILE'
+		USERS = read_users()
+		remove_attribute(USERS, 'ID')
+		make_attribute_boolean(USERS, 'years_elite')
+		designate_attribute_as_label(USERS, 'years_elite')
 
 	# Ensure 50-50 split of positive and negative data, preventing a natural bias towards the 94% negative labels
 	print 'TAKING STRATIFIED SAMPLE OF DATA'
-	users = stratified_boolean_sample(users)
+	users = stratified_boolean_sample(USERS)
 	random.shuffle(users)
-	user_vectors, labels = vectorize_users(users)
+	user_vectors, labels = vectorize_users(users, attributes)
 
 	print 'PARTITIONING DATA INTO TRAINING AND TEST'
 	training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels = partition_data_vectors(user_vectors, labels, fraction_for_training)
@@ -86,7 +96,7 @@ def train_logistic_regression_elite_status_classifier():
 		#'useful_vote_count',
 		#'cool_vote_count',
 		#'friend_count',
-		'years_elite',
+		#'years_elite',
 		#'months_member',
 		#'compliment_count',
 		#'fan_count',
@@ -111,7 +121,7 @@ def train_decision_tree_elite_status_classifier():
 		#'useful_vote_count',
 		#'cool_vote_count',
 		#'friend_count',
-		'years_elite',
+		#'years_elite',
 		#'months_member',
 		#'compliment_count',
 		#'fan_count',
@@ -147,7 +157,7 @@ def train_random_forest_elite_status_classifier():
 		'useful_vote_count',
 		'cool_vote_count',
 		'friend_count',
-		'years_elite',
+		#'years_elite',
 		'months_member',
 		'compliment_count',
 		'fan_count',

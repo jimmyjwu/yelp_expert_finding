@@ -2,7 +2,7 @@
 General utilities for working with Python data structures, NetworkX graphs, etc.
 """
 import random
-from collections import Counter, defaultdict
+from collections import Counter, defaultdict, OrderedDict
 
 import networkx
 from matplotlib import pyplot

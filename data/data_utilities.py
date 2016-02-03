@@ -5,6 +5,8 @@ import os
 import json
 from datetime import date
 
+from utilities import *
+
 THIS_FILE_PATH = os.path.dirname(__file__)
 CURRENT_YEAR = date.today().year
 CURRENT_MONTH = date.today().month
@@ -149,9 +151,8 @@ def read_multiple_user_attributes(input_file_name, attributes):
 				.
 			{attribute_1_name: user_N_attribute_1_value, ..., attribute_k_name: user_N_attribute_k_value}
 		]
-	where the user dictionaries include only the k <= K desired attributes.
+	where the user dictionaries include only the k <= K desired attributes, in the order given.
 	"""
-	attributes_set = set(attributes)
 	users = []
 
 	with open(processed_data_absolute_path(input_file_name)) as attributes_file:
@@ -159,13 +160,13 @@ def read_multiple_user_attributes(input_file_name, attributes):
 		# Row 1: attribute names
 		attributes_in_file = attributes_file.readline().split()
 
-		# Type-casting functions corresponding to attributes found in file
-		attributes_in_file_casters = [CASTER_FOR_ATTRIBUTE_NAME[attribute] for attribute in attributes_in_file]
+		# List of (desired attribute name, index in attributes_in_file where desired attribute occurs, caster for desired attribute)
+		attribute_names_indices_and_casters = [ (attribute, attributes_in_file.index(attribute), CASTER_FOR_ATTRIBUTE_NAME[attribute]) for attribute in attributes ]
 
 		# Rows 2,...,N: users' attribute values written in the same order
 		for user_line in attributes_file:
 			user_attribute_values = user_line.split()
-			users += [ { attribute_name: attributes_in_file_casters[i](user_attribute_values[i]) for i, attribute_name in enumerate(attributes_in_file) if attribute_name in attributes_set } ]
+			users += [ OrderedDict([ ( attribute, caster(user_attribute_values[index]) ) for attribute, index, caster in attribute_names_indices_and_casters ]) ]
 
 	return users
 

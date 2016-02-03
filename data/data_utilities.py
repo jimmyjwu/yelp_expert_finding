@@ -129,7 +129,7 @@ def write_single_user_attribute(attribute_for_user, output_file_name):
 			attribute_file.write(user_ID + ' ' + str(attribute) + '\n')
 
 
-def read_multiple_user_attributes(input_file_name, attributes):
+def read_multiple_user_attributes(input_file_name, attributes, order_attributes=False):
 	"""
 	Given a processed user attributes file of the form
 		attribute_1_name ... attribute_K_name
@@ -150,6 +150,7 @@ def read_multiple_user_attributes(input_file_name, attributes):
 	where the user dictionaries include only the k <= K desired attributes, in the order given.
 	"""
 	users = []
+	DictionaryClass = OrderedDict if order_attributes else dict
 
 	with open(processed_data_absolute_path(input_file_name)) as attributes_file:
 
@@ -162,7 +163,7 @@ def read_multiple_user_attributes(input_file_name, attributes):
 		# Rows 2,...,N: users' attribute values written in the same order
 		for user_line in attributes_file:
 			user_attribute_values = user_line.split()
-			users += [ OrderedDict([ ( attribute, caster(user_attribute_values[index]) ) for attribute, index, caster in attribute_names_indices_and_casters ]) ]
+			users += [ DictionaryClass([ ( attribute, caster(user_attribute_values[index]) ) for attribute, index, caster in attribute_names_indices_and_casters ]) ]
 
 	return users
 

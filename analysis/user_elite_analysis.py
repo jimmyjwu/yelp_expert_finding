@@ -35,7 +35,7 @@ def train_elite_status_classifier(ModelClass, attributes, fraction_for_training,
 		print 'READING USERS FROM FILE'
 		users = read_users()
 		remove_attribute(users, 'ID')
-		make_attribute_boolean(users, 'years_elite')
+		booleanize_attribute(users, 'years_elite')
 		designate_attribute_as_label(users, 'years_elite')
 		CACHE['users'] = users
 

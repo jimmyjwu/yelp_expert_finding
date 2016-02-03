@@ -162,9 +162,10 @@ def train_random_forest_elite_status_classifier():
 
 	model = train_elite_status_classifier(RandomForestClassifier, RANDOM_FOREST_USER_ATTRIBUTES, FRACTION_FOR_TRAINING, model_arguments=RANDOM_FOREST_ARGUMENTS)
 
-	# TODO: Make learning pipeline preserve order of attributes
-	# TODO: Print features and importances side-by-side
-	# print model.feature_importances_
+	# Print features and importances side-by-side
+	features = [attribute for attribute in RANDOM_FOREST_USER_ATTRIBUTES if attribute != 'years_elite']
+	for attribute, importance in sorted(zip(features, model.feature_importances_), key=lambda x: x[1]):
+		print attribute, '\t', format_as_percentage(importance)
 
 
 

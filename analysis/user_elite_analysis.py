@@ -41,7 +41,7 @@ def train_elite_status_classifier(ModelClass, attributes, fraction_for_training,
 	else:
 		print 'READING USERS FROM FILE'
 		users = read_users()
-		booleanize_attribute(users, 'years_elite')
+		binarize_attribute(users, 'years_elite')
 		designate_attribute_as_label(users, 'years_elite')
 		CACHE['users'] = users
 
@@ -179,10 +179,10 @@ def train_decision_tree_elite_status_classifier():
 
 
 
-# Current best: training fraction=0.8, attributes=[(all attributes)], n_estimators=100
+# Current best: training fraction=0.8, attributes=[(all attributes)], n_estimators=100, max_depth=12
 # Accuracy on test data: ~96%
-# Accuracy on training data: 100%
-# Recall on positive samples: ~97.5%
+# Accuracy on training data: ~98%
+# Recall on positive samples: ~98%
 RANDOM_FOREST_FRACTION_FOR_TRAINING = 0.8
 RANDOM_FOREST_USER_ATTRIBUTES = [
 	'review_count',

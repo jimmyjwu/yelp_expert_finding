@@ -4,7 +4,7 @@ Utilities specifically for machine learning and data analysis.
 from utilities import *
 
 
-def booleanize_attribute(users, attribute):
+def binarize_attribute(users, attribute):
 	"""
 	Given a list of user dictionaries and an attribute name, maps the designated attribute values
 	of all users as follows:

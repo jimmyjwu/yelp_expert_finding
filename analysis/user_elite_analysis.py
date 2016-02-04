@@ -113,7 +113,7 @@ def train_logistic_regression_elite_status_classifier():
 
 
 
-# Current best: training fraction=0.8, attributes=['review_count'], kernel='rbf' (default)
+# Current best: training fraction=0.8, attributes=[review_count], kernel='rbf' (default)
 # Accuracy on test data: ~94.5%
 # Accuracy on training data: ~94.5%
 # Recall on positive samples: ~97.5%
@@ -139,7 +139,11 @@ def train_SVM_elite_status_classifier():
 
 
 
-DECISION_TREE_FRACTION_FOR_TRAINING = 0.8
+# Current best: training fraction=0.3, attributes=[review_count]
+# Accuracy on test data: ~94.5%
+# Accuracy on training data: 94.5%
+# Recall on positive samples: ~97%
+DECISION_TREE_FRACTION_FOR_TRAINING = 0.3
 DECISION_TREE_USER_ATTRIBUTES = [
 	'review_count',
 	#'average_stars',

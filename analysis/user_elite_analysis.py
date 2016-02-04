@@ -91,7 +91,11 @@ def train_naive_bayes_elite_status_classifier():
 
 
 
-LOGISTIC_REGRESSION_FRACTION_FOR_TRAINING = 0.7
+# Current best: training fraction=0.5, attributes=[review_count]
+# Accuracy on test data: ~93%
+# Accuracy on training data: ~93%
+# Recall on positive samples: ~91.5%
+LOGISTIC_REGRESSION_FRACTION_FOR_TRAINING = 0.5
 LOGISTIC_REGRESSION_USER_ATTRIBUTES = [
 	'review_count',
 	#'average_stars',
@@ -201,6 +205,30 @@ def train_random_forest_elite_status_classifier():
 	# Print features and importances side-by-side
 	for importance, attribute in sorted(zip(model.feature_importances_, RANDOM_FOREST_USER_ATTRIBUTES)):
 		print attribute, '\t', format_as_percentage(importance)
+
+
+
+def classify_by_review_count(minimum_reviews_for_elite=48):
+	""" Classifies solely by the number of reviews. """
+	if CACHE['users']:
+		print 'USERS LOADED FROM MEMORY'
+		users = CACHE['users']
+	else:
+		print 'READING USERS FROM FILE'
+		users = read_users()
+		booleanize_attribute(users, 'years_elite')
+		designate_attribute_as_label(users, 'years_elite')
+		CACHE['users'] = users
+
+	predicted_positives = [user for user in users if user['review_count'] >= minimum_reviews_for_elite]
+	predicted_negatives = [user for user in users if user['review_count'] < minimum_reviews_for_elite]
+
+	correct_predictions = len([user for user in predicted_positives if user['label'] == 1] + [user for user in predicted_negatives if user['label'] == 0])
+	print 'Accuracy: ', format_as_percentage( float(correct_predictions) / len(users) )
+
+	recalled_positives = [user for user in predicted_positives if user['label'] == 1]
+	all_positives = [user for user in users if user['label'] == 1]
+	print 'Recall: ', format_as_percentage( float(len(recalled_positives)) / len(all_positives) )
 
 
 

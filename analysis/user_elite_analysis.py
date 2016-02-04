@@ -69,7 +69,11 @@ def train_elite_status_classifier(ModelClass, attributes, fraction_for_training,
 
 
 
-FRACTION_FOR_TRAINING = 0.7
+# Current best: training fraction=0.5, attributes=[review_count, average_stars, months_member, pagerank]
+# Accuracy on test data: ~91%
+# Accuracy on training data: ~91%
+# Recall on positive samples: ~88%
+FRACTION_FOR_TRAINING = 0.5
 NAIVE_BAYES_USER_ATTRIBUTES = [
 	'review_count',
 	'average_stars',

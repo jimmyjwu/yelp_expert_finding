@@ -7,6 +7,7 @@ from sklearn.svm import SVC
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import AdaBoostClassifier
 from sklearn.externals.six import StringIO
 import pydot
 
@@ -209,6 +210,35 @@ def train_random_forest_elite_status_classifier():
 	# Print features and importances side-by-side
 	for importance, attribute in sorted(zip(model.feature_importances_, RANDOM_FOREST_USER_ATTRIBUTES)):
 		print attribute, '\t', format_as_percentage(importance)
+
+
+
+# Current best: training fraction=0.8, attributes=[(all attributes)], n_estimators=100, learning_rate=1.0
+# Accuracy on test data: ~96%
+# Accuracy on training data: ~96%
+# Recall on positive samples: ~97.5%
+ADABOOST_FRACTION_FOR_TRAINING = 0.8
+ADABOOST_USER_ATTRIBUTES = [
+	'review_count',
+	'average_stars',
+	'funny_vote_count',
+	'useful_vote_count',
+	'cool_vote_count',
+	'friend_count',
+	'months_member',
+	'compliment_count',
+	'fan_count',
+	'average_review_length',
+	'average_reading_level',
+	'tip_count',
+	'pagerank',
+]
+ADABOOST_ARGUMENTS = {
+	'n_estimators': 100
+}
+def train_adaboost_elite_status_classifier():
+	"""Trains and tests an AdaBoost (boosted decision trees) model for predicting users' Elite status."""
+	model = train_elite_status_classifier(AdaBoostClassifier, ADABOOST_USER_ATTRIBUTES, ADABOOST_FRACTION_FOR_TRAINING, model_arguments=ADABOOST_ARGUMENTS)
 
 
 

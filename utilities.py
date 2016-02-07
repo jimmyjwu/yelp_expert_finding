@@ -5,6 +5,7 @@ import random
 from collections import Counter, defaultdict, OrderedDict
 
 import networkx
+import numpy
 from matplotlib import pyplot
 
 

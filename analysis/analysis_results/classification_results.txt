@@ -1,0 +1,26 @@
+Random forest:
+
+Confusion matrix:
+[[29685  1776]
+ [  708 30753]]
+
+             precision    recall  f1-score   support
+
+      Elite       0.95      0.98      0.96     31461
+  Non-Elite       0.98      0.94      0.96     31461
+
+avg / total       0.96      0.96      0.96     62922
+
+
+AdaBoost:
+
+Confusion matrix:
+[[29710  1751]
+ [  871 30590]]
+
+             precision    recall  f1-score   support
+
+      Elite       0.95      0.97      0.96     31461
+  Non-Elite       0.97      0.94      0.96     31461
+
+avg / total       0.96      0.96      0.96     62922

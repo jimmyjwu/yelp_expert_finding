@@ -1,9 +1,12 @@
-Random forest:
+RANDOM FOREST
 
-Confusion matrix:
-[[29685  1776]
- [  708 30753]]
+Confusion Matrix
+					Predicted:
+Actual:		Elite			Non-Elite
+Elite		30753 (97.7%)	708 (2.3%)
+Non-Elite	1776 (5.6%)		29685 (94.4%)
 
+Classification Report
              precision    recall  f1-score   support
 
       Elite       0.95      0.98      0.96     31461
@@ -12,12 +15,16 @@ Confusion matrix:
 avg / total       0.96      0.96      0.96     62922
 
 
-AdaBoost:
 
-Confusion matrix:
-[[29710  1751]
- [  871 30590]]
+ADABOOST
 
+Confusion Matrix
+					Predicted:
+Actual:		Elite			Non-Elite
+Elite		30590 (97.2%)	871 (2.8%)
+Non-Elite	1751 (5.6%)		29710 (94.4%)
+
+Classification Report
              precision    recall  f1-score   support
 
       Elite       0.95      0.97      0.96     31461

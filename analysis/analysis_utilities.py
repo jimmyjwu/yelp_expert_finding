@@ -23,7 +23,7 @@ def designate_attribute_as_label(users, attribute):
 		user['label'] = user.pop(attribute)
 
 
-def stratified_boolean_sample(users, label_name='label'):
+def balanced_sample(users, label_name='label'):
 	"""
 	Given a list of user dictionaries with a Boolean label, returns a maximal sample of the users
 	in which both labels are equally common.
@@ -45,8 +45,8 @@ def remove_attribute(users, attribute):
 def vectorize_users(users, attributes, label_name='label'):
 	"""
 	Given a list of user dictionaries, returns
-		X : a list of vectors (lists), each representing the attribute values of a single user
-		y : a list of corresponding correct labels for X
+		X : a numpy array of arrays, each representing the attribute values of a single user
+		y : a numpy array of corresponding correct labels for X
 
 	NOTE: Output vectors respect ordering of input attributes: for every x in X, x[i] is the value
 	of attribute attributes[i].
@@ -58,7 +58,7 @@ def vectorize_users(users, attributes, label_name='label'):
 		user_vectors += [ [user[attribute] for attribute in attributes if attribute != label_name] ]
 		labels += [ user[label_name] ]
 
-	return user_vectors, labels
+	return numpy.array(user_vectors), numpy.array(labels)
 
 
 def partition_data_vectors(feature_vectors, labels, fraction_for_training=0.7):

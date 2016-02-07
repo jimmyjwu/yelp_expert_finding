@@ -9,7 +9,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.externals.six import StringIO
-from sklearn.cross_validation import train_test_split, cross_val_score
+from sklearn.cross_validation import train_test_split, cross_val_score, StratifiedKFold
+from sklearn.metrics import confusion_matrix, classification_report
 import pydot
 
 from utilities import *
@@ -45,28 +46,35 @@ def train_elite_status_classifier(ModelClass, attributes, fraction_for_training,
 		users = read_users()
 		binarize_attribute(users, 'years_elite')
 		designate_attribute_as_label(users, 'years_elite')
+		random.shuffle(users)
 		CACHE['users'] = users
 
-	# Ensure 50-50 split of positive and negative data, preventing a natural bias towards the 94% negative labels
-	print 'TAKING STRATIFIED SAMPLE OF DATA'
-	sampled_users = stratified_boolean_sample(users)
-	random.shuffle(sampled_users)
-	X, y = vectorize_users(sampled_users, attributes)
+	print 'PREPARING DATA'
+	users = balanced_sample(users)
+	X, y = vectorize_users(users, attributes)
 
-	print 'PARTITIONING DATA INTO TRAINING AND TEST'
-	X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=fraction_for_training)
-	# X_train, y_train, X_test, y_test, X_positive, y_positive = partition_data_vectors(X, y, fraction_for_training)
-
-	print 'TRAINING CLASSIFIER'
+	print 'BUILDING CLASSIFIER MODEL'
 	model = ModelClass(**model_arguments)
-	model.fit(X_train, y_train)
 
-	print ''
+	# Perform k-fold validation (to make use of all data for training and testing) with stratification (to prevent bias towards either class)
+	print 'PERFORMING STRATIFIED K-FOLD VALIDATION'
+	combined_confusion_matrix = numpy.zeros((2,2), dtype=numpy.int)
+	combined_y_test = []
+	combined_y_predict = []
+	for train_indices, test_indices in StratifiedKFold(y, n_folds=5):
+		X_train, X_test = X[train_indices], X[test_indices]
+		y_train, y_test = y[train_indices], y[test_indices]
+		model.fit(X_train, y_train)
+		y_predict = model.predict(X_test)
+		combined_confusion_matrix += confusion_matrix(y_test, y_predict, labels=[0,1])
+		combined_y_test.extend(y_test)
+		combined_y_predict.extend(y_predict)
+
+
 	print 'COMPUTING ACCURACY MEASURES'
-	print 'Accuracy on test data: ', format_as_percentage( model.score(X_test, y_test) )
-	print 'Accuracy on training data: ', format_as_percentage( model.score(X_train, y_train) )
-	# print 'Recall of positive samples: ', format_as_percentage( model.score(X_positive, y_positive) )
-	print ''
+	print '\nConfusion matrix:'
+	print combined_confusion_matrix
+	print '\n' + classification_report(combined_y_test, combined_y_predict, labels=[1,0], target_names=['Elite', 'Non-Elite'])
 
 	return model
 

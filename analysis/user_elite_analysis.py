@@ -9,6 +9,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.externals.six import StringIO
+from sklearn.cross_validation import train_test_split, cross_val_score
 import pydot
 
 from utilities import *
@@ -50,20 +51,21 @@ def train_elite_status_classifier(ModelClass, attributes, fraction_for_training,
 	print 'TAKING STRATIFIED SAMPLE OF DATA'
 	sampled_users = stratified_boolean_sample(users)
 	random.shuffle(sampled_users)
-	user_vectors, labels = vectorize_users(sampled_users, attributes)
+	X, y = vectorize_users(sampled_users, attributes)
 
 	print 'PARTITIONING DATA INTO TRAINING AND TEST'
-	training_set, training_set_labels, test_set, test_set_labels, positive_test_set, positive_test_set_labels = partition_data_vectors(user_vectors, labels, fraction_for_training)
+	X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=fraction_for_training)
+	# X_train, y_train, X_test, y_test, X_positive, y_positive = partition_data_vectors(X, y, fraction_for_training)
 
 	print 'TRAINING CLASSIFIER'
 	model = ModelClass(**model_arguments)
-	model.fit(training_set, training_set_labels)
+	model.fit(X_train, y_train)
 
 	print ''
 	print 'COMPUTING ACCURACY MEASURES'
-	print 'Accuracy on test data: ', format_as_percentage( model.score(test_set, test_set_labels) )
-	print 'Accuracy on training data: ', format_as_percentage( model.score(training_set, training_set_labels) )
-	print 'Recall of positive samples: ', format_as_percentage( model.score(positive_test_set, positive_test_set_labels) )
+	print 'Accuracy on test data: ', format_as_percentage( model.score(X_test, y_test) )
+	print 'Accuracy on training data: ', format_as_percentage( model.score(X_train, y_train) )
+	# print 'Recall of positive samples: ', format_as_percentage( model.score(X_positive, y_positive) )
 	print ''
 
 	return model
@@ -201,7 +203,8 @@ RANDOM_FOREST_USER_ATTRIBUTES = [
 	'pagerank',
 ]
 RANDOM_FOREST_ARGUMENTS = {
-	'n_estimators': 100
+	'n_estimators': 100,
+	'max_depth': 12,
 }
 def train_random_forest_elite_status_classifier():
 	"""Trains and tests a random forest model for predicting users' Elite status."""

@@ -125,4 +125,55 @@ def show_histogram(values, value_name='Value', bins=100, range_to_display=(0,0),
 	pyplot.show()
 
 
+def show_histogram_with_broken_y_axis(values, value_name='Value', bins=100, range_to_display=(0,0), normed=False, cutout=(0,0)):
+	"""
+	Displays a histogram with a break (a section cut out) in the y-dimension.
+	"""
+	n, bins, patches = pyplot.hist(x=values, bins=bins, range=range_to_display, normed=normed, facecolor='g', alpha=0.75)
+	bins = numpy.delete(bins, -1)
+	width = bins[2] - bins[1]
+
+	pyplot.xlabel(value_name)
+	pyplot.ylabel('Frequency')
+	pyplot.title('Histogram of ' + value_name + 's')
+	pyplot.axis('tight')
+	pyplot.grid(True)
+
+	# Create two plots with a y-axis break in between
+	figure, (axes_1, axes_2) = pyplot.subplots(2, 1, sharex=True)
+
+	# Plot the same data as bar charts on both axes
+	axes_1.bar(bins, n, width, color='g')
+	axes_2.bar(bins, n, width, color='g')
+
+	axes_1.set_ylim(bottom=cutout[1])	# Limit first axis to upper parts of bars
+	axes_2.set_ylim(0, cutout[0])		# Limit second axis to lower parts of bars
+
+	# Fix x-axis boundaries (without this, visible boundary is changed by diagonal lines below)
+	axes_1.set_xlim(right=range_to_display[1])
+	axes_2.set_xlim(right=range_to_display[1])
+
+	# Hide the spines between axes_1 and axes_2
+	axes_1.spines['bottom'].set_visible(False)
+	axes_2.spines['top'].set_visible(False)
+	axes_1.xaxis.tick_top()
+	axes_1.tick_params(labeltop='off') # Omit tick labels at the top
+	axes_2.xaxis.tick_bottom()
+
+	# Add short diagonal lines around breaks
+	# Note: axis dimensions are always on a [0,1] scale regardless of actual range
+	d = .015  # Size of diagonal lines
+	kwargs = dict(transform=axes_1.transAxes, color='k', clip_on=False)
+	axes_1.plot((-d, +d), (-d, +d), **kwargs) # Top-left diagonal
+	axes_1.plot(((1 - d), (1 + d)), (-d, +d), **kwargs) # Top-right diagonal
+
+	kwargs.update(transform=axes_2.transAxes) # Switch to the bottom axes
+	axes_2.plot((-d, +d), (1 - d, 1 + d), **kwargs) # Bottom-left diagonal
+	axes_2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs) # Bottom-right diagonal
+
+	pyplot.show()
+
+
+
+
 

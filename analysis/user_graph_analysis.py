@@ -26,6 +26,7 @@ def analyze_user_graph(
 
 	print 'READING IN PAGERANKS'
 	pagerank_for_node = read_user_pageranks(input_file_name=user_pageranks_file_name)
+	maximum_pagerank = max(pagerank_for_node.itervalues())
 
 	print '\n============================================================================'
 	print 'YELP USER GRAPH STATISTICS'
@@ -40,8 +41,17 @@ def analyze_user_graph(
 		show_histogram(values=node_degrees, value_name='Node Degree', bins=range(-1, maximum_degree_shown, bin_width), range_to_display=(-1, maximum_degree_shown + 1))
 
 	if show_pagerank_histogram:
-		show_histogram(values=pagerank_for_node.values(), value_name='PageRank', bins=500, range_to_display=(0, 0.001))
+		show_histogram_with_broken_y_axis(
+			values=pagerank_for_node.values(),
+			value_name='PageRank',
+			bins=100,
+			range_to_display=(0, 5.0e-6),
+			cutout=(1.0e5,3.0e5)
+		)
 
 
 if __name__ == "__main__":
 	analyze_user_graph()
+
+
+

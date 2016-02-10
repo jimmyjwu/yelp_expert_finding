@@ -119,7 +119,7 @@ def show_histogram(values, value_name='Value', bins=100, range_to_display=(0,0),
 		n, bins, patches = pyplot.hist(values, bins=bins, range=range_to_display, normed=normed, facecolor='g', alpha=0.75)
 	pyplot.xlabel(value_name)
 	pyplot.ylabel('Frequency')
-	pyplot.title('Histogram of ' + value_name + 's')
+	# pyplot.title('Histogram of ' + value_name + 's')
 	pyplot.axis('tight')
 	pyplot.grid(True)
 	pyplot.show()
@@ -135,16 +135,19 @@ def show_histogram_with_broken_y_axis(values, value_name='Value', bins=100, rang
 
 	pyplot.xlabel(value_name)
 	pyplot.ylabel('Frequency')
-	pyplot.title('Histogram of ' + value_name + 's')
+	# pyplot.title('Histogram of ' + value_name + 's')
 	pyplot.axis('tight')
-	pyplot.grid(True)
 
 	# Create two plots with a y-axis break in between
 	figure, (axes_1, axes_2) = pyplot.subplots(2, 1, sharex=True)
 
 	# Plot the same data as bar charts on both axes
-	axes_1.bar(bins, n, width, color='g')
-	axes_2.bar(bins, n, width, color='g')
+	axes_1.bar(bins, n, width, color='g', alpha=0.75)
+	axes_2.bar(bins, n, width, color='g', alpha=0.75)
+
+	# Turn grid lines on
+	axes_1.grid(True)
+	axes_2.grid(True)
 
 	axes_1.set_ylim(bottom=cutout[1])	# Limit first axis to upper parts of bars
 	axes_2.set_ylim(0, cutout[0])		# Limit second axis to lower parts of bars

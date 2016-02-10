@@ -44,9 +44,9 @@ def analyze_user_graph(
 		show_histogram_with_broken_y_axis(
 			values=pagerank_for_node.values(),
 			value_name='PageRank',
-			bins=100,
+			bins=50,
 			range_to_display=(0, 5.0e-6),
-			cutout=(1.0e5,3.0e5)
+			cutout=(6.0e4,3.0e5)
 		)
 
 

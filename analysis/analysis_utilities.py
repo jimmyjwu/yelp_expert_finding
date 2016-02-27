@@ -177,6 +177,30 @@ def show_histogram_with_broken_y_axis(values, value_name='Value', bins=100, rang
 	pyplot.show()
 
 
+def show_feature_importances(forest, features):
+	"""
+	Given a trained forest-type classifier (e.g. random forest, boosted decision tree, etc.),
+	displays a bar chart of the features' relative importances according to the Gini impurity index.
+	"""
+	m = len(features)
+
+	sorted_importances_and_features = sorted(zip(forest.feature_importances_, features))
+	sorted_importances, sorted_features = zip(*sorted_importances_and_features)
+
+	# Print the feature ranking
+	for importance, feature in sorted_importances_and_features:
+		print feature, ':\t', format_as_percentage(importance)
+
+	# Plot the feature importances of the forest
+	pyplot.figure()
+	# pyplot.title('Feature Importances')
+	pyplot.barh(range(m), sorted_importances, color='c', align='center')
+	pyplot.yticks(range(m), sorted_features, fontsize='xx-large')
+	pyplot.ylim([-1, m])
+	pyplot.axis('tight')
+	pyplot.grid(True)
+	pyplot.show()
+
 
 
 

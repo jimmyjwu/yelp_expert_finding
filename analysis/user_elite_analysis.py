@@ -218,9 +218,7 @@ def train_random_forest_elite_status_classifier():
 	"""Trains and tests a random forest model for predicting users' Elite status."""
 	model = train_elite_status_classifier(RandomForestClassifier, RANDOM_FOREST_USER_ATTRIBUTES, RANDOM_FOREST_FRACTION_FOR_TRAINING, model_arguments=RANDOM_FOREST_ARGUMENTS)
 
-	# Print features and importances side-by-side
-	for importance, attribute in sorted(zip(model.feature_importances_, RANDOM_FOREST_USER_ATTRIBUTES)):
-		print attribute, '\t', format_as_percentage(importance)
+	show_feature_importances(model, RANDOM_FOREST_USER_ATTRIBUTES)
 
 
 

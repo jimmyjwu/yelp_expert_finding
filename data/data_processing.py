@@ -175,6 +175,34 @@ def combine_all_user_data(
 	write_multiple_user_attributes(user_for_ID.itervalues(), ALL_USER_ATTRIBUTES, output_users_file_name)
 
 
+def create_training_and_test_sets(
+	input_users_file_name=DEFAULT_COMBINED_USERS_FILE_NAME,
+	output_training_set_file_name=DEFAULT_TRAINING_SET_FILE_NAME,
+	output_test_set_file_name=DEFAULT_TEST_SET_FILE_NAME,
+	fraction_for_training=0.8
+):
+	"""
+	Given a single user data file output by combine_all_user_data(), randomly partitions the users
+	into two new files:
+		- Training set
+		- Test set
+
+	These files are formatted the same as the input, except:
+		- Attribute/column 'years_elite' (nonnegative integer) --> column 'label' (0 or 1)
+	"""
+	users = read_combined_users()
+
+	# Replace integer 'years_elite' attribute with 0/1 'label'
+	binarize_attribute(users, 'years_elite')
+	designate_attribute_as_label(users, 'years_elite')
+	
+	# Randomly partition users into training and test sets
+	random.shuffle(users)
+	training_users, test_users = random_partition(users, fraction_for_training)
+
+	# Write to files
+	write_multiple_user_attributes(training_users, TRAINING_AND_TEST_SET_ATTRIBUTES, output_training_set_file_name)
+	write_multiple_user_attributes(test_users, TRAINING_AND_TEST_SET_ATTRIBUTES, output_test_set_file_name)
 
 
 

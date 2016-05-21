@@ -4,24 +4,6 @@ Utilities specifically for machine learning and data analysis.
 from utilities import *
 
 
-def binarize_attribute(users, attribute):
-	"""
-	Given a list of user dictionaries and an attribute name, maps the designated attribute values
-	of all users as follows:
-		value = 0	-->		new value = 0
-		value != 0	-->		new value = 1
-	"""
-	[ user.update( { attribute: int(bool(user[attribute])) } ) for user in users ]
-
-
-def designate_attribute_as_label(users, attribute):
-	"""
-	Given a list of user dictionaries and an attribute name, replaces the designated attribute
-	with a 'label' attribute which takes on the removed attribute's value.
-	"""
-	for user in users:
-		user['label'] = user.pop(attribute)
-
 
 def balanced_sample(users, label_name='label'):
 	"""

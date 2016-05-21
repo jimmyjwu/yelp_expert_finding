@@ -21,8 +21,21 @@ from analysis_utilities import *
 
 # Cache expensive file reads and computations
 CACHE = {
-	'users': None,
+	'training_set': None,
+	'test_set': None,
 }
+
+def load_training_set():
+	"""Loads training set from the cache if possible, or from the training set file."""
+	if not CACHE['training_set']:
+		CACHE['training_set'] = read_training_set()
+	return CACHE['training_set']
+
+def load_test_set():
+	"""Loads test set from the cache if possible, or from the test set file."""
+	if not CACHE['test_set']:
+		CACHE['test_set'] = read_test_set()
+	return CACHE['test_set']
 
 
 
@@ -38,16 +51,8 @@ def train_elite_status_classifier(ModelClass, attributes, fraction_for_training,
 	print 'Fraction of dataset for training: ' + format_as_percentage(fraction_for_training)
 	print ''
 
-	if CACHE['users']:
-		print 'USERS LOADED FROM MEMORY'
-		users = CACHE['users']
-	else:
-		print 'READING USERS FROM FILE'
-		users = read_users()
-		binarize_attribute(users, 'years_elite')
-		designate_attribute_as_label(users, 'years_elite')
-		random.shuffle(users)
-		CACHE['users'] = users
+	print 'LOADING TRAINING SET'
+	users = load_training_set()
 
 	print 'PREPARING DATA'
 	users = balanced_sample(users)
@@ -253,15 +258,7 @@ def train_adaboost_elite_status_classifier():
 
 def classify_by_review_count(minimum_reviews_for_elite=48):
 	""" Classifies solely by the number of reviews. """
-	if CACHE['users']:
-		print 'USERS LOADED FROM MEMORY'
-		users = CACHE['users']
-	else:
-		print 'READING USERS FROM FILE'
-		users = read_users()
-		booleanize_attribute(users, 'years_elite')
-		designate_attribute_as_label(users, 'years_elite')
-		CACHE['users'] = users
+	users = load_training_set()
 
 	predicted_positives = [user for user in users if user['review_count'] >= minimum_reviews_for_elite]
 	predicted_negatives = [user for user in users if user['review_count'] < minimum_reviews_for_elite]

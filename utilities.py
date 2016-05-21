@@ -87,6 +87,12 @@ def frequencies(values):
 	return Counter(values)
 
 
+def random_partition(elements, fraction_in_first_list):
+	"""Given a list, randomly partitions its elements it into two new lists of desired size."""
+	first_list_size = int( len(elements) * fraction_in_first_list )
+	return elements[:first_list_size], elements[first_list_size:]
+
+
 def remove_low_degree_nodes(graph, minimum_degree=1):
 	"""Removes all nodes in a graph with degree less than minimum_degree."""
 	for node in graph.nodes():

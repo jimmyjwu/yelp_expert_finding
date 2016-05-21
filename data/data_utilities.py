@@ -22,6 +22,9 @@ DEFAULT_TIP_COUNTS_FILE_NAME = 'user_tip_counts.txt'
 DEFAULT_PAGERANKS_FILE_NAME = 'user_pageranks.txt'
 DEFAULT_COMBINED_USERS_FILE_NAME = 'combined_users.txt'
 
+DEFAULT_TRAINING_SET_FILE_NAME = 'training_set.txt'
+DEFAULT_TEST_SET_FILE_NAME = 'test_set.txt'
+
 DEFAULT_D3_GRAPH_FILE_NAME = 'users_D3_graph.json'
 
 # List of (attribute name, function that returns attribute value, given a raw user dictionary)
@@ -42,13 +45,16 @@ BASIC_USER_ATTRIBUTES_AND_EXTRACTORS = [
 # Attributes that can be extracted solely from the raw Yelp user file
 BASIC_USER_ATTRIBUTES = list(zip(*BASIC_USER_ATTRIBUTES_AND_EXTRACTORS)[0])
 
-# All user attributes available (across all dataset files and after all processing)
+# All user attributes available
 ALL_USER_ATTRIBUTES = list(BASIC_USER_ATTRIBUTES) + [
 	'average_review_length',
 	'average_reading_level',
 	'tip_count',
 	'pagerank',
 ]
+
+# All attributes used in the training and test sets
+TRAINING_AND_TEST_SET_ATTRIBUTES = ['label' if attribute=='years_elite' else attribute for attribute in ALL_USER_ATTRIBUTES]
 
 # Used for re-casting attribute values when reading from processed data files
 CASTER_FOR_ATTRIBUTE_NAME = {
@@ -67,6 +73,7 @@ CASTER_FOR_ATTRIBUTE_NAME = {
 	'average_reading_level': float,
 	'tip_count': int,
 	'pagerank': float,
+	'label': int,
 }
 
 

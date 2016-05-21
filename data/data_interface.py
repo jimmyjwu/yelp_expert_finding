@@ -72,9 +72,25 @@ def read_user_basic_attributes(input_file_name=DEFAULT_BASIC_ATTRIBUTES_FILE_NAM
 	return read_multiple_user_attributes(input_file_name=input_file_name, attributes=BASIC_USER_ATTRIBUTES)
 
 
-def read_users(input_file_name=DEFAULT_COMBINED_USERS_FILE_NAME, attributes=ALL_USER_ATTRIBUTES):
+def read_combined_users(input_file_name=DEFAULT_COMBINED_USERS_FILE_NAME, attributes=ALL_USER_ATTRIBUTES):
 	"""
 	Given a combined users file and a list of desired attributes, returns a list of user dictionaries
+	containing only those attributes.
+	"""
+	return read_multiple_user_attributes(input_file_name=input_file_name, attributes=attributes)
+
+
+def read_training_set(input_file_name=DEFAULT_TRAINING_SET_FILE_NAME, attributes=TRAINING_AND_TEST_SET_ATTRIBUTES):
+	"""
+	Given a training set file and a list of desired attributes, returns a list of user dictionaries
+	containing only those attributes.
+	"""
+	return read_multiple_user_attributes(input_file_name=input_file_name, attributes=attributes)
+
+
+def read_test_set(input_file_name=DEFAULT_TEST_SET_FILE_NAME, attributes=TRAINING_AND_TEST_SET_ATTRIBUTES):
+	"""
+	Given a test set file and a list of desired attributes, returns a list of user dictionaries
 	containing only those attributes.
 	"""
 	return read_multiple_user_attributes(input_file_name=input_file_name, attributes=attributes)

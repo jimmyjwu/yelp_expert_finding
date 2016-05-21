@@ -39,7 +39,7 @@ def load_test_set():
 
 
 
-def train_elite_status_classifier(ModelClass, attributes, fraction_for_training, model_arguments={}):
+def train_elite_status_classifier(ModelClass, attributes, model_arguments={}):
 	"""
 	Given a constructor for a classifier object and a list of user attributes to use, trains,
 	tests, and returns a classifier for Elite status.
@@ -48,7 +48,6 @@ def train_elite_status_classifier(ModelClass, attributes, fraction_for_training,
 	print 'STARTING LEARNING PIPELINE'
 	print 'Model type: ' + ModelClass.__name__ + ' with arguments ' + str(model_arguments)
 	print 'Features: ' + ', '.join(attributes)
-	print 'Fraction of dataset for training: ' + format_as_percentage(fraction_for_training)
 	print ''
 
 	print 'LOADING TRAINING SET'
@@ -85,11 +84,10 @@ def train_elite_status_classifier(ModelClass, attributes, fraction_for_training,
 
 
 
-# Current best: training fraction=0.5, attributes=[review_count, average_stars, months_member, pagerank]
+# Current best: attributes=[review_count, average_stars, months_member, pagerank]
 # Accuracy on test data: ~91%
 # Accuracy on training data: ~91%
 # Recall on positive samples: ~88%
-FRACTION_FOR_TRAINING = 0.5
 NAIVE_BAYES_USER_ATTRIBUTES = [
 	'review_count',
 	'average_stars',
@@ -107,15 +105,14 @@ NAIVE_BAYES_USER_ATTRIBUTES = [
 ]
 def train_naive_bayes_elite_status_classifier():
 	"""Trains and tests a naive Bayes model for predicting users' Elite status."""
-	model = train_elite_status_classifier(GaussianNB, NAIVE_BAYES_USER_ATTRIBUTES, FRACTION_FOR_TRAINING)
+	model = train_elite_status_classifier(GaussianNB, NAIVE_BAYES_USER_ATTRIBUTES)
 
 
 
-# Current best: training fraction=0.5, attributes=[review_count]
+# Current best: attributes=[review_count]
 # Accuracy on test data: ~93%
 # Accuracy on training data: ~93%
 # Recall on positive samples: ~91.5%
-LOGISTIC_REGRESSION_FRACTION_FOR_TRAINING = 0.5
 LOGISTIC_REGRESSION_USER_ATTRIBUTES = [
 	'review_count',
 	#'average_stars',
@@ -133,15 +130,14 @@ LOGISTIC_REGRESSION_USER_ATTRIBUTES = [
 ]
 def train_logistic_regression_elite_status_classifier():
 	"""Trains and tests a logistic regression model for predicting users' Elite status."""
-	model = train_elite_status_classifier(LogisticRegression, LOGISTIC_REGRESSION_USER_ATTRIBUTES, LOGISTIC_REGRESSION_FRACTION_FOR_TRAINING)
+	model = train_elite_status_classifier(LogisticRegression, LOGISTIC_REGRESSION_USER_ATTRIBUTES)
 
 
 
-# Current best: training fraction=0.8, attributes=[review_count], kernel='rbf' (default)
+# Current best: attributes=[review_count], kernel='rbf' (default)
 # Accuracy on test data: ~94.5%
 # Accuracy on training data: ~94.5%
 # Recall on positive samples: ~97.5%
-SVM_FRACTION_FOR_TRAINING = 0.8
 SVM_USER_ATTRIBUTES = [
 	'review_count',
 	#'average_stars',
@@ -159,15 +155,14 @@ SVM_USER_ATTRIBUTES = [
 ]
 def train_SVM_elite_status_classifier():
 	"""Trains and tests a support vector machine model for predicting users' Elite status."""
-	model = train_elite_status_classifier(SVC, SVM_USER_ATTRIBUTES, SVM_FRACTION_FOR_TRAINING)
+	model = train_elite_status_classifier(SVC, SVM_USER_ATTRIBUTES)
 
 
 
-# Current best: training fraction=0.3, attributes=[review_count]
+# Current best: attributes=[review_count]
 # Accuracy on test data: ~94.5%
 # Accuracy on training data: 94.5%
 # Recall on positive samples: ~97%
-DECISION_TREE_FRACTION_FOR_TRAINING = 0.3
 DECISION_TREE_USER_ATTRIBUTES = [
 	'review_count',
 	#'average_stars',
@@ -185,7 +180,7 @@ DECISION_TREE_USER_ATTRIBUTES = [
 ]
 def train_decision_tree_elite_status_classifier():
 	"""Trains and tests a decision tree model for predicting users' Elite status."""
-	model = train_elite_status_classifier(DecisionTreeClassifier, DECISION_TREE_USER_ATTRIBUTES, DECISION_TREE_FRACTION_FOR_TRAINING)
+	model = train_elite_status_classifier(DecisionTreeClassifier, DECISION_TREE_USER_ATTRIBUTES)
 
 	# Output tree representation showing decision rules
 	dot_data = StringIO()
@@ -195,11 +190,10 @@ def train_decision_tree_elite_status_classifier():
 
 
 
-# Current best: training fraction=0.8, attributes=[(all attributes)], n_estimators=100, max_depth=12
+# Current best: attributes=[(all attributes)], n_estimators=100, max_depth=12
 # Accuracy on test data: ~96%
 # Accuracy on training data: ~98%
 # Recall on positive samples: ~98%
-RANDOM_FOREST_FRACTION_FOR_TRAINING = 0.8
 RANDOM_FOREST_USER_ATTRIBUTES = [
 	'review_count',
 	'average_stars',
@@ -221,17 +215,16 @@ RANDOM_FOREST_ARGUMENTS = {
 }
 def train_random_forest_elite_status_classifier():
 	"""Trains and tests a random forest model for predicting users' Elite status."""
-	model = train_elite_status_classifier(RandomForestClassifier, RANDOM_FOREST_USER_ATTRIBUTES, RANDOM_FOREST_FRACTION_FOR_TRAINING, model_arguments=RANDOM_FOREST_ARGUMENTS)
+	model = train_elite_status_classifier(RandomForestClassifier, RANDOM_FOREST_USER_ATTRIBUTES, model_arguments=RANDOM_FOREST_ARGUMENTS)
 
 	show_feature_importances(model, RANDOM_FOREST_USER_ATTRIBUTES)
 
 
 
-# Current best: training fraction=0.8, attributes=[(all attributes)], n_estimators=100, learning_rate=1.0
+# Current best: attributes=[(all attributes)], n_estimators=100, learning_rate=1.0
 # Accuracy on test data: ~96%
 # Accuracy on training data: ~96%
 # Recall on positive samples: ~97.5%
-ADABOOST_FRACTION_FOR_TRAINING = 0.8
 ADABOOST_USER_ATTRIBUTES = [
 	'review_count',
 	'average_stars',
@@ -252,7 +245,7 @@ ADABOOST_ARGUMENTS = {
 }
 def train_adaboost_elite_status_classifier():
 	"""Trains and tests an AdaBoost (boosted decision trees) model for predicting users' Elite status."""
-	model = train_elite_status_classifier(AdaBoostClassifier, ADABOOST_USER_ATTRIBUTES, ADABOOST_FRACTION_FOR_TRAINING, model_arguments=ADABOOST_ARGUMENTS)
+	model = train_elite_status_classifier(AdaBoostClassifier, ADABOOST_USER_ATTRIBUTES, model_arguments=ADABOOST_ARGUMENTS)
 
 
 

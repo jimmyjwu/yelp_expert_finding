@@ -41,8 +41,9 @@ def load_test_set():
 
 def train_and_validate_elite_status_classifier(ModelClass, attributes, model_arguments={}):
 	"""
-	Given a constructor for a classifier object and a list of user attributes to use, trains,
-	validates, and returns a classifier for Elite status.
+	Given a constructor for a classifier object and a list of user attributes to use,
+		- Trains a classifier (using part of the training dataset)
+		- Validates the classifier (using another part of the training dataset)
 	"""
 	print '---------------------------------------------------------------------------------------'
 	print 'STARTING LEARNING PIPELINE'
@@ -81,8 +82,6 @@ def train_and_validate_elite_status_classifier(ModelClass, attributes, model_arg
 	print combined_confusion_matrix
 	print '\nClassification report:'
 	print classification_report(combined_y_test, combined_y_predict, labels=[1,0], target_names=['Elite', 'Non-Elite'], digits=3)
-
-	return model
 
 
 

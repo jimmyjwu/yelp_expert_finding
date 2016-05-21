@@ -39,10 +39,10 @@ def load_test_set():
 
 
 
-def train_elite_status_classifier(ModelClass, attributes, model_arguments={}):
+def train_and_validate_elite_status_classifier(ModelClass, attributes, model_arguments={}):
 	"""
 	Given a constructor for a classifier object and a list of user attributes to use, trains,
-	tests, and returns a classifier for Elite status.
+	validates, and returns a classifier for Elite status.
 	"""
 	print '---------------------------------------------------------------------------------------'
 	print 'STARTING LEARNING PIPELINE'
@@ -60,8 +60,9 @@ def train_elite_status_classifier(ModelClass, attributes, model_arguments={}):
 	print 'BUILDING CLASSIFIER MODEL'
 	model = ModelClass(**model_arguments)
 
-	# Perform k-fold validation (to make use of all data for training and testing) with stratification (to prevent bias towards either class)
-	print 'PERFORMING STRATIFIED K-FOLD VALIDATION'
+	# k-fold cross-validation: uses all data for training and validation
+	# Stratification: prevents bias towards either class
+	print 'PERFORMING STRATIFIED K-FOLD CROSS-VALIDATION'
 	combined_confusion_matrix = numpy.zeros((2,2), dtype=numpy.int)
 	combined_y_test = []
 	combined_y_predict = []
@@ -76,9 +77,10 @@ def train_elite_status_classifier(ModelClass, attributes, model_arguments={}):
 
 
 	print 'COMPUTING ACCURACY MEASURES'
-	print '\nConfusion matrix:'
+	print '\nConfusion matrix (C_ij = # samples in class i but predicted j):'
 	print combined_confusion_matrix
-	print '\n' + classification_report(combined_y_test, combined_y_predict, labels=[1,0], target_names=['Elite', 'Non-Elite'], digits=3)
+	print '\nClassification report:'
+	print classification_report(combined_y_test, combined_y_predict, labels=[1,0], target_names=['Elite', 'Non-Elite'], digits=3)
 
 	return model
 

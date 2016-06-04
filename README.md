@@ -5,8 +5,8 @@ The goal of this project is to develop high-accuracy machine learning models for
 __Here is a [paper summarizing our methods and findings](https://goo.gl/QPeILJ)__.
 
 
-
-### How to Replicate Our Experiments
+---
+## How to Replicate Our Experiments
 
 #### Download Materials
 Install all Python packages in requirements.txt:

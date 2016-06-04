@@ -144,8 +144,8 @@ NAIVE_BAYES_USER_ATTRIBUTES = [
 	'pagerank',
 ]
 def train_naive_bayes_elite_status_classifier():
-	"""Trains and tests a naive Bayes model for predicting users' Elite status."""
-	model = train_elite_status_classifier(GaussianNB, NAIVE_BAYES_USER_ATTRIBUTES)
+	"""Trains and validates a naive Bayes model for predicting users' Elite status."""
+	model = train_and_validate_elite_status_classifier(GaussianNB, NAIVE_BAYES_USER_ATTRIBUTES)
 
 
 
@@ -169,8 +169,8 @@ LOGISTIC_REGRESSION_USER_ATTRIBUTES = [
 	#'pagerank',
 ]
 def train_logistic_regression_elite_status_classifier():
-	"""Trains and tests a logistic regression model for predicting users' Elite status."""
-	model = train_elite_status_classifier(LogisticRegression, LOGISTIC_REGRESSION_USER_ATTRIBUTES)
+	"""Trains and validates a logistic regression model for predicting users' Elite status."""
+	model = train_and_validate_elite_status_classifier(LogisticRegression, LOGISTIC_REGRESSION_USER_ATTRIBUTES)
 
 
 
@@ -194,8 +194,8 @@ SVM_USER_ATTRIBUTES = [
 	#'pagerank',
 ]
 def train_SVM_elite_status_classifier():
-	"""Trains and tests a support vector machine model for predicting users' Elite status."""
-	model = train_elite_status_classifier(SVC, SVM_USER_ATTRIBUTES)
+	"""Trains and validates a support vector machine model for predicting users' Elite status."""
+	model = train_and_validate_elite_status_classifier(SVC, SVM_USER_ATTRIBUTES)
 
 
 
@@ -219,8 +219,8 @@ DECISION_TREE_USER_ATTRIBUTES = [
 	#'pagerank',
 ]
 def train_decision_tree_elite_status_classifier():
-	"""Trains and tests a decision tree model for predicting users' Elite status."""
-	model = train_elite_status_classifier(DecisionTreeClassifier, DECISION_TREE_USER_ATTRIBUTES)
+	"""Trains and validates a decision tree model for predicting users' Elite status."""
+	model = train_and_validate_elite_status_classifier(DecisionTreeClassifier, DECISION_TREE_USER_ATTRIBUTES)
 
 	# Output tree representation showing decision rules
 	dot_data = StringIO()
@@ -254,9 +254,8 @@ RANDOM_FOREST_ARGUMENTS = {
 	'max_depth': 12,
 }
 def train_random_forest_elite_status_classifier():
-	"""Trains and tests a random forest model for predicting users' Elite status."""
-	model = train_elite_status_classifier(RandomForestClassifier, RANDOM_FOREST_USER_ATTRIBUTES, model_arguments=RANDOM_FOREST_ARGUMENTS)
-
+	"""Trains and validates a random forest model for predicting users' Elite status."""
+	model = train_and_validate_elite_status_classifier(RandomForestClassifier, RANDOM_FOREST_USER_ATTRIBUTES, model_arguments=RANDOM_FOREST_ARGUMENTS)
 	show_feature_importances(model, RANDOM_FOREST_USER_ATTRIBUTES)
 
 
@@ -284,8 +283,8 @@ ADABOOST_ARGUMENTS = {
 	'n_estimators': 100
 }
 def train_adaboost_elite_status_classifier():
-	"""Trains and tests an AdaBoost (boosted decision trees) model for predicting users' Elite status."""
-	model = train_elite_status_classifier(AdaBoostClassifier, ADABOOST_USER_ATTRIBUTES, model_arguments=ADABOOST_ARGUMENTS)
+	"""Trains and validates an AdaBoost (boosted decision trees) model for predicting users' Elite status."""
+	model = train_and_validate_elite_status_classifier(AdaBoostClassifier, ADABOOST_USER_ATTRIBUTES, model_arguments=ADABOOST_ARGUMENTS)
 
 
 

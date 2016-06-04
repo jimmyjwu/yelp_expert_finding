@@ -98,7 +98,7 @@ def test_elite_status_classifier(ModelClass, attributes, model_arguments={}):
 	print ''
 
 	print 'LOADING TRAINING SET (WITH BALANCED CLASSES)'
-	training_users = load_training_set()
+	training_users = balanced_sample( load_training_set() )
 	X_train, y_train = vectorize_users(training_users, attributes)
 
 	print 'TRAINING CLASSIFIER MODEL'

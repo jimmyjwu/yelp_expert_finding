@@ -84,7 +84,7 @@ def train_and_validate_elite_status_classifier(ModelClass, attributes, model_arg
 	print classification_report(combined_y_test, combined_y_predict, labels=[1,0], target_names=['Elite', 'Non-Elite'], digits=3)
 
 
-def test_elite_status_classifier(ModelClass, attributes, model_arguments={}):
+def test_elite_status_classifier(ModelClass, attributes, model_arguments={}, balance_training_set=True, balance_test_set=True):
 	"""
 	Given a constructor for a classifier object and a list of user attributes to use,
 		- Trains a classifier (using the full training dataset)
@@ -97,34 +97,28 @@ def test_elite_status_classifier(ModelClass, attributes, model_arguments={}):
 	print 'Features: ' + ', '.join(attributes)
 	print ''
 
-	print 'LOADING TRAINING SET (WITH BALANCED CLASSES)'
-	training_users = balanced_sample( load_training_set() )
+	print 'LOADING TRAINING SET (WITH ' + ('UN' if not balance_training_set else '') + 'BALANCED CLASSES)'
+	training_users = load_training_set()
+	if balance_training_set:
+		training_users = balanced_sample(training_users)
 	X_train, y_train = vectorize_users(training_users, attributes)
 
 	print 'TRAINING CLASSIFIER MODEL'
 	model = ModelClass(**model_arguments)
 	model.fit(X_train, y_train)
 
-	print 'LOADING TEST SETS'
-	unbalanced_test_users = load_test_set()
-	X_test_unbalanced, y_test_unbalanced = vectorize_users(unbalanced_test_users, attributes)
+	print 'LOADING TEST SET (WITH ' + ('UN' if not balance_test_set else '') + 'BALANCED CLASSES)'
+	test_users = load_test_set()
+	if balance_test_set:
+		test_users = balanced_sample(test_users)
+	X_test, y_test = vectorize_users(test_users, attributes)
 
-	balanced_test_users = balanced_sample(unbalanced_test_users)
-	X_test_balanced, y_test_balanced = vectorize_users(balanced_test_users, attributes)
-
-	print 'TESTING ON BALANCED TEST SET'
-	y_predict_balanced = model.predict(X_test_balanced)
+	print 'TESTING ON TEST SET'
+	y_predict = model.predict(X_test)
 	print '\nConfusion matrix (C_ij = # samples in class i but predicted j):'
-	print confusion_matrix(y_test_balanced, y_predict_balanced, labels=[0,1])
+	print confusion_matrix(y_test, y_predict, labels=[0,1])
 	print '\nClassification report:'
-	print classification_report(y_test_balanced, y_predict_balanced, labels=[1,0], target_names=['Elite', 'Non-Elite'], digits=3)
-
-	print 'TESTING ON UNBALANCED TEST SET'
-	y_predict_unbalanced = model.predict(X_test_unbalanced)
-	print '\nConfusion matrix (C_ij = # samples in class i but predicted j):'
-	print confusion_matrix(y_test_unbalanced, y_predict_unbalanced, labels=[0,1])
-	print '\nClassification report:'
-	print classification_report(y_test_unbalanced, y_predict_unbalanced, labels=[1,0], target_names=['Elite', 'Non-Elite'], digits=3)
+	print classification_report(y_test, y_predict, labels=[1,0], target_names=['Elite', 'Non-Elite'], digits=3)
 
 	return model
 

@@ -78,9 +78,9 @@ def train_and_validate_elite_status_classifier(ModelClass, attributes, model_arg
 
 
 	print 'COMPUTING ACCURACY MEASURES'
-	print '\nConfusion matrix (C_ij = # samples in class i but predicted j):'
+	print '\nConfusion Matrix (C_ij = # samples in class i but predicted j)'
 	print combined_confusion_matrix
-	print '\nClassification report:'
+	print '\nClassification Report'
 	print classification_report(combined_y_test, combined_y_predict, labels=[1,0], target_names=['Elite', 'Non-Elite'], digits=3)
 
 

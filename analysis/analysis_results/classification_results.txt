@@ -1,33 +1,120 @@
+-------------------------------------------------------------------
 RANDOM FOREST
+All of the following reflect the median performance
+of the model out of 3 tests.
+
+----------------------------------------------------
+Training:	balanced
+Test:		balanced
 
 Confusion Matrix
 					Predicted:
-Actual:		Elite			Non-Elite
-Elite		30753 (97.7%)	708 (2.3%)
-Non-Elite	1776 (5.6%)		29685 (94.4%)
+Actual:		Non-Elite		Elite
+Non-Elite	5865 (94.0%)	374 (6.0%)
+Elite		115 (1.8%)		6124 (98.2%)
 
 Classification Report
              precision    recall  f1-score   support
 
-      Elite       0.95      0.98      0.96     31461
-  Non-Elite       0.98      0.94      0.96     31461
+      Elite      0.942     0.982     0.962      6239
+  Non-Elite      0.981     0.940     0.960      6239
 
-avg / total       0.96      0.96      0.96     62922
+avg / total      0.962     0.961     0.961     12478
+
+----------------------------------------------------
+Training:	balanced
+Test:		unbalanced
+
+Confusion Matrix
+					Predicted:
+Actual:		Non-Elite		Elite
+Non-Elite	98259 (94.3%)	5970 (5.7%)
+Elite		130 (2.1%)		6109 (97.9%)
+
+Classification Report
+             precision    recall  f1-score   support
+
+      Elite      0.506     0.979     0.667      6239
+  Non-Elite      0.999     0.943     0.970    104229
+
+avg / total      0.971     0.945     0.953    110468
+
+----------------------------------------------------
+Training:	unbalanced
+Test:		unbalanced
+
+Confusion Matrix
+					Predicted:
+Actual:		Non-Elite		Elite
+Non-Elite	103258 (99.1%)	971 (0.9%)
+Elite		1456 (23.3%)	4783 (76.7%)
+
+Classification Report
+             precision    recall  f1-score   support
+
+      Elite      0.831     0.767     0.798      6239
+  Non-Elite      0.986     0.991     0.988    104229
+
+avg / total      0.977     0.978     0.978    110468
 
 
 
+-------------------------------------------------------------------
 ADABOOST
+All of the following reflect the median performance
+of the model out of 3 tests.
+
+----------------------------------------------------
+Training:	balanced
+Test:		balanced
 
 Confusion Matrix
 					Predicted:
-Actual:		Elite			Non-Elite
-Elite		30590 (97.2%)	871 (2.8%)
-Non-Elite	1751 (5.6%)		29710 (94.4%)
+Actual:		Non-Elite		Elite
+Non-Elite	5883 (94.3%)	356 (5.7%)
+Elite		148 (2.4%)		6091 (97.6%)
 
 Classification Report
              precision    recall  f1-score   support
 
-      Elite       0.95      0.97      0.96     31461
-  Non-Elite       0.97      0.94      0.96     31461
+      Elite      0.945     0.976     0.960      6239
+  Non-Elite      0.975     0.943     0.959      6239
 
-avg / total       0.96      0.96      0.96     62922
+avg / total      0.960     0.960     0.960     12478
+
+----------------------------------------------------
+Training:	balanced
+Test:		unbalanced
+
+Confusion Matrix
+					Predicted:
+Actual:		Non-Elite		Elite
+Non-Elite	98529 (94.5%)	5700 (5.5%)
+Elite		144 (2.3%)		6095 (97.7%)
+
+Classification Report
+             precision    recall  f1-score   support
+
+      Elite      0.517     0.977     0.676      6239
+  Non-Elite      0.999     0.945     0.971    104229
+
+avg / total      0.971     0.947     0.955    110468
+
+----------------------------------------------------
+Training:	unbalanced
+Test:		unbalanced
+
+Confusion Matrix
+					Predicted:
+Actual:		Non-Elite		Elite
+Non-Elite	103046 (98.9%)	1183 (1.1%)
+Elite		1372 (22.0%)	4867 (78.0%)
+
+Classification Report
+             precision    recall  f1-score   support
+
+      Elite      0.804     0.780     0.792      6239
+  Non-Elite      0.987     0.989     0.988    104229
+
+avg / total      0.977     0.977     0.977    110468
+

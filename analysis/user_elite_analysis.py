@@ -115,9 +115,9 @@ def test_elite_status_classifier(ModelClass, attributes, model_arguments={}, bal
 
 	print 'TESTING ON TEST SET'
 	y_predict = model.predict(X_test)
-	print '\nConfusion matrix (C_ij = # samples in class i but predicted j):'
+	print '\nConfusion Matrix (C_ij = # samples in class i but predicted j)'
 	print confusion_matrix(y_test, y_predict, labels=[0,1])
-	print '\nClassification report:'
+	print '\nClassification Report'
 	print classification_report(y_test, y_predict, labels=[1,0], target_names=['Elite', 'Non-Elite'], digits=3)
 
 	return model

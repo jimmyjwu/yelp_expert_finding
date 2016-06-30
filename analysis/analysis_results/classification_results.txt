@@ -118,3 +118,105 @@ Classification Report
 
 avg / total      0.977     0.977     0.977    110468
 
+
+
+-------------------------------------------------------------------
+SVM
+All of the following reflect the median performance
+of the model out of 3 tests.
+
+----------------------------------------------------
+Training:	balanced
+Test:		unbalanced
+
+Confusion Matrix
+					Predicted:
+Actual:		Non-Elite		Elite
+Non-Elite	95484 (91.6%)	8745 (8.4%)
+Elite 		162 (2.6%)		6077 (97.4%)
+
+Classification Report
+             precision    recall  f1-score   support
+
+      Elite      0.410     0.974     0.577      6239
+  Non-Elite      0.998     0.916     0.955    104229
+
+avg / total      0.965     0.919     0.934    110468
+
+
+
+-------------------------------------------------------------------
+DECISION TREE
+All of the following reflect the median performance
+of the model out of 3 tests.
+
+----------------------------------------------------
+Training:	balanced
+Test:		unbalanced
+
+Confusion Matrix
+					Predicted:
+Actual:		Non-Elite		Elite
+Non-Elite	95488 (91.6%)	8741 (8.4%)
+Elite 		164 (2.6%)		6075 (97.4%)
+
+Classification Report
+             precision    recall  f1-score   support
+
+      Elite      0.410     0.974     0.577      6239
+  Non-Elite      0.998     0.916     0.955    104229
+
+avg / total      0.965     0.919     0.934    110468
+
+
+
+-------------------------------------------------------------------
+LOGISTIC REGRESSION
+All of the following reflect the median performance
+of the model out of 3 tests.
+
+----------------------------------------------------
+Training:	balanced
+Test:		unbalanced
+
+Confusion Matrix
+					Predicted:
+Actual:		Non-Elite		Elite
+Non-Elite	98984 (95.0%)	5245 (5.0%)
+Elite 		487 (7.8%)		5752 (92.2%)
+
+Classification Report
+             precision    recall  f1-score   support
+
+      Elite      0.523     0.922     0.667      6239
+  Non-Elite      0.995     0.950     0.972    104229
+
+avg / total      0.968     0.948     0.955    110468
+
+
+
+-------------------------------------------------------------------
+NAIVE BAYES
+All of the following reflect the median performance
+of the model out of 3 tests.
+
+----------------------------------------------------
+Training:	balanced
+Test:		unbalanced
+
+Confusion Matrix
+					Predicted:
+Actual:		Non-Elite		Elite
+Non-Elite	97532 (93.6%)	6697 (6.4%)
+Elite 		735 (11.8%)		5504 (88.2%)
+
+Classification Report
+             precision    recall  f1-score   support
+
+      Elite      0.451     0.882     0.597      6239
+  Non-Elite      0.993     0.936     0.963    104229
+
+avg / total      0.962     0.933     0.943    110468
+
+
+
